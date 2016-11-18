@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="Jan Peteler, FHWS Würzburg-Schweinfurt, jan.peteler@student.fhws.de">
-  <title>Microservices im Browser durch Web Components</title>
+  <meta name="author" content="Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de">
+  <title>Browsernative Microservices durch Web Components</title>
   <style type="text/css">code{white-space: pre;}</style>
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -15,9 +15,9 @@
 </head>
 <body>
 <header>
-<h1 class="title">Microservices im Browser durch Web Components</h1>
-<h1 class="subtitle">Kombinierte W3C Spezifikationen für plattformübergreifende Browsermodule</h1>
-<h2 class="author">Jan Peteler, FHWS Würzburg-Schweinfurt, jan.peteler@student.fhws.de</h2>
+<h1 class="title">Browsernative Microservices durch Web Components</h1>
+<h1 class="subtitle">Modulare Webarchitekturen durch neue Browserstandards entwickeln</h1>
+<h2 class="author">Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de</h2>
 <h3 class="date">November 2016</h3>
 </header>
 <nav id="TOC">
@@ -29,8 +29,41 @@
 </nav>
 <div id="main">
 <h1 id="ausgangssituation">Ausgangssituation</h1>
+<p>Softwareentwicklung für den Browser ist ohne Zweifel eine komplexe und fehleranfällige Angelegenheit. Die Gründe für diesen Umstand sind so vielfältig, dass darüber eine ganze Forschungsarbeit geschrieben werden könnte. Je nach Blickwinkel könnte man von der technischen Seite argumentieren und die Designschwächen der Browserplattform erläutern.<span class="citation" data-cites="Katz2013">(Katz 2013)</span> Oder man könnte die organisatorische Seite betrachten und die Schwerfälligkeit von Standardisierungsprozessen anprangern.<span class="citation" data-cites="Walton2016">(Walton 2016)</span> Oder aber man nimmt die historische Entwicklung in Augenschein. Die Zeiten statischer HTML/CSS Seiten auf Desktopgeräten ist mithin noch nicht lange her.</p>
+<p>Dennoch tragen alle diese Facetten dazu bei, dass die Entwicklung und Wartung von komplexen Webapplikationen mit enormen Zeit- und Geldaufwand verbunden ist. Offensichtlich wird das Problem, wenn man die schiere Anzahl der Frameworks und Bibliotheken mit Javascript als Zielsprache betrachtet, die vielen Entwicklern Schwierigkeiten bereitet.<span class="citation" data-cites="Berner2016">(Berner 2016)</span></p>
+<p>Um die inhärenten Designschwächen von Browsern aus der Welt zu schaffen, wurde schon im Jahr 2013 das <em>Extensible Web Manifesto</em> proklamiert.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Darin wird, kurz gefasst, eine Öffnung der Webplattformen avisiert, um Webprogrammierung teilweise von Browserstandards zu entkoppeln. Drei Jahre später sind diese Ziele in W3C Standards konkretisiert worden und teilweise schon umgesetzt worden.</p>
 <h1 id="zielsetzung">Zielsetzung</h1>
+<p>Viele populäre Frameworks für den Browser als Zielplattform versprechen dem Entwickler eine bessere Kontrolle über seinen Webservice. Die Notwendigkeit rührt unter anderem daher, dass es bisher nicht möglich war einzelne Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Selbst kleinste Änderungen können daher die Funktionalität des Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation <em>Web Components</em>,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> die mehrere Substandards unter sich vereint, soll die Modularität nun auch nativ im Browser unterstützt werden. Modularität als Designpattern ist in der IT schon länger Standard um komplexe Systeme beherrschbar zu gestalten und auch zukünftige Unsicherheiten abzuwägen.<span class="citation" data-cites="Baldwin2006">(Baldwin and Clark 2006, 1)</span> Die Unsicherheit, die Frameworks immer anhaftet, ist die Lebensdauer derselben.</p>
+<p>Mit <em>Web Components</em> ist der Entwickler in der Lage, eigene HTML Elemente zu definieren und diese per Templates zu ex- &amp; importieren. Darüber hinaus können sie JavaScript und CSS Funktionalität enthalten und diese vom Rest der Webseite abzukapseln. Ziel dieser Arbeit ist die systematische Erfassung und Risikoabwägung der neuen Technologien sowie eine praktische Erläuterung möglicher Architekturmodelle. Bisher gibt es keine einheitliche Bestpractice, wie denn die Komponenten umzusetzen sind, obwohl diese Technologien bereits länger durch Polyfills genutzt werden können. Manch ein Entwickler fürchtet schon eine Flut von schlecht gebauten Komponenten, die wiederum neue Probleme schaffen könnten.<span class="citation" data-cites="Keith2014">(Keith 2014)</span></p>
 <h1 id="vorgehensweise">Vorgehensweise</h1>
+<p>Den Anfang dieser Arbeit soll eine Analyse der aktuellen Situation der Frontend Entwicklung aufzeigen. Dort soll auf die Problematik der bisherigen Architekturmodelle und die Probleme mit monolithischen Frameworks eingegangen werden. Außerdem soll dieser Teil vor Augen führen, warum es bisher nur mit zusätzlicher Abstraktionsebenen möglich war einen modularen Aufbau von Web Applikationen zu ermöglichen.</p>
+<p>Im nächsten Abschnitt der Arbeit sollen die neuen Standards aufgeschlüsselt, zugänglich gemacht und auf Anwendungsmöglichkeiten untersucht werden. Explorativ sollen Bestpractices offengelegt werden und mögliche Einbettungen ins Gesamtsystem diskutiert werden. Auch die Probleme, wie sie beispielsweise bei alten Browsern auftreten können, sollen hier behandelt werden.</p>
+<p>Der letzte Abschnitt soll das Thema mit einer Metaebene abrunden, in der auch die neuen CSS Standards <em>Houdini</em> als Teil des Gesamtsystems betrachtet werden sollen.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<div id="refs" class="references">
+<div id="ref-Baldwin2006">
+<p>Baldwin, Carliss Y., and Kim B. Clark. 2006. “Modularity in the Design of Complex Engineering Systems.” In <em>Complex Engineered Systems: Science Meets Technology</em>, edited by Dan Braha, Ali A. Minai, and Yaneer Bar-Yam, 175–205. Berlin, Heidelberg: Springer Berlin Heidelberg. doi:<a href="https://doi.org/10.1007/3-540-32834-3_9">10.1007/3-540-32834-3_9</a>.</p>
+</div>
+<div id="ref-Berner2016">
+<p>Berner, David. 2016. “Not an Imposter: Fighting Front-End Fatigue.” <a href="https://www.smashingmagazine.com/2016/11/not-an-imposter-fighting-front-end-fatigue/" class="uri">https://www.smashingmagazine.com/2016/11/not-an-imposter-fighting-front-end-fatigue/</a>.</p>
+</div>
+<div id="ref-Katz2013">
+<p>Katz, Yehuda. 2013. “Extend the Web Forward.” <a href="http://yehudakatz.com/2013/05/21/extend-the-web-forward/" class="uri">http://yehudakatz.com/2013/05/21/extend-the-web-forward/</a>.</p>
+</div>
+<div id="ref-Keith2014">
+<p>Keith, Jeremy. 2014. “Web Components.” <a href="https://adactio.com/journal/7431" class="uri">https://adactio.com/journal/7431</a>.</p>
+</div>
+<div id="ref-Walton2016">
+<p>Walton, Philip. 2016. “Houdini: Maybe the Most Exciting Development in Css You’ve Never Heard of.” <a href="https://www.smashingmagazine.com/2016/03/houdini-maybe-the-most-exciting-development-in-css-youve-never-heard-of" class="uri">https://www.smashingmagazine.com/2016/03/houdini-maybe-the-most-exciting-development-in-css-youve-never-heard-of</a>.</p>
+</div>
+</div>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>https://extensiblewebmanifesto.org/<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>https://www.w3.org/standards/techs/components<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>https://drafts.css-houdini.org/<a href="#fnref3">↩</a></p></li>
+</ol>
+</section>
 </div>
 </body>
 </html>
