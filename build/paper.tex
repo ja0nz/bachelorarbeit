@@ -33,23 +33,37 @@ Zeichen Code addieren.{[}3{]}
 Aus diesen Grund wurde schon 2013 das ``Extensible Web Manifesto''
 proklamiert. Darin wird, kurz gefasst, eine Öffnung der Webplattformen
 avisiert, um Webprogrammierung teilweise von Browserstandards zu
-entkoppeln.{[}\^{}fn2{]} Drei Jahre später sind diese Ziele in W3C
-Spezifikationen konkretisiert worden. Einige dieser neuen Standards
-werden bereits nativ in (einigen) Browsern unterstützt.
+entkoppeln.\footnote{https://extensiblewebmanifesto.org/} Drei Jahre
+später sind diese Ziele in W3C Spezifikationen konkretisiert worden.
+Einige dieser neuen Standards werden bereits nativ in (einigen) Browsern
+unterstützt.
 
 \section{Zielsetzung}\label{zielsetzung}
 
-Viele populäre Frameworks für den Browser als Zielplattform weisen
-heutzutage eine monolithische Architektur auf. Der Grund dafür liegt
-unter anderem darin, dass es bisher nicht möglich war einzelne
-Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Mit dem
-neuen W3C Spezifikation ``Web Components'', die mehrere Substandards
-unter sich vereint , Ziel dieser Arbeit soll ein In jüngster Zeit haben
-einige Vorschläge für eine ``low-level API'' Ziel dieser Arbeit ist die
-systematische Erfassung der neuen Technologien sowie eine praktische
-Erläuterung möglicher Architekturmodelle.
+Viele populäre Frameworks für den Browser als Zielplattform versprechen
+dem Entwickler eine bessere Kontrolle über die Webseite. Der Grund dafür
+liegt unter anderem darin, dass es bisher nicht möglich war einzelne
+Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Selbst
+kleinste Änderungen können daher die Funktionalität des komplexen
+Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation ``Web
+Components'',{[}\^{}fn3{]} die mehrere Substandards unter sich vereint,
+soll die Modularität nun auch nativ im Browser unterstützt werden.
+Modularität als Designpattern ist in der IT schon länger Standard um
+komplexe Systeme beherrschbar zu gestalten und auch zukünftige
+Unsicherheiten abzuwägen.{[}4{]} Die Unsicherheit, die Frameworks immer
+anhaftet ist die Lebensdauer derselben.
 
-houdini https://www.w3.org/standards/techs/components
+Web Components ist der Entwickler in der Lage, eigene HTML Elemente zu
+definieren und diese per Templates zu exportieren oder zu importieren.
+Darüber hinaus können sie JavaScript und CSS Funktionalität enthalten
+und diese vom Rest der Webseite abzukapseln. Ziel dieser Arbeit ist die
+systematische Erfassung und Risikoabwägung der neuen Technologien sowie
+eine praktische Erläuterung möglicher Architekturmodelle. Bisher gibt es
+keine einheitlichen ``best practices'' wie denn die Komponenten
+umzusetzen sind, obwohl diese Technologien bereits länger durch
+Polyfills genutzt werden können. Manch ein Entwickler fürchtet schon
+eine Flut von schlecht gebauten Komponenten, die wiederum neue Probleme
+schaffen könnten.{[}5{]}
 
 \section{Vorgehensweise}\label{vorgehensweise}
 
@@ -63,11 +77,8 @@ und Wartung dieser Systeme aufzeigen.
 
 Im nächsten Abschnitt der Arbeit sollen die
 
-\subsection[:
-https://extensiblewebmanifesto.org/]{\texorpdfstring{\footnote{Ein
-  fiktives Gespräch mit einem JavaScript Neuling
-  https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f}:
-https://extensiblewebmanifesto.org/}{: https://extensiblewebmanifesto.org/}}\label{fn1-httpsextensiblewebmanifesto.org}
+\subsection{{[}\^{}fn3{]}:
+https://www.w3.org/standards/techs/components}\label{fn3-httpswww.w3.orgstandardstechscomponents}
 
 title: Microservices im Browser durch Web Components subtitle:
 Kombinierte W3C Spezifikationen für plattformübergreifende Browsermodule
@@ -84,3 +95,12 @@ you've never heard of,'' 2016.
 
 \hypertarget{ref-Filloux2016}{}
 {[}3{]} F. Filloux, ``Bloated html, the best and the worse,'' 2016.
+
+\hypertarget{ref-Baldwin2006}{}
+{[}4{]} C. Y. Baldwin and K. B. Clark, ``Modularity in the design of
+complex engineering systems,'' in \emph{Complex engineered systems:
+Science meets technology}, D. Braha, A. A. Minai, and Y. Bar-Yam, Eds.
+Berlin, Heidelberg: Springer Berlin Heidelberg, 2006, pp. 175--205.
+
+\hypertarget{ref-Keith2014}{}
+{[}5{]} J. Keith, ``Web components,'' 2014.
