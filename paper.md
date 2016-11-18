@@ -8,7 +8,7 @@ Aus diesen Grund wurde schon 2013 das "Extensible Web Manifesto" proklamiert. Da
 
 # Zielsetzung
 
-Viele populäre Frameworks für den Browser als Zielplattform versprechen dem Entwickler eine bessere Kontrolle über die Webseite. Der Grund dafür liegt unter anderem darin, dass es bisher nicht möglich war einzelne Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Selbst kleinste Änderungen können daher die Funktionalität des komplexen Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation "Web Components", die mehrere Substandards unter sich vereint, soll die Modularität nun auch nativ im Browser unterstützt werden.[^w3cWebComponent] Modularität als Designpattern ist in der IT schon länger Standard um komplexe Systeme beherrschbar zu gestalten und auch zukünftige Unsicherheiten abzuwägen.[@Baldwin2006, p. 1] Die Unsicherheit, die Frameworks immer anhaftet, ist die Lebensdauer derselben.
+Viele populäre Frameworks für den Browser als Zielplattform versprechen dem Entwickler eine bessere Kontrolle über die Webseite. Der Grund dafür liegt unter anderem darin, dass es bisher nicht möglich war einzelne Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Selbst kleinste Änderungen können daher die Funktionalität des komplexen Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation "Web Components", die mehrere Substandards unter sich vereint, soll die Modularität nun auch nativ im Browser unterstützt werden.[^wc] Modularität als Designpattern ist in der IT schon länger Standard um komplexe Systeme beherrschbar zu gestalten und auch zukünftige Unsicherheiten abzuwägen.[@Baldwin2006, p. 1] Die Unsicherheit, die Frameworks immer anhaftet, ist die Lebensdauer derselben.
 
 Web Components ist der Entwickler in der Lage, eigene HTML Elemente zu definieren und diese per Templates zu exportieren oder zu importieren. Darüber hinaus können sie JavaScript und CSS Funktionalität enthalten und diese vom Rest der Webseite abzukapseln. Ziel dieser Arbeit ist die systematische Erfassung und Risikoabwägung der neuen Technologien sowie eine praktische Erläuterung möglicher Architekturmodelle. Bisher gibt es keine einheitlichen "best practices" wie denn die Komponenten umzusetzen sind, obwohl diese Technologien bereits länger durch Polyfills genutzt werden können. Manch ein Entwickler fürchtet schon eine Flut von schlecht gebauten Komponenten, die wiederum neue Probleme schaffen könnten.[@Keith2014]
 
@@ -18,10 +18,10 @@ Den Anfang dieser Arbeit soll eine Analyse der aktuellen Situation der Frontend 
 
 Im nächsten Abschnitt der Arbeit sollen die neuen Standards aufgeschlüsselt, zugänglich gemacht und auf Anwendungsmöglichkeiten untersucht werden. Explorativ sollen gute Bespiele offengelegt werden und mögliche Einbettungen ins Gesamtsystem diskutiert werden. Auch die Probleme, wie sie beispielsweise bei alten Browsern auftreten können, sollen hier behandelt werden.
 
-Der letzte Abschnitt soll das Thema noch mit einer Metaperspektive abrunden, in der auch die neuen low-level CSS Standards Houdini als Teil des Gesamtsystems betrachtet werden sollen.[^w3cHoudini]
+Der letzte Abschnitt soll das Thema noch mit einer Metaperspektive abrunden, in der auch die neuen low-level CSS Standards Houdini als Teil des Gesamtsystems betrachtet werden sollen.[^h]
 
 [^manifesto]: https://extensiblewebmanifesto.org/
 
-[^w3cWebComponents]: https://www.w3.org/standards/techs/components
+[^wc]: https://www.w3.org/standards/techs/components
 
-[^w3cHoudini]: https://drafts.css-houdini.org/
+[^h]: https://drafts.css-houdini.org/
