@@ -19,16 +19,14 @@ Wartung von komplexen Webapplikationen, wie sie heute Standard sind, mit
 enormen Zeit- und Geldaufwand verbunden sind. Die Anzahl der Frameworks,
 Werkzeuge und Bibliotheken mit Javascript als Zielsprache ist nahezu
 unüberblickbar und wandelt sich in einer Geschwindigkeit, die vielen
-Entwicklern Schwierigkeiten bereitet.\footnote{Ein fiktives Gespräch mit
-  einem JavaScript Neuling
-  https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f}
-Auch die Konsumenten und Nutzern der Webdiensten bekommen diese Probleme
-zumindest teilweise spüren. Einerseits spürbar in Form von ``Downtimes''
-der Services. Andererseits subtil wie etwa durch lange Ladezeiten wegen
-aufgeblähtem Quellcode. Frederic Filloux zeigte in einem Blogpost
-anschaulich, dass sich in einem Zeitungsartikel der britischen Zeitung
-``The Guardian'' zu jedem lesbaren Buchstaben des Artikels über 100
-Zeichen Code addieren.{[}3{]}
+Entwicklern Schwierigkeiten bereitet.{[}3{]} Auch die Konsumenten und
+Nutzern der Webdiensten bekommen diese Probleme zumindest teilweise
+spüren. Einerseits spürbar in Form von ``Downtimes'' der Services.
+Andererseits subtil wie etwa durch lange Ladezeiten wegen aufgeblähtem
+Quellcode. Frederic Filloux zeigte in einem Blogpost anschaulich, dass
+sich in einem Zeitungsartikel der britischen Zeitung ``The Guardian'' zu
+jedem lesbaren Buchstaben des Artikels über 100 Zeichen Code
+addieren.{[}4{]}
 
 Aus diesen Grund wurde schon 2013 das ``Extensible Web Manifesto''
 proklamiert. Darin wird, kurz gefasst, eine Öffnung der Webplattformen
@@ -46,12 +44,13 @@ liegt unter anderem darin, dass es bisher nicht möglich war einzelne
 Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Selbst
 kleinste Änderungen können daher die Funktionalität des komplexen
 Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation ``Web
-Components''{[}\^{}fn3{]}, die mehrere Substandards unter sich vereint,
-soll die Modularität nun auch nativ im Browser unterstützt werden.
-Modularität als Designpattern ist in der IT schon länger Standard um
-komplexe Systeme beherrschbar zu gestalten und auch zukünftige
-Unsicherheiten abzuwägen.{[}4{]} Die Unsicherheit, die Frameworks immer
-anhaftet ist die Lebensdauer derselben.
+Components'', die mehrere Substandards unter sich vereint, soll die
+Modularität nun auch nativ im Browser unterstützt
+werden.{[}\^{}w3cWebComponent{]} Modularität als Designpattern ist in
+der IT schon länger Standard um komplexe Systeme beherrschbar zu
+gestalten und auch zukünftige Unsicherheiten abzuwägen.{[}5, p. 1{]} Die
+Unsicherheit, die Frameworks immer anhaftet, ist die Lebensdauer
+derselben.
 
 Web Components ist der Entwickler in der Lage, eigene HTML Elemente zu
 definieren und diese per Templates zu exportieren oder zu importieren.
@@ -63,22 +62,30 @@ keine einheitlichen ``best practices'' wie denn die Komponenten
 umzusetzen sind, obwohl diese Technologien bereits länger durch
 Polyfills genutzt werden können. Manch ein Entwickler fürchtet schon
 eine Flut von schlecht gebauten Komponenten, die wiederum neue Probleme
-schaffen könnten.{[}5{]}
+schaffen könnten.{[}6{]}
 
 \section{Vorgehensweise}\label{vorgehensweise}
 
 Den Anfang dieser Arbeit soll eine Analyse der aktuellen Situation der
-Frontend Entwicklung aufzeigen. In ihr sollen aktuelle
-Architekturmodelle analysiert werden. Außerdem soll dieser Teil vor
-Augen führen, warum es bisher nur mit zusätzlichen Schichten der
-Abstraktion möglich war einen modularen Aufbau von Web Apps zu
-ermöglichen. In diesem Teil sollen auch die Probleme die der Entwicklung
-und Wartung dieser Systeme aufzeigen.
+Frontend Entwicklung aufzeigen. Dort soll auf die Problematik der
+bisherigen Architekturmodelle und die Probleme mit monolithischen
+Frameworks eingegangen werden. Außerdem soll dieser Teil vor Augen
+führen, warum es bisher nur mit zusätzlicher Abstraktionsebenen möglich
+war einen modularen Aufbau von Web Applikationen zu ermöglichen.
 
-Im nächsten Abschnitt der Arbeit sollen die
+Im nächsten Abschnitt der Arbeit sollen die neuen Standards
+aufgeschlüsselt, zugänglich gemacht und auf Anwendungsmöglichkeiten
+untersucht werden. Explorativ sollen gute Bespiele offengelegt werden
+und mögliche Einbettungen ins Gesamtsystem diskutiert werden. Auch die
+Probleme, wie sie beispielsweise bei alten Browsern auftreten können,
+sollen hier behandelt werden.
 
-\subsection{{[}\^{}fn3{]}:
-https://www.w3.org/standards/techs/components}\label{fn3-httpswww.w3.orgstandardstechscomponents}
+Der letzte Abschnitt soll das Thema noch mit einer Metaperspektive
+abrunden, in der auch die neuen low-level CSS Standards Houdini als Teil
+des Gesamtsystems betrachtet werden sollen.{[}\^{}w3cHoudini{]}
+
+\subsection{{[}\^{}w3cHoudini{]}:
+https://drafts.css-houdini.org/}\label{w3choudini-httpsdrafts.css-houdini.org}
 
 title: Microservices im Browser durch Web Components subtitle:
 Kombinierte W3C Spezifikationen für plattformübergreifende Browsermodule
@@ -93,14 +100,18 @@ jan.peteler@student.fhws.de date: November 2016 abstract: \ldots{}
 {[}2{]} P. Walton, ``Houdini: Maybe the most exciting development in css
 you've never heard of,'' 2016.
 
+\hypertarget{ref-Berner2016}{}
+{[}3{]} D. Berner, ``Not an imposter: Fighting front-end fatigue,''
+2016.
+
 \hypertarget{ref-Filloux2016}{}
-{[}3{]} F. Filloux, ``Bloated html, the best and the worse,'' 2016.
+{[}4{]} F. Filloux, ``Bloated html, the best and the worse,'' 2016.
 
 \hypertarget{ref-Baldwin2006}{}
-{[}4{]} C. Y. Baldwin and K. B. Clark, ``Modularity in the design of
+{[}5{]} C. Y. Baldwin and K. B. Clark, ``Modularity in the design of
 complex engineering systems,'' in \emph{Complex engineered systems:
 Science meets technology}, D. Braha, A. A. Minai, and Y. Bar-Yam, Eds.
 Berlin, Heidelberg: Springer Berlin Heidelberg, 2006, pp. 175--205.
 
 \hypertarget{ref-Keith2014}{}
-{[}5{]} J. Keith, ``Web components,'' 2014.
+{[}6{]} J. Keith, ``Web components,'' 2014.
