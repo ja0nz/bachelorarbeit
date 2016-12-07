@@ -1,4 +1,4 @@
-\documentclass[ngerman,]{assets/latex/ieee}
+\documentclass[ngerman,]{../assets/latex/ieee}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -34,6 +34,44 @@
   \usepackage{polyglossia}
   \setmainlanguage[]{german}
 \fi
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
 \IfFileExists{parskip.sty}{%
 \usepackage{parskip}
 }{% else
@@ -71,46 +109,17 @@
 
 \section{Ausgangssituation}\label{ausgangssituation}
 
-Softwareentwicklung für den Browser ist ohne Zweifel eine komplexe und
-fehleranfällige Angelegenheit. Die Gründe für diesen Umstand sind so
-vielfältig, dass darüber eine ganze Forschungsarbeit geschrieben werden
-könnte. Je nach Blickwinkel könnte man von der technischen Seite
-argumentieren und die Designschwächen der Browserplattform
-erläutern.{[}1{]} Oder man könnte die organisatorische Seite betrachten
-und die Schwerfälligkeit von Standardisierungsprozessen
-anprangern.{[}2{]} Oder aber man nimmt die historische Entwicklung in
-Augenschein. Die Zeiten statischer HTML/CSS Seiten auf Desktopgeräten
-ist mithin noch nicht lange her.
+en der Browserplattform erläutern.{[}1{]} Oder man könnte die
+organisatorische Seite betrachten und die Schwerfälligkeit von
+Standardisierungsprozessen anprangern.{[}2{]} Oder aber man nimmt die
+historische Entwicklung in Augenschein. Die Zeiten statischer HTML/CSS
+Seiten auf Desktopgeräten ist mithin noch nicht lange her.
 
-Dennoch tragen alle diese Facetten dazu bei, dass die Entwicklung und
-Wartung von komplexen Webapplikationen mit enormen Zeit- und Geldaufwand
-verbunden ist. Offensichtlich wird das Problem, wenn man die schiere
-Anzahl der Frameworks und Bibliotheken mit Javascript als Zielsprache
-betrachtet, die vielen Entwicklern Schwierigkeiten bereitet.{[}3{]}
+cript als Zielsprache betrachtet, die vielen Entwicklern Schwierigkeiten
+bereitet.{[}3{]}
 
-Um die inhärenten Designschwächen von Browsern aus der Welt zu schaffen,
-wurde schon im Jahr 2013 das \emph{Extensible Web Manifesto}
-proklamiert.\footnote{https://extensiblewebmanifesto.org/} Darin wird,
-kurz gefasst, eine Öffnung der Webplattformen avisiert, um
-Webprogrammierung teilweise von Browserstandards zu entkoppeln. Drei
-Jahre später sind diese Ziele in W3C Standards konkretisiert worden und
-teilweise schon umgesetzt worden.
-
-\section{Zielsetzung}\label{zielsetzung}
-
-Viele populäre Frameworks für den Browser als Zielplattform versprechen
-dem Entwickler eine bessere Kontrolle über seinen Webservice. Die
-Notwendigkeit rührt unter anderem daher, dass es bisher nicht möglich
-war einzelne Browserelemente in ihrem Aussehen und Verhalten zu
-isolieren. Selbst kleinste Änderungen können daher die Funktionalität
-des Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation
-\emph{Web Components},\footnote{https://www.w3.org/standards/techs/components}
-die mehrere Substandards unter sich vereint, soll die Modularität nun
-auch nativ im Browser unterstützt werden. Modularität als Designpattern
-ist in der IT schon länger Standard um komplexe Systeme beherrschbar zu
-gestalten und auch zukünftige Unsicherheiten abzuwägen.{[}4, S. 1{]} Die
-Unsicherheit, die Frameworks immer anhaftet, ist die Lebensdauer
-derselben.
+nftige Unsicherheiten abzuwägen.{[}4, S. 1--3{]} Die Unsicherheit, die
+Frameworks immer anhaftet, ist die Lebensdauer derselben.
 
 Mit \emph{Web Components} ist der Entwickler in der Lage, eigene HTML
 Elemente zu definieren und diese per Templates zu ex- \& importieren.
@@ -138,7 +147,47 @@ aufgeschlüsselt, zugänglich gemacht und auf Anwendungsmöglichkeiten
 untersucht werden. Explorativ sollen Bestpractices offengelegt werden
 und mögliche Einbettungen ins Gesamtsystem diskutiert werden. Auch die
 Probleme, wie sie beispielsweise bei alten Browsern auftreten können,
-sollen hier behandelt werden.
+sollen hier behandelt werden.\\
+So we are
+
+\begin{quote}
+This is a blockquote
+\end{quote}
+
+´hello world´
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Javascript baby}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{so\ this\ is\ the\ js\ world}
+
+one more last test
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  This is the list
+\end{enumerate}
+
+This is a sub
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Anothoter list
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  {[} {]} oohhhhhhh
+\end{itemize}
 
 Der letzte Abschnitt soll das Thema mit einer Metaebene abrunden, in der
 auch die neuen CSS Standards \emph{Houdini} als Teil des Gesamtsystems
@@ -159,13 +208,11 @@ You've Never Heard Of``, 2016 {[}Online{]}. Verfügbar unter:
 {[}Online{]}. Verfügbar unter:
 \url{https://www.smashingmagazine.com/2016/11/not-an-imposter-fighting-front-end-fatigue/}
 
-\hypertarget{ref-Baldwin2006}{}
-{[}4{]} C. Y. Baldwin und K. B. Clark, „Modularity in the Design of
-Complex Engineering Systems``, in \emph{Complex Engineered Systems:
-Science Meets Technology}, D. Braha, A. A. Minai, und Y. Bar-Yam, Hrsg.
-Berlin, Heidelberg: Springer Berlin Heidelberg, 2006, S. 175--205
-{[}Online{]}. Verfügbar unter:
-\url{http://dx.doi.org/10.1007/3-540-32834-3_9}
+\hypertarget{ref-Dodson2016}{}
+{[}4{]} R. Dodson, „The Case for Custom Elements: Part 2 -- Dev Channel
+-- Medium``. 2016 {[}Online{]}. Verfügbar unter:
+\href{https://medium.com/dev-channel/the-case-for-custom-elements-part-2-2efe42ce9133\%7B/\#\%7D.gl5nuty2r}{https://medium.com/dev-channel/the-case-for-custom-elements-part-2-2efe42ce9133\{\textbackslash{}\#\}.gl5nuty2r}.
+{[}Zugegriffen: 01-Dez-2016{]}
 
 \hypertarget{ref-Keith2014}{}
 {[}5{]} J. Keith, „Web Components``, 2014 {[}Online{]}. Verfügbar unter:
