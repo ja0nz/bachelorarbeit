@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="de-DE">
+<html>
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de">
-  <title>Browsernative Microservices</title>
+  <title></title>
   <style type="text/css">code{white-space: pre;}</style>
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -14,54 +13,81 @@
   <link rel="stylesheet" href="assets/css/academic-pub.css">
 </head>
 <body>
-<header>
-<h1 class="title">Browsernative Microservices</h1>
-<h1 class="subtitle">Modulare Webarchitekturen durch neue Browserstandards entwickeln</h1>
-<h2 class="author">Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de</h2>
-<h3 class="date">Januar 2017</h3>
-</header>
 <nav id="TOC">
 <ul>
-<li><a href="#ausgangssituation">Ausgangssituation</a></li>
-<li><a href="#zielsetzung">Zielsetzung</a></li>
-<li><a href="#vorgehensweise">Vorgehensweise</a></li>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#store">Store</a></li>
+<li><a href="#microservices">Microservices</a></li>
+<li><a href="#progressive-enhancement">Progressive Enhancement</a><ul>
+<li><a href="#chapter-about-progressive-enhancement">Chapter about progressive enhancement</a></li>
+</ul></li>
 </ul>
 </nav>
 <div id="main">
-<h1 id="ausgangssituation">Ausgangssituation</h1>
-<p>Softwareentwicklung für den Browser ist ohne Zweifel eine komplexe und fehleranfällige Angelegenheit. Die Gründe für diesen Umstand sind so vielfältig, dass darüber eine ganze Forschungsarbeit geschrieben werden könnte. Je nach Blickwinkel könnte man von der technischen Seite argumentieren und die Designschwächen der Browserplattform erläutern.<span class="citation" data-cites="Katz2013">(Katz 2013)</span> Oder man könnte die organisatorische Seite betrachten und die Schwerfälligkeit von Standardisierungsprozessen anprangern.<span class="citation" data-cites="Walton2016">(Walton 2016)</span> Oder aber man nimmt die historische Entwicklung in Augenschein. Die Zeiten statischer HTML/CSS Seiten auf Desktopgeräten ist mithin noch nicht lange her.</p>
-<p>Dennoch tragen alle diese Facetten dazu bei, dass die Entwicklung und Wartung von komplexen Webapplikationen mit enormen Zeit- und Geldaufwand verbunden ist. Offensichtlich wird das Problem, wenn man die schiere Anzahl der Frameworks und Bibliotheken mit Javascript als Zielsprache betrachtet, die vielen Entwicklern Schwierigkeiten bereitet.<span class="citation" data-cites="Berner2016">(Berner 2016)</span></p>
-<p>Um die inhärenten Designschwächen von Browsern aus der Welt zu schaffen, wurde schon im Jahr 2013 das <em>Extensible Web Manifesto</em> proklamiert.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Darin wird, kurz gefasst, eine Öffnung der Webplattformen avisiert, um Webprogrammierung teilweise von Browserstandards zu entkoppeln. Drei Jahre später sind diese Ziele in W3C Standards konkretisiert worden und teilweise schon umgesetzt worden.</p>
-<h1 id="zielsetzung">Zielsetzung</h1>
-<p>Viele populäre Frameworks für den Browser als Zielplattform versprechen dem Entwickler eine bessere Kontrolle über seinen Webservice. Die Notwendigkeit rührt unter anderem daher, dass es bisher nicht möglich war einzelne Browserelemente in ihrem Aussehen und Verhalten zu isolieren. Selbst kleinste Änderungen können daher die Funktionalität des Gesamtsystems beeinträchtigen. Mit der neuen W3C Spezifikation <em>Web Components</em>,<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> die mehrere Substandards unter sich vereint, soll die Modularität nun auch nativ im Browser unterstützt werden. Modularität als Designpattern ist in der IT schon länger Standard um komplexe Systeme beherrschbar zu gestalten und auch zukünftige Unsicherheiten abzuwägen.<span class="citation" data-cites="Baldwin2006">(Baldwin und Clark 2006, 1)</span> Die Unsicherheit, die Frameworks immer anhaftet, ist die Lebensdauer derselben.</p>
-<p>Mit <em>Web Components</em> ist der Entwickler in der Lage, eigene HTML Elemente zu definieren und diese per Templates zu ex- &amp; importieren. Darüber hinaus können sie JavaScript und CSS Funktionalität enthalten und diese vom Rest der Webseite abzukapseln. Ziel dieser Arbeit ist die systematische Erfassung und Risikoabwägung der neuen Technologien sowie eine praktische Erläuterung möglicher Architekturmodelle. Bisher gibt es keine einheitliche Bestpractice, wie denn die Komponenten umzusetzen sind, obwohl diese Technologien bereits länger durch Polyfills genutzt werden können. Manch ein Entwickler fürchtet schon eine Flut von schlecht gebauten Komponenten, die wiederum neue Probleme schaffen könnten.<span class="citation" data-cites="Keith2014">(Keith 2014)</span></p>
-<h1 id="vorgehensweise">Vorgehensweise</h1>
-<p>Den Anfang dieser Arbeit soll eine Analyse der aktuellen Situation der Frontend Entwicklung aufzeigen. Dort soll auf die Problematik der bisherigen Architekturmodelle und die Probleme mit monolithischen Frameworks eingegangen werden. Außerdem soll dieser Teil vor Augen führen, warum es bisher nur mit zusätzlicher Abstraktionsebenen möglich war einen modularen Aufbau von Web Applikationen zu ermöglichen.</p>
-<p>Im nächsten Abschnitt der Arbeit sollen die neuen Standards aufgeschlüsselt, zugänglich gemacht und auf Anwendungsmöglichkeiten untersucht werden. Explorativ sollen Bestpractices offengelegt werden und mögliche Einbettungen ins Gesamtsystem diskutiert werden. Auch die Probleme, wie sie beispielsweise bei alten Browsern auftreten können, sollen hier behandelt werden.</p>
-<p>Der letzte Abschnitt soll das Thema mit einer Metaebene abrunden, in der auch die neuen CSS Standards <em>Houdini</em> als Teil des Gesamtsystems betrachtet werden sollen.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<h1 id="introduction">Introduction</h1>
+<blockquote>
+<p>Simplicity is prerequisite for reliability. - Edsger W. Dijkstra</p>
+</blockquote>
+<p>Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von komplexen Systemen. In einer vielbeachteten Keynote aus dem Jahr 2012 geht er auf etymologisch-philosophische Spurensuche nach dem Wort <strong>simplicity </strong> aus Sicht eines Softwareentwicklers.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Das Adjektiv <em>simple</em> hat demnach seinen Ursprung im lateinischen Wort <em>simplex</em>, was soviel wie <em>einfach</em> oder <em>einzeln</em> bedeutet. In Gegensatz dazu stehen Eigenschaften wie <em>complex</em> oder <em>multiplex</em>. Qualitative Software ist, so Hickey, vor allem simpel - im Prozess, im Design, in der Struktur und in der Entwicklung.</p>
+<p>Bezeichnend für diese Keynote ist, dass sie von Rich Hickey im Rahmen einer Webentwicklerkonferenz gehalten wurde. Software für den Browser war (und ist) seit langer Zeit maßgeblich geprägt von <strong>Komplexität</strong> auf mehreren Ebenen. Im Laufe dieser Bachelorarbeit werden diese Stru</p>
+<ul>
+<li>Das <em>Document Object Model</em> als Rückgrad jeder Webapplikation ist hierarchisch strukturiert und deren Elemente damit keinesfalls unabhängig in ihrer Darstellung und Reihenfolge.</li>
+<li>JavaScript als single-threaded Skriptsprache lässt sich schlecht ihn ihrem Verhalten isolieren, ist Fehleranfällig und hatte lange Zeit nur sehr wenig idiomatische Lösungsansätze für komplexe Probleme, wie beispielsweise Asynchronität</li>
+<li>CSS ist geprägt von stetigem Überschreiben vorher definierter Regeln und verletzt damit Simplizität in ihrer Struktur, Design und dem Entwicklungsprozesses auf bester Art und Weise.</li>
+</ul>
+<hr />
+<p>Betrachtet man andere populäre Webframeworks dieser Zeit, wie beispielsweise React oder Angular, lässt sich ziemlich schnell ein gemeinsames Designpattern ausmachen, wie Komponenten intern ihre Zuständen verwalten. Der Facebook Entwickler Dan Abramov hat dieses dichotome Pattern systematisch erfasst und in zwei Kategorien eingeteilt.</p>
+<p>Nach Abramov existieren zum einen Komponenten, die alleine für das <strong>Darstellen von Information</strong> zuständig sind. Diese Komponenten nehmen keinerlei Einfluss auf Informationen oder anderen Komponenten um sich herum. Sie sind im wahrsten Sinne passiv und fremdgesteuert über klar definierte Schnittstellen. Diese Komponenten sind häufig flexibel einsetzbar und hochgradig wiederwerwendbar. Abramov nennt diese Komponenten &quot;Presentational Components&quot;.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Verortet man diese Art von Komponenten innerhalb des <em>MVC Pattern</em>, sind die Komponenten reine <em>View-Elemente</em>.</p>
+<p>Im Gegensatz dazu stehen Komponenten, die für die <strong>Verarbeitung von Informationen</strong> zuständig sind. Diese so genannten &quot;Container Components&quot; haben oft einen internen Zustand, den sie verändern können und an ihre Kindkomponenten weiterreichen können.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Im <em>MVC Pattern</em> handelt es sich um die <em>Controller</em>. In der funktionalen Programmiersprache Elm werden diese Elemente <em>Updater</em> genannt, was ihre Funktion noch besser umschreibt.</p>
+<p>Ein üblicher eventgesteuerter Webservice setzt sich aus unterschiedlichsten Komponenten zusammen, die wiederum unterschiedlichste Eventlistener &amp; -emitter in sich subsummieren. Diese inhärente Komplexität verlangt geradezu nach einer klaren, deterministischen Struktur des Webservices, die das Zusammenspiel orchestriert. In der Analogie des Orchesters gesprochen, benötigt der Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der für die Steuerung verantwortlich ist.</p>
+<h1 id="store">Store</h1>
+<pre><code>   +-----------------------+
+   |         Store         |
+   +-----------------------+
+       /\|  |
+       </code></pre>
+<p>die Änderungen des Zustands vorhersehbar aber auch zurückverfolgbar macht.</p>
+<h1 id="microservices">Microservices</h1>
+<p>In a nutshell a microservice is a small, autonomous service that works together with other services seamlessly.<span class="citation" data-cites="Newman2015">(Newman 2016, 2)</span> While the concept of microservices lacks a formal standardization there are certain defacto standardized ideas emergine from this pattern. The purpose of this section is to match those ideas against the manifestations of web components.</p>
+<p>First of all, from a technical perspective, a microservice reinforces the <em>Single Responsibility Principle</em> defined by Robert C. Martin: &quot;Gather together those things that change for the same reason and separate those things that change for different reasons.&quot;<span class="citation" data-cites="Martin">(Martin, n.d.)</span> An a way this principle tackles another often cited design principle of the <em>seperation of concerns</em>. Web Components incorporate this principle in multiple ways while still remaining flexible.</p>
+<p>Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases trying to find a tricky way to glue related parts together.</p>
+<p>Secondly, the sub-standard <em>custom elements</em> introduces so called lifecycle methods and a getter/setter interface exposing the functionality to the developer. Event handling, for example, can be registered in place which is much more declarative than assigning event listeners from the outside. Of course, this events can be pushed down to nested tags, allowing an increasingly granular system design. This approach will be explained further in the upcoming sections.</p>
+<p>The concept of microservices incooperates not only a technical perspective. Microservice patterns are a product of real-world usage.<span class="citation" data-cites="Newman2015">(Newman 2016, 1)</span> In a real world we typical have to deal with the so called <em>Conway's Law</em>:</p>
+<blockquote>
+<p>&quot;organizations which design systems ... are constrained to produce designs which are copies of the communication structures of these organizations&quot;. <span class="citation" data-cites="Conway1968">(Conway 1968)</span></p>
+</blockquote>
+<p>Following this logic any company, whether its web-related or not, should be devided in units grouped around a destinct business service to optimise the workflow. Fowler and Lewis outlines this approach as an &quot;alignment of business capabilities&quot;<span class="citation" data-cites="Fowler2015">(Fowler and Lewis 2015, 2)</span> While this kind of structure may be true for companies like Google or Amazon, there is a vast majority of companies developing for the web which are grouped around tasks.<span class="citation" data-cites="Issa2016">(Issa 2016)</span> A very common structure is formed by the technology stack: UX Designers, Frontend- &amp; Backend Developers.</p>
+<p>The microservice approach models all those functions into business-related units. Web components are one (but important) way to tie up those diciplines as one component can host a single independent business service. Combined with a flexible backend service these components can be huge gain over the cumbersome functional organizational approach.</p>
+<p>Macroperspektive / Composition</p>
+<p>http://alistair.cockburn.us/Hexagonal+architecture</p>
+<p>MVC Pattern</p>
+<h1 id="progressive-enhancement">Progressive Enhancement</h1>
+<h2 id="chapter-about-progressive-enhancement">Chapter about progressive enhancement</h2>
+<p>title: Browsernative Microservices subtitle: Modulare Webarchitekturen durch neue W3C-Spezifikationen author: Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de date: Januar 2017 lang: de-DE abstract: Webapplikationen lassen sich oft nur mit zusätzlichen Abstraktionsebenen wie beispielsweise &quot;Frameworks&quot; verwirklichen. Neue Browserstandards ermöglichen eine native Servicearchitektur, die direkt auf der Browser-Engine aufsetzt. Diese Charakteristiken sollen systematisch erfasst werden. ...</p>
 <div id="refs" class="references">
-<div id="ref-Baldwin2006">
-<p>Baldwin, Carliss Y., und Kim B. Clark. 2006. „Modularity in the Design of Complex Engineering Systems“. In <em>Complex Engineered Systems: Science Meets Technology</em>, herausgegeben von Dan Braha, Ali A. Minai, und Yaneer Bar-Yam, 175–205. Berlin, Heidelberg: Springer Berlin Heidelberg. doi:<a href="https://doi.org/10.1007/3-540-32834-3_9">10.1007/3-540-32834-3_9</a>.</p>
+<div id="ref-Abramov2015">
+<p>Abramov, Dan. 2015. “Presentational and Container Components – Medium.” <a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" class="uri">https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0</a>.</p>
 </div>
-<div id="ref-Berner2016">
-<p>Berner, David. 2016. „Not An Imposter: Fighting Front-End Fatigue“. <a href="https://www.smashingmagazine.com/2016/11/not-an-imposter-fighting-front-end-fatigue/" class="uri">https://www.smashingmagazine.com/2016/11/not-an-imposter-fighting-front-end-fatigue/</a>.</p>
+<div id="ref-Conway1968">
+<p>Conway, Melvin E. 1968. “How Do Committees Invent?” <a href="http://www.melconway.com/Home/Committees_Paper.html" class="uri">http://www.melconway.com/Home/Committees_Paper.html</a>.</p>
 </div>
-<div id="ref-Katz2013">
-<p>Katz, Yehuda. 2013. „Extend the Web Forward“. <a href="http://yehudakatz.com/2013/05/21/extend-the-web-forward/" class="uri">http://yehudakatz.com/2013/05/21/extend-the-web-forward/</a>.</p>
+<div id="ref-Fowler2015">
+<p>Fowler, Martin, and James Lewis. 2015. “Microservices: Nur Ein Weiteres Konzept in Der Softwarearchitektur Oder Mehr?” <em>OBJEKTspektrum</em>, January.</p>
 </div>
-<div id="ref-Keith2014">
-<p>Keith, Jeremy. 2014. „Web Components“. <a href="https://adactio.com/journal/7431" class="uri">https://adactio.com/journal/7431</a>.</p>
+<div id="ref-Issa2016">
+<p>Issa, Ben. 2016. “The Way of the Web.” Polymer Summit 2016. <a href="https://www.youtube.com/watch?v=8ZTFEhPBJEE" class="uri">https://www.youtube.com/watch?v=8ZTFEhPBJEE</a>.</p>
 </div>
-<div id="ref-Walton2016">
-<p>Walton, Philip. 2016. „Houdini: Maybe The Most Exciting Development In CSS You’ve Never Heard Of“. <a href="https://www.smashingmagazine.com/2016/03/houdini-maybe-the-most-exciting-development-in-css-youve-never-heard-of" class="uri">https://www.smashingmagazine.com/2016/03/houdini-maybe-the-most-exciting-development-in-css-youve-never-heard-of</a>.</p>
+<div id="ref-Martin">
+<p>Martin, Robert C. n.d. “The Single Responsibility Principle.” <a href="http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle" class="uri">http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle</a>.</p>
+</div>
+<div id="ref-Newman2015">
+<p>Newman, Sam. 2016. <em>Building Microservices</em>. O’Reilly Media, Inc. <a href="http://www.ebook.de/de/product/22539693/sam_newmann_building_microservices.html" class="uri">http://www.ebook.de/de/product/22539693/sam_newmann_building_microservices.html</a>.</p>
 </div>
 </div>
 <section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>https://extensiblewebmanifesto.org/<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>https://www.w3.org/standards/techs/components<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>https://drafts.css-houdini.org/<a href="#fnref3">↩</a></p></li>
+<li id="fn1"><p><a href="https://www.youtube.com/watch?v=rI8tNMsozo0&amp;t=48s">Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey</a><a href="#fnref1">↩</a></p></li>
 </ol>
 </section>
 </div>
