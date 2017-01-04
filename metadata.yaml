@@ -1,8 +1,7 @@
 ---
 title: Browsernative Microservices
-subtitle: Modulare Webarchitekturen durch neue W3C-Spezifikationen
+subtitle: Modular web architecture through new W3C specifications
 author: Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de
 date: Januar 2017
-lang: de-DE
-abstract: Webapplikationen lassen sich oft nur mit zusätzlichen Abstraktionsebenen wie beispielsweise "Frameworks" verwirklichen. Neue Browserstandards ermöglichen eine native Servicearchitektur, die direkt auf der Browser-Engine aufsetzt. Diese Charakteristiken sollen systematisch erfasst werden.
+abstract: Building complex web applications nowadays require additional layers of abstraction and often heavily depend on proprietary frameworks. New specifications build right into the browserengine provide a native service API to overcome tricky abstraction constraints.
 ...
