@@ -23,6 +23,8 @@
 }{}
 \usepackage[unicode=true]{hyperref}
 \hypersetup{
+            pdftitle={Browsernative Microservices},
+            pdfauthor={Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
@@ -52,15 +54,29 @@
 \makeatother
 
 
-\date{}
+\title{Browsernative Microservices}
+\providecommand{\subtitle}[1]{}
+\subtitle{Modular web architecture through new W3C specifications}
+\author{Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de}
+\date{Januar 2017}
 
 \begin{document}
+\maketitle
+\begin{abstract}
+Building complex web applications nowadays require additional layers of
+abstraction and often heavily depend on proprietary frameworks. New
+specifications build right into the browserengine provide a native
+service API to overcome tricky abstraction constraints.
+\end{abstract}
 
 \section{Introduction}\label{introduction}
 
 \begin{quote}
 Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 \end{quote}
+
+Introduction: from simplicity to Microservices to w3c specifications
+\ldots{} and beyond
 
 Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne
 Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von
@@ -133,32 +149,58 @@ orchestriert. In der Analogie des Orchesters gesprochen, benötigt der
 Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der
 für die Steuerung verantwortlich ist.
 
-\section{Store}\label{store}
-
-\begin{verbatim}
-   +-----------------------+
-   |         Store         |
-   +-----------------------+
-       /\|  |
-       
-\end{verbatim}
-
-die Änderungen des Zustands vorhersehbar aber auch zurückverfolgbar
-macht.
-
 \section{Microservices}\label{microservices}
 
-In a nutshell a microservice is a small, autonomous service that works
-together with other services seamlessly.{[}2, p. 2{]} While the concept
-of microservices lacks a formal standardization there are certain
-defacto standardized ideas emergine from this pattern. The purpose of
+Opening up the case for \emph{Browsernative Microservices} brings up the
+question about the concept microservices in general. In fact the concept
+of microservices has many facets, stretching beyond disciplines and
+technical boundaries. It lacks a formal standardization but there are
+certain ideas emergine from this pattern. As a primary source of truth
+this articles relies on the work of Sam Newman, who has written a
+comprehensive guide in \emph{Building Microservices}. The purpose of
 this section is to match those ideas against the manifestations of web
 components.
+
+In a nutshell a microservice is a small, autonomous service that works
+together with other services seamlessly.{[}2, p. 2{]} or with the words
+of Fowler and Lewis: ``It is an approach to developing a single
+application as a suite of small services, each running in its own
+process and communicating with lightweight mechanisms,\ldots{}''{[}3{]}
+Microservices incorporate many ideas, like \emph{domain-driven design}
+where we try to represent the real world in our code.{\textbf{???}} Or
+making use of \emph{continuous delivery} for pushing software rapidly
+through \emph{automated deployment} mechanisms in production.{[}3{]}
+And, last but not least, microservices utilizes the idea of small teams
+with a lot of product knowledge working mostly autonomous on their very
+own service with their very own set of tools and techniques.
+
+\subsection{Technical perspective}\label{technical-perspective}
+
+Shift of paradigms / BFF / Platform agnostic / changes in infrastructure
+like APIs Databanks / Deployment
+
+Talking about microservices in a browsernative context isn't that far
+fetched as microservices themselves incorporate many ideas from the web.
+Exemplary, microservices often communicate via an HTTP request-response
+with resource API's and lightweight messaging.{[}3{]} Nevertheless,
+while (server-side) microservices offer wide ranges of technical
+possibilities, we must take into account that (client-side) browsers
+come with certain constraints and limitations.
+
+Fowler and Lewis issue a call for using services as components. A
+component~is regarded as a unit of software that is independently
+replaceable and upgradeable. The main advantage of a component in
+contrast of library is the possibility of an independent deployment. It
+aligns perfectly with the main goal of a microservice architecture to
+strip away most of the dependencies in favour of clean
+interfaces.{[}3{]}
+
+Components
 
 First of all, from a technical perspective, a microservice reinforces
 the \emph{Single Responsibility Principle} defined by Robert C. Martin:
 ``Gather together those things that change for the same reason and
-separate those things that change for different reasons.''{[}3{]} An a
+separate those things that change for different reasons.''{[}4{]} An a
 way this principle tackles another often cited design principle of the
 \emph{seperation of concerns}. Web Components incorporate this principle
 in multiple ways while still remaining flexible.
@@ -168,8 +210,8 @@ of a single HTML tag. Grouping together HTML, JS and CSS Code in a safe,
 sandboxed environment exposes the possibility to build more cohesive and
 understandable services. In the typical global nature of web development
 those three pillars are separated. This circumstance left the developer
-switching back and forth between code bases trying to find a tricky way
-to glue related parts together.
+switching back and forth between code bases developing a tricky (and
+sometimes biased) way to glue related parts together.
 
 Secondly, the sub-standard \emph{custom elements} introduces so called
 lifecycle methods and a getter/setter interface exposing the
@@ -187,24 +229,28 @@ called \emph{Conway's Law}:
 \begin{quote}
 ``organizations which design systems \ldots{} are constrained to produce
 designs which are copies of the communication~structures~of these
-organizations''. {[}4{]}
+organizations''. {[}5{]}
 \end{quote}
 
-Following this logic any company, whether its web-related or not, should
-be devided in units grouped around a destinct business service to
+Following this logic any company, whether it is web-related or not,
+should be devided in units grouped around a destinct business service to
 optimise the workflow. Fowler and Lewis outlines this approach as an
-``alignment of business capabilities''{[}5, p. 2{]} While this kind of
+``alignment of business capabilities''{[}3{]} While this kind of
 structure may be true for companies like Google or Amazon, there is a
 vast majority of companies developing for the web which are grouped
 around tasks.{[}6{]} A very common structure is formed by the technology
-stack: UX Designers, Frontend- \& Backend Developers.
+stack (UX Designers, Frontend- \& Backend Developers) or by separating
+teams along the product lifecycle (development, testing, deployment).
 
-The microservice approach models all those functions into
-business-related units. Web components are one (but important) way to
-tie up those diciplines as one component can host a single independent
-business service. Combined with a flexible backend service these
-components can be huge gain over the cumbersome functional
-organizational approach.
+Advocators from the microservice approach propose a different model.
+best described by . Web components are one (but important) way to tie up
+those diciplines as one component can host a single independent business
+service. Combined with a flexible backend service these components can
+be huge gain over the cumbersome functional organizational approach.
+
+The ideas transcending from the microservice approach offers plenty of
+choices and decisions how to proceed with designing a program or to
+structure a process.
 
 Macroperspektive / Composition
 
@@ -212,19 +258,11 @@ http://alistair.cockburn.us/Hexagonal+architecture
 
 MVC Pattern
 
+Pure frontend vs heavy backend
+
 \section{Progressive Enhancement}\label{progressive-enhancement}
 
-\subsection{Chapter about progressive
-enhancement}\label{chapter-about-progressive-enhancement}
-
-title: Browsernative Microservices subtitle: Modulare Webarchitekturen
-durch neue W3C-Spezifikationen author: Jan Peteler, FH
-Würzburg-Schweinfurt, jan.peteler@student.fhws.de date: Januar 2017
-lang: de-DE abstract: Webapplikationen lassen sich oft nur mit
-zusätzlichen Abstraktionsebenen wie beispielsweise ``Frameworks''
-verwirklichen. Neue Browserstandards ermöglichen eine native
-Servicearchitektur, die direkt auf der Browser-Engine aufsetzt. Diese
-Charakteristiken sollen systematisch erfasst werden. \ldots{}
+Chapter about progressive enhancement
 
 \hypertarget{refs}{}
 \hypertarget{ref-Abramov2015}{}
@@ -238,19 +276,19 @@ Medium.'' 2015 {[}Online{]}. Available:
 2016 {[}Online{]}. Available:
 \url{http://www.ebook.de/de/product/22539693/sam_newmann_building_microservices.html}
 
+\hypertarget{ref-Fowler2014}{}
+{[}3{]} M. Fowler and J. Lewis, ``Microservices: A definition of this
+new architectural term,'' Jan. 2014 {[}Online{]}. Available:
+\url{http://www.martinfowler.com/articles/microservices.html}
+
 \hypertarget{ref-Martin}{}
-{[}3{]} R. C. Martin, ``The single responsibility principle.''
+{[}4{]} R. C. Martin, ``The single responsibility principle.''
 {[}Online{]}. Available:
 \url{http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle}
 
 \hypertarget{ref-Conway1968}{}
-{[}4{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
+{[}5{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
 Available: \url{http://www.melconway.com/Home/Committees_Paper.html}
-
-\hypertarget{ref-Fowler2015}{}
-{[}5{]} M. Fowler and J. Lewis, ``Microservices: Nur ein weiteres
-konzept in der softwarearchitektur oder mehr?'' \emph{OBJEKTspektrum},
-Jan. 2015.
 
 \hypertarget{ref-Issa2016}{}
 {[}6{]} B. Issa, ``The way of the web.'' Polymer Summit 2016, Oct-2016
