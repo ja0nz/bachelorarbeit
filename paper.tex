@@ -28,6 +28,47 @@
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 \IfFileExists{parskip.sty}{%
 \usepackage{parskip}
 }{% else
@@ -75,8 +116,8 @@ service API to overcome tricky abstraction constraints.
 Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 \end{quote}
 
-Introduction: from simplicity to Microservices to w3c specifications
-\ldots{} and beyond
+Introduction: from simplicity to Microservices to extensible web
+manifesto to w3c specifications \ldots{} and beyond
 
 Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne
 Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von
@@ -252,6 +293,66 @@ The ideas transcending from the microservice approach offers plenty of
 choices and decisions how to proceed with designing a program or to
 structure a process.
 
+\section{W3C specifications}\label{w3c-specifications}
+
+For building a native microservice running on the ``bare-metal'' browser
+engine requires a bunch of new specifications and assumptions. Starting
+right into it, the first and foremost the quasi specification \emph{Web
+Components} is needed. \emph{Web Components} is not a real standard.
+It's an amalgam of APIs from multiple w3c specs which can be used
+independently, too. Some people argue for only two specs{[}7{]}, some
+people go for three specs {[}8{]}, but the majority advocating the four
+specs variant, which can looked up on \sout{the official}
+\href{http://webcomponents.org}{webcomponents.org} website. For the
+purpose of this article, those four specs will be discussed briefly to
+provide a rough understanding. It is not meant to cover all bits and
+pieces.
+
+\subsection{\texorpdfstring{Custom Elements
+\href{http://w3c.github.io/webcomponents/spec/custom/}{(w3c)}}{Custom Elements (w3c)}}\label{custom-elements-w3c}
+
+\emph{Custom Elements} are the fundamental building block for
+browsernative microservices. They provide a way to create customized
+HTML tags. An obligatory \textbf{HelloWorld} will help to understand the
+spec quickly:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+        \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
+        \KeywordTok{this}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{"hello world"}\OperatorTok{;}
+        \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{innerHTML}\NormalTok{)}\OperatorTok{;}
+    \OperatorTok{\}}
+\OperatorTok{\}}
+\VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{> index.html}
+\KeywordTok{<hello-world></hello-world>}
+\end{Highlighting}
+\end{Shaded}
+
+Most obvious, this spec relies on the new \emph{ES6 Class Syntax} in
+favor of the original prototype-based inheritance model.
+``Extending~\texttt{HTMLElement}~ensures the custom element inherits the
+entire DOM API and means any properties/methods that you add to the
+class become part of the element's DOM interface.''{[}9{]} The keyword
+\texttt{this} points to the element itself and let us easily define and
+access properties of the element. The so called \emph{fat-arrow}
+(\texttt{=\textgreater{}}) is just a new feature of ES6 and nothing more
+than a \texttt{function()}.
+
+After defining the element it needs to be registered in the new global
+build-in \texttt{customElements} with an DOM alias like
+\texttt{hello-world}. Note that there must be a dash inside the name to
+be valid. Finally, the new element can go live inside the HTML Document
+\texttt{index.html}.
+
 Macroperspektive / Composition
 
 http://alistair.cockburn.us/Hexagonal+architecture
@@ -294,5 +395,21 @@ Available: \url{http://www.melconway.com/Home/Committees_Paper.html}
 {[}6{]} B. Issa, ``The way of the web.'' Polymer Summit 2016, Oct-2016
 {[}Online{]}. Available:
 \url{https://www.youtube.com/watch?v=8ZTFEhPBJEE}
+
+\hypertarget{ref-Buchner2016}{}
+{[}7{]} D. Buchner, ``Demythstifying web components,'' 2016
+{[}Online{]}. Available:
+\url{http://www.backalleycoder.com/2016/08/26/demythstifying-web-components/}
+
+\hypertarget{ref-vanKesteren2014}{}
+{[}8{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
+{[}Online{]}. Available:
+\url{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
+
+\hypertarget{ref-Bidelman2016}{}
+{[}9{]} E. Bidelman, ``Custom elements v1: reusable web components.''
+2016 {[}Online{]}. Available:
+\url{https://developers.google.com/web/fundamentals/primers/customelements/}.
+{[}Accessed: 01-Dec-2016{]}
 
 \end{document}
