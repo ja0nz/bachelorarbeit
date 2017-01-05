@@ -9,6 +9,43 @@
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
   <link rel="stylesheet" href="assets/fonts/cm/cm.css">
   <link rel="stylesheet" href="assets/css/academic-pub.css">
 </head>
@@ -18,6 +55,9 @@
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#microservices">Microservices</a><ul>
 <li><a href="#technical-perspective">Technical perspective</a></li>
+</ul></li>
+<li><a href="#w3c-specifications">W3C specifications</a><ul>
+<li><a href="#custom-elements-w3c">Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></a></li>
 </ul></li>
 <li><a href="#progressive-enhancement">Progressive Enhancement</a><ul>
 <li><a href="#chapter-about-progressive-enhancement">Chapter about progressive enhancement</a></li>
@@ -29,7 +69,7 @@
 <blockquote>
 <p>Simplicity is prerequisite for reliability. - Edsger W. Dijkstra</p>
 </blockquote>
-<p>Introduction: from simplicity to Microservices to w3c specifications ... and beyond</p>
+<p>Introduction: from simplicity to Microservices to extensible web manifesto to w3c specifications ... and beyond</p>
 <p>Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von komplexen Systemen. In einer vielbeachteten Keynote aus dem Jahr 2012 geht er auf etymologisch-philosophische Spurensuche nach dem Wort <strong>simplicity </strong> aus Sicht eines Softwareentwicklers.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Das Adjektiv <em>simple</em> hat demnach seinen Ursprung im lateinischen Wort <em>simplex</em>, was soviel wie <em>einfach</em> oder <em>einzeln</em> bedeutet. In Gegensatz dazu stehen Eigenschaften wie <em>complex</em> oder <em>multiplex</em>. Qualitative Software ist, so Hickey, vor allem simpel - im Prozess, im Design, in der Struktur und in der Entwicklung.</p>
 <p>Bezeichnend für diese Keynote ist, dass sie von Rich Hickey im Rahmen einer Webentwicklerkonferenz gehalten wurde. Software für den Browser war (und ist) seit langer Zeit maßgeblich geprägt von <strong>Komplexität</strong> auf mehreren Ebenen. Im Laufe dieser Bachelorarbeit werden diese Stru</p>
 <ul>
@@ -60,6 +100,23 @@
 <p>Following this logic any company, whether it is web-related or not, should be devided in units grouped around a destinct business service to optimise the workflow. Fowler and Lewis outlines this approach as an &quot;alignment of business capabilities&quot;<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> While this kind of structure may be true for companies like Google or Amazon, there is a vast majority of companies developing for the web which are grouped around tasks.<span class="citation" data-cites="Issa2016">(Issa 2016)</span> A very common structure is formed by the technology stack (UX Designers, Frontend- &amp; Backend Developers) or by separating teams along the product lifecycle (development, testing, deployment).</p>
 <p>Advocators from the microservice approach propose a different model. best described by . Web components are one (but important) way to tie up those diciplines as one component can host a single independent business service. Combined with a flexible backend service these components can be huge gain over the cumbersome functional organizational approach.</p>
 <p>The ideas transcending from the microservice approach offers plenty of choices and decisions how to proceed with designing a program or to structure a process.</p>
+<h1 id="w3c-specifications">W3C specifications</h1>
+<p>For building a native microservice running on the &quot;bare-metal&quot; browser engine requires a bunch of new specifications and assumptions. Starting right into it, the first and foremost the quasi specification <em>Web Components</em> is needed. <em>Web Components</em> is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently, too. Some people argue for only two specs<span class="citation" data-cites="Buchner2016">(Buchner 2016)</span>, some people go for three specs <span class="citation" data-cites="vanKesteren2014">(Kesteren 2014)</span>, but the majority advocating the four specs variant, which can looked up on <del>the official</del> <a href="http://webcomponents.org">webcomponents.org</a> website. For the purpose of this article, those four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.</p>
+<h2 id="custom-elements-w3c">Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></h2>
+<p><em>Custom Elements</em> are the fundamental building block for browsernative microservices. They provide a way to create customized HTML tags. An obligatory <strong>HelloWorld</strong> will help to understand the spec quickly:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
+<span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+    <span class="at">constructor</span>() <span class="op">{</span>
+        <span class="kw">super</span>()<span class="op">;</span> <span class="co">// mandatory!</span>
+        <span class="kw">this</span>.<span class="at">innerHTML</span> <span class="op">=</span> <span class="st">&quot;hello world&quot;</span><span class="op">;</span>
+        <span class="kw">this</span>.<span class="at">onclick</span> <span class="op">=</span> e <span class="op">=&gt;</span> <span class="at">alert</span>(<span class="kw">this</span>.<span class="at">innerHTML</span>)<span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+<span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> HelloWorld)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; index.html
+<span class="kw">&lt;hello-world&gt;&lt;/hello-world&gt;</span></code></pre></div>
+<p>Most obvious, this spec relies on the new <em>ES6 Class Syntax</em> in favor of the original prototype-based inheritance model. &quot;Extending <code>HTMLElement</code> ensures the custom element inherits the entire DOM API and means any properties/methods that you add to the class become part of the element's DOM interface.&quot;<span class="citation" data-cites="Bidelman2016">(Bidelman 2016)</span> The keyword <code>this</code> points to the element itself and let us easily define and access properties of the element. The so called <em>fat-arrow</em> (<code>=&gt;</code>) is just a new feature of ES6 and nothing more than a <code>function()</code>.</p>
+<p>After defining the element it needs to be registered in the new global build-in <code>customElements</code> with an DOM alias like <code>hello-world</code>. Note that there must be a dash inside the name to be valid. Finally, the new element can go live inside the HTML Document <code>index.html</code>.</p>
 <p>Macroperspektive / Composition</p>
 <p>http://alistair.cockburn.us/Hexagonal+architecture</p>
 <p>MVC Pattern</p>
@@ -71,6 +128,12 @@
 <div id="ref-Abramov2015">
 <p>Abramov, Dan. 2015. “Presentational and Container Components – Medium.” <a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" class="uri">https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0</a>.</p>
 </div>
+<div id="ref-Bidelman2016">
+<p>Bidelman, Eric. 2016. “Custom elements v1: reusable web components.” <a href="https://developers.google.com/web/fundamentals/primers/customelements/" class="uri">https://developers.google.com/web/fundamentals/primers/customelements/</a>.</p>
+</div>
+<div id="ref-Buchner2016">
+<p>Buchner, Daniel. 2016. “Demythstifying Web Components.” <a href="http://www.backalleycoder.com/2016/08/26/demythstifying-web-components/" class="uri">http://www.backalleycoder.com/2016/08/26/demythstifying-web-components/</a>.</p>
+</div>
 <div id="ref-Conway1968">
 <p>Conway, Melvin E. 1968. “How Do Committees Invent?” <a href="http://www.melconway.com/Home/Committees_Paper.html" class="uri">http://www.melconway.com/Home/Committees_Paper.html</a>.</p>
 </div>
@@ -79,6 +142,9 @@
 </div>
 <div id="ref-Issa2016">
 <p>Issa, Ben. 2016. “The Way of the Web.” Polymer Summit 2016. <a href="https://www.youtube.com/watch?v=8ZTFEhPBJEE" class="uri">https://www.youtube.com/watch?v=8ZTFEhPBJEE</a>.</p>
+</div>
+<div id="ref-vanKesteren2014">
+<p>Kesteren, Anne van. 2014. “Mozilla and Web Components: Update.” <a href="https://hacks.mozilla.org/2014/12/mozilla-and-web-components/" class="uri">https://hacks.mozilla.org/2014/12/mozilla-and-web-components/</a>.</p>
 </div>
 <div id="ref-Martin">
 <p>Martin, Robert C. n.d. “The Single Responsibility Principle.” <a href="http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle" class="uri">http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle</a>.</p>
