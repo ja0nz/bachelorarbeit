@@ -6,7 +6,7 @@
 
 
 
-Introduction: from simplicity to Microservices to w3c specifications ... and beyond
+Introduction: from simplicity to Microservices to extensible web manifesto to w3c specifications ... and beyond
 
 Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von komplexen Systemen. In einer vielbeachteten Keynote aus dem Jahr 2012 geht er auf etymologisch-philosophische Spurensuche nach dem Wort **simplicity ** aus Sicht eines Softwareentwicklers.[^rich] Das Adjektiv *simple* hat demnach seinen Ursprung im lateinischen Wort *simplex*, was soviel wie *einfach* oder *einzeln* bedeutet. In Gegensatz dazu stehen Eigenschaften wie *complex* oder *multiplex*. Qualitative Software ist, so Hickey, vor allem simpel -  im Prozess, im Design, in der Struktur und in der Entwicklung.
 
@@ -76,9 +76,34 @@ The ideas transcending from the microservice approach offers plenty of choices a
 
 
 
+# W3C specifications
 
+For building a native microservice running on the "bare-metal" browser engine requires a bunch of new specifications and assumptions. Starting right into it, the first and foremost the quasi specification *Web Components*  is needed. *Web Components* is not a real standard.  It's an amalgam  of APIs from multiple w3c specs which can be used independently, too. Some people argue for only two specs[@Buchner2016], some people go for three specs [@vanKesteren2014], but the majority advocating the four specs variant, which can looked up on ~~the official~~ [webcomponents.org](http://webcomponents.org) website. For the purpose of this article, those four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.
 
+## Custom Elements [(w3c)](http://w3c.github.io/webcomponents/spec/custom/)
 
+*Custom Elements* are the fundamental building block for browsernative microservices. They provide a way to create customized HTML tags.  An obligatory **HelloWorld** will help to understand the spec quickly:
+
+````javascript
+> main.js
+class HelloWorld extends HTMLElement {
+	constructor() {
+		super(); // mandatory!
+		this.innerHTML = "hello world";
+		this.onclick = e => alert(this.innerHTML);
+	}
+}
+customElements.define('hello-world', HelloWorld)
+````
+
+````html
+> index.html
+<hello-world></hello-world>
+````
+
+Most obvious, this spec relies on the new *ES6 Class Syntax* in favor of the original prototype-based inheritance model. "Extending `HTMLElement` ensures the custom element inherits the entire DOM API and means any properties/methods that you add to the class become part of the element's DOM interface."[@Bidelman2016]  The keyword `this` points to the element itself and let us easily define and access properties of the element. The so called *fat-arrow* (`=>`) is just a new feature of ES6 and nothing more than a `function()`.
+
+After defining the element it needs to be registered in the new global build-in `customElements` with an DOM alias like `hello-world`. Note that there must be a dash inside the name to be valid. Finally, the new element can go live inside the HTML Document `index.html`.
 
 
 
