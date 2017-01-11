@@ -296,35 +296,40 @@ structure a process.
 \section{W3C specifications}\label{w3c-specifications}
 
 For building a native microservice running on the ``bare-metal'' browser
-engine requires a bunch of new specifications and assumptions. Starting
-right into it, the first and foremost the quasi specification \emph{Web
-Components} is needed. \emph{Web Components} is not a real standard.
-It's an amalgam of APIs from multiple w3c specs which can be used
-independently, too. Some people argue for only two specs{[}7{]}, some
-people go for three specs {[}8{]}, but the majority advocating the four
-specs variant, which can looked up on \sout{the official}
+engine requires a bunch of new specifications and assumptions. Most
+importantly the quasi specification \textbf{Web Components} is needed.
+\emph{Web Components} is not a real standard. It's an amalgam of APIs
+from multiple w3c specs which can be used independently, too. A
+webdeveloper may choose one spec and embrace the freedom in architecture
+which can be combined with other frameworks/libraries.
+
+Depending on the context, some people argue for only two specs which
+essentially make it possible to create a scoped component but not caring
+too much on it's distribution{[}7{]}. Some people prefer the three specs
+{[}8{]}, but the majority advocating the four specs variant, which is
+listed on \sout{the official}
 \href{http://webcomponents.org}{webcomponents.org} website. For the
-purpose of this article, those four specs will be discussed briefly to
+purpose of this article, all four specs will be discussed briefly to
 provide a rough understanding. It is not meant to cover all bits and
 pieces.
 
 \subsection{\texorpdfstring{Custom Elements
 \href{http://w3c.github.io/webcomponents/spec/custom/}{(w3c)}}{Custom Elements (w3c)}}\label{custom-elements-w3c}
 
-\emph{Custom Elements} are the fundamental building block for
-browsernative microservices. They provide a way to create customized
-HTML tags. An obligatory \textbf{HelloWorld} will help to understand the
-spec quickly:
+\emph{Custom elements} are the fundamental building blocks for web
+components. Essentially, they provide a way to create custom HTML tags
+enriched with behavior, design and functionality. An obligatory
+\textbf{HelloWorld} will help to grasp the spec:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-        \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
-        \KeywordTok{this}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{"hello world"}\OperatorTok{;}
-        \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{innerHTML}\NormalTok{)}\OperatorTok{;}
-    \OperatorTok{\}}
+  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+    \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\StringTok{"hello"}\NormalTok{)}\OperatorTok{;}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(...)}\OperatorTok{;}
+  \OperatorTok{\}}
 \OperatorTok{\}}
 \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}
 \end{Highlighting}
@@ -333,7 +338,7 @@ spec quickly:
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{> index.html}
-\KeywordTok{<hello-world></hello-world>}
+\KeywordTok{<hello-world>}\NormalTok{say hello}\KeywordTok{</hello-world>}
 \end{Highlighting}
 \end{Shaded}
 
@@ -341,19 +346,181 @@ Most obvious, this spec relies on the new \emph{ES6 Class Syntax} in
 favor of the original prototype-based inheritance model.
 ``Extending~\texttt{HTMLElement}~ensures the custom element inherits the
 entire DOM API and means any properties/methods that you add to the
-class become part of the element's DOM interface.''{[}9{]} The keyword
-\texttt{this} points to the element itself and let us easily define and
-access properties of the element. The so called \emph{fat-arrow}
-(\texttt{=\textgreater{}}) is just a new feature of ES6 and nothing more
-than a \texttt{function()}.
+class become part of the element's DOM interface.''{[}9{]} Like any
+other \emph{ES6 class}, \emph{custom element}s can be sub-classed
+further on with the typical \texttt{extends} inheritance.
 
-After defining the element it needs to be registered in the new global
-build-in \texttt{customElements} with an DOM alias like
-\texttt{hello-world}. Note that there must be a dash inside the name to
-be valid. Finally, the new element can go live inside the HTML Document
-\texttt{index.html}.
+The beauty of \emph{custom elements} comes with the keyword
+\texttt{this} which points to the element itself. Instead of querying
+and assigning behavior AFTER creation of the node in question
+\texttt{this} functionality allows a \textbf{declarative programming
+style}. Assigning functionality happens right in place BEFORE creation
+or insertion of the DOM. The so called \emph{fat-arrow}
+(\texttt{=\textgreater{}}) is just a new feature of ES6 and nothing more
+than an anonymous \texttt{function()}.
+
+After definition, the element needs to be registered in the new global
+build-in \texttt{customElements} with an tag name like
+\texttt{\textless{}hello-world\textgreater{}}. Mind the dash inside the
+tag name to conform the spec. Finally, the new element can go live
+inside the HTML Document \texttt{index.html}.
+
+\subsubsection{Lifecycle methods}\label{lifecycle-methods}
+
+In addition to the \texttt{constructor()}, the spec defines so called
+\emph{lifecycle callbacks} for controlling the \textbf{behaviour in the
+DOM}. Many popular frameworks like ReactJS or AngularJS rely on similar
+approaches:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{connectedCallback()}\\
+  Called upon the time of \emph{connecting or upgrading the node} which
+  means the moment the node is inserted and rendered inside the DOM.
+  Typically this block of code contains setup code, such as fetching
+  resources or rendering.{[}9{]} For performance issues it's highly
+  preferable to put much code in here.
+\item
+  \texttt{disconnectedCallback()}\\
+  Called upon the time of \emph{node removal}. Cleanup code like
+  removing eventListeners or disconnecting websockets can be put here.
+\item
+  \texttt{attributeChangedCallback(attrName,\ oldVal,\ newVal)}\\
+  This method provides an \emph{Onchange handler} that runs for certain
+  attributes called with three values as defined in the signature. It is
+  meant to control an elements' transition from on \texttt{oldVal} to a
+  \texttt{newVal}. Due to performance issues, this callback is only
+  triggered for attributes registered in an \emph{observedAttributes}
+  array.
+\item
+  \texttt{adoptedCallback()}\\
+  Called when moving the node \emph{between documents}.
+\end{itemize}
+
+\subsubsection{Custom attributes}\label{custom-attributes}
+
+As previously mentioned, the custom elements must \texttt{extend} the
+\texttt{HTMLElement}. Consequently, the new element inherits properties
+and methods from it (and it's parent \texttt{Element}) and things like
+\texttt{id,\ class,\ addEventListner,\ ...} run out-of-the-box.
+Additionally, it is possible to define custom attributes using the
+\emph{custom elements'} \textbf{getter / setter interface} to steer the
+behavior of the element.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+  \NormalTok{...}
+  \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
+    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
+  \OperatorTok{\}}
+  \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
+    \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
+  \OperatorTok{\}}
+\OperatorTok{\}}
+\VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
+\KeywordTok{var} \NormalTok{el }\OperatorTok{=} \KeywordTok{new} \AttributeTok{HelloWorld}\NormalTok{()}\OperatorTok{;}
+\VariableTok{el}\NormalTok{.}\AttributeTok{sayhello} \OperatorTok{=} \StringTok{"earth"}\OperatorTok{;}
+\VariableTok{el}\NormalTok{.}\AttributeTok{sayhello}\OperatorTok{;}\CommentTok{//"earth"}
+\end{Highlighting}
+\end{Shaded}
+
+While getters and setters work great in the JS world they fail crossing
+the boundaries to the corresponding HTML node. Declaring
+\texttt{\textless{}hello-world\ sayhello="mars"\textgreater{}\textless{}/hello-world\textgreater{}}
+would't work in the previous setup. A common workaround is archived by
+using the previous mentioned \texttt{attributeChangedCallback} lifecycle
+method to \textbf{reflect changing HTML attributes to JS} and/or map JS
+attributes to HTML with \texttt{this.setAttributes(...)} respectively.
+On \textbf{insertion time} html attributes might raise their hand with
+\texttt{this.hasAttributes(...)} and \texttt{this.getAttributes(...)}.
+Native DOM properties will reflect their values between HTML and JS
+automatically.{[}10, Para. 2.6.1{]}
+
+Concluding this section, a reader might already discover the
+\textbf{mental model} behind \emph{web compontents}. A custom element is
+similar to a named function where attributes treated as \textbf{input
+variables}. In the hierarchical nature of DOM, input can occur either
+top-down via assignments and bottom-up via captured events. The same
+goes true when talking about output. Even though it seems obvious, it
+might be helpful to keep this point in mind.
+
+\subsubsection{Customized build-in
+elements}\label{customized-build-in-elements}
+
+One aspect didn't mentioned yet is the possibility of creating
+sub-classes of \textbf{build-in elements} by extending the native
+Interfaces like the \texttt{HTMLButtonElement} interface. While this
+functionality is perfectly spec'd it is strongly rejected by some
+browser vendors.\footnote{Discussion on the topic:
+  https://github.com/w3c/webcomponents/issues/509} Most likely the spec
+will change in future in one or other way on this issue and therefore
+\textbf{customized build-in elements} left out of this paper
+intentionally.
+
+\subsection{\texorpdfstring{Shadow DOM
+\href{http://w3c.github.io/webcomponents/spec/shadow/}{(w3c)}}{Shadow DOM (w3c)}}\label{shadow-dom-w3c}
+
+The second most important concept of \emph{web components} rewards to
+the \emph{shadow DOM} spec. The concept isn't the easiest to wrap ones
+head around. Basically it's an isolated DOM tree living inside an
+hosting DOM tree. The spec referencing the hosting tree as \textbf{light
+tree} and the attached DOM as \textbf{shadow tree}. Conceptually, the
+Shadow DOM issues a single topic: \textbf{Style Encapsulation}.
+
+With an ever increasing complexity of an single-page application, the
+global nature of the DOM creates a challenging situation for the web
+developer and often ends up in highly fragmented bits of CSS and obscure
+CSS selectors. Of course, this situation lowers code clarity and
+reusability dramatically. The only solution which won't break with the
+existing global paradigm effectively is to allow separate pieces of
+encapsulated code sit on top of the global DOM - introducing the
+shadowed DOM approach!
+
+Enhancing the previous example the new encapsulated \texttt{HelloWorld}
+would like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+    \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
+    \KeywordTok{const} \NormalTok{shadowRoot }\OperatorTok{=}
+          \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+    \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{"hello"}\OperatorTok{;}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\StringTok{"hello"}\NormalTok{)}\OperatorTok{;}
+  \OperatorTok{\}}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The new global method \texttt{attachShadow} adds a new document root to
+the \texttt{HelloWorld} which has the same properties as a normal DOM.
+Therefore, it's possible to call the \texttt{innerHTML} method to fill
+the new document (fragment) with some content. Note that shadowRoot is
+attached as \textbf{open} which ensures that some events can bubble out
+and outside JS can reach in the new root. Nested children and other
+content in the light DOM are ``shadowed'' by the new root and must be
+invited in by so called \texttt{slots}.
+
+\subsubsection{Slots}\label{slots}
 
 Macroperspektive / Composition
+
+\subsubsection{Assumptions about custom
+elements}\label{assumptions-about-custom-elements}
+
+Apart from the spec'd perspective there is mental model a webdeveloper
+might
+
+Creating and using webcomponents might require a new mental model how do
+design a
+
+containers
 
 http://alistair.cockburn.us/Hexagonal+architecture
 
@@ -411,5 +578,9 @@ Available: \url{http://www.melconway.com/Home/Committees_Paper.html}
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/primers/customelements/}.
 {[}Accessed: 01-Dec-2016{]}
+
+\hypertarget{ref-HTML}{}
+{[}10{]} \emph{HTML living standard --- last updated 11 january 2017}.
+{[}Online{]}. Available: \url{https://html.spec.whatwg.org/multipage/}
 
 \end{document}
