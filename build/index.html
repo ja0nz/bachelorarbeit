@@ -57,7 +57,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#technical-perspective">Technical perspective</a></li>
 </ul></li>
 <li><a href="#w3c-specifications">W3C specifications</a><ul>
-<li><a href="#custom-elements-w3c">Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></a></li>
+<li><a href="#custom-elements-w3c">Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></a><ul>
+<li><a href="#lifecycle-methods">Lifecycle methods</a></li>
+<li><a href="#custom-attributes">Custom attributes</a></li>
+<li><a href="#customized-build-in-elements">Customized build-in elements</a></li>
+</ul></li>
+<li><a href="#shadow-dom-w3c">Shadow DOM <a href="http://w3c.github.io/webcomponents/spec/shadow/">(w3c)</a></a><ul>
+<li><a href="#slots">Slots</a></li>
+<li><a href="#assumptions-about-custom-elements">Assumptions about custom elements</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#progressive-enhancement">Progressive Enhancement</a><ul>
 <li><a href="#chapter-about-progressive-enhancement">Chapter about progressive enhancement</a></li>
@@ -101,23 +109,78 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Advocators from the microservice approach propose a different model. best described by . Web components are one (but important) way to tie up those diciplines as one component can host a single independent business service. Combined with a flexible backend service these components can be huge gain over the cumbersome functional organizational approach.</p>
 <p>The ideas transcending from the microservice approach offers plenty of choices and decisions how to proceed with designing a program or to structure a process.</p>
 <h1 id="w3c-specifications">W3C specifications</h1>
-<p>For building a native microservice running on the &quot;bare-metal&quot; browser engine requires a bunch of new specifications and assumptions. Starting right into it, the first and foremost the quasi specification <em>Web Components</em> is needed. <em>Web Components</em> is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently, too. Some people argue for only two specs<span class="citation" data-cites="Buchner2016">(Buchner 2016)</span>, some people go for three specs <span class="citation" data-cites="vanKesteren2014">(Kesteren 2014)</span>, but the majority advocating the four specs variant, which can looked up on <del>the official</del> <a href="http://webcomponents.org">webcomponents.org</a> website. For the purpose of this article, those four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.</p>
+<p>For building a native microservice running on the &quot;bare-metal&quot; browser engine requires a bunch of new specifications and assumptions. Most importantly the quasi specification <strong>Web Components</strong> is needed. <em>Web Components</em> is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently, too. A webdeveloper may choose one spec and embrace the freedom in architecture which can be combined with other frameworks/libraries.</p>
+<p>Depending on the context, some people argue for only two specs which essentially make it possible to create a scoped component but not caring too much on it's distribution<span class="citation" data-cites="Buchner2016">(Buchner 2016)</span>. Some people prefer the three specs <span class="citation" data-cites="vanKesteren2014">(Kesteren 2014)</span>, but the majority advocating the four specs variant, which is listed on <del>the official</del> <a href="http://webcomponents.org">webcomponents.org</a> website. For the purpose of this article, all four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.</p>
 <h2 id="custom-elements-w3c">Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></h2>
-<p><em>Custom Elements</em> are the fundamental building block for browsernative microservices. They provide a way to create customized HTML tags. An obligatory <strong>HelloWorld</strong> will help to understand the spec quickly:</p>
+<p><em>Custom elements</em> are the fundamental building blocks for web components. Essentially, they provide a way to create custom HTML tags enriched with behavior, design and functionality. An obligatory <strong>HelloWorld</strong> will help to grasp the spec:</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
 <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
-    <span class="at">constructor</span>() <span class="op">{</span>
-        <span class="kw">super</span>()<span class="op">;</span> <span class="co">// mandatory!</span>
-        <span class="kw">this</span>.<span class="at">innerHTML</span> <span class="op">=</span> <span class="st">&quot;hello world&quot;</span><span class="op">;</span>
-        <span class="kw">this</span>.<span class="at">onclick</span> <span class="op">=</span> e <span class="op">=&gt;</span> <span class="at">alert</span>(<span class="kw">this</span>.<span class="at">innerHTML</span>)<span class="op">;</span>
-    <span class="op">}</span>
+  <span class="at">constructor</span>() <span class="op">{</span>
+    <span class="kw">super</span>()<span class="op">;</span> <span class="co">// mandatory!</span>
+    <span class="kw">this</span>.<span class="at">onclick</span> <span class="op">=</span> e <span class="op">=&gt;</span> <span class="at">alert</span>(<span class="st">&quot;hello&quot;</span>)<span class="op">;</span>
+    <span class="kw">this</span>.<span class="at">addEventListener</span>(...)<span class="op">;</span>
+  <span class="op">}</span>
 <span class="op">}</span>
 <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> HelloWorld)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; index.html
-<span class="kw">&lt;hello-world&gt;&lt;/hello-world&gt;</span></code></pre></div>
-<p>Most obvious, this spec relies on the new <em>ES6 Class Syntax</em> in favor of the original prototype-based inheritance model. &quot;Extending <code>HTMLElement</code> ensures the custom element inherits the entire DOM API and means any properties/methods that you add to the class become part of the element's DOM interface.&quot;<span class="citation" data-cites="Bidelman2016">(Bidelman 2016)</span> The keyword <code>this</code> points to the element itself and let us easily define and access properties of the element. The so called <em>fat-arrow</em> (<code>=&gt;</code>) is just a new feature of ES6 and nothing more than a <code>function()</code>.</p>
-<p>After defining the element it needs to be registered in the new global build-in <code>customElements</code> with an DOM alias like <code>hello-world</code>. Note that there must be a dash inside the name to be valid. Finally, the new element can go live inside the HTML Document <code>index.html</code>.</p>
+<span class="kw">&lt;hello-world&gt;</span>say hello<span class="kw">&lt;/hello-world&gt;</span></code></pre></div>
+<p>Most obvious, this spec relies on the new <em>ES6 Class Syntax</em> in favor of the original prototype-based inheritance model. &quot;Extending <code>HTMLElement</code> ensures the custom element inherits the entire DOM API and means any properties/methods that you add to the class become part of the element's DOM interface.&quot;<span class="citation" data-cites="Bidelman2016">(Bidelman 2016)</span> Like any other <em>ES6 class</em>, <em>custom element</em>s can be sub-classed further on with the typical <code>extends</code> inheritance.</p>
+<p>The beauty of <em>custom elements</em> comes with the keyword <code>this</code> which points to the element itself. Instead of querying and assigning behavior AFTER creation of the node in question <code>this</code> functionality allows a <strong>declarative programming style</strong>. Assigning functionality happens right in place BEFORE creation or insertion of the DOM. The so called <em>fat-arrow</em> (<code>=&gt;</code>) is just a new feature of ES6 and nothing more than an anonymous <code>function()</code>.</p>
+<p>After definition, the element needs to be registered in the new global build-in <code>customElements</code> with an tag name like <code>&lt;hello-world&gt;</code>. Mind the dash inside the tag name to conform the spec. Finally, the new element can go live inside the HTML Document <code>index.html</code>.</p>
+<h3 id="lifecycle-methods">Lifecycle methods</h3>
+<p>In addition to the <code>constructor()</code>, the spec defines so called <em>lifecycle callbacks</em> for controlling the <strong>behaviour in the DOM</strong>. Many popular frameworks like ReactJS or AngularJS rely on similar approaches:</p>
+<ul>
+<li><code>connectedCallback()</code><br />
+Called upon the time of <em>connecting or upgrading the node</em> which means the moment the node is inserted and rendered inside the DOM. Typically this block of code contains setup code, such as fetching resources or rendering.<span class="citation" data-cites="Bidelman2016">(Bidelman 2016)</span> For performance issues it's highly preferable to put much code in here.</li>
+<li><code>disconnectedCallback()</code><br />
+Called upon the time of <em>node removal</em>. Cleanup code like removing eventListeners or disconnecting websockets can be put here.</li>
+<li><code>attributeChangedCallback(attrName, oldVal, newVal)</code><br />
+This method provides an <em>Onchange handler</em> that runs for certain attributes called with three values as defined in the signature. It is meant to control an elements' transition from on <code>oldVal</code> to a <code>newVal</code>. Due to performance issues, this callback is only triggered for attributes registered in an <em>observedAttributes</em> array.</li>
+<li><code>adoptedCallback()</code><br />
+Called when moving the node <em>between documents</em>.</li>
+</ul>
+<h3 id="custom-attributes">Custom attributes</h3>
+<p>As previously mentioned, the custom elements must <code>extend</code> the <code>HTMLElement</code>. Consequently, the new element inherits properties and methods from it (and it's parent <code>Element</code>) and things like <code>id, class, addEventListner, ...</code> run out-of-the-box. Additionally, it is possible to define custom attributes using the <em>custom elements'</em> <strong>getter / setter interface</strong> to steer the behavior of the element.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
+<span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+  ...
+  set <span class="at">sayhello</span>(val) <span class="op">{</span>
+    <span class="kw">this</span>.<span class="at">_hello</span> <span class="op">=</span> val<span class="op">;</span>
+    <span class="va">console</span>.<span class="at">log</span>(<span class="kw">this</span>.<span class="at">_hello</span>)<span class="op">;</span>
+  <span class="op">}</span>
+  get <span class="at">sayhello</span>() <span class="op">{</span>
+    <span class="cf">return</span> <span class="kw">this</span>.<span class="at">_hello</span><span class="op">;</span>
+  <span class="op">}</span>
+<span class="op">}</span>
+<span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> HelloWorld)<span class="op">;</span>
+<span class="kw">var</span> el <span class="op">=</span> <span class="kw">new</span> <span class="at">HelloWorld</span>()<span class="op">;</span>
+<span class="va">el</span>.<span class="at">sayhello</span> <span class="op">=</span> <span class="st">&quot;earth&quot;</span><span class="op">;</span>
+<span class="va">el</span>.<span class="at">sayhello</span><span class="op">;</span><span class="co">//&quot;earth&quot;</span></code></pre></div>
+<p>While getters and setters work great in the JS world they fail crossing the boundaries to the corresponding HTML node. Declaring <code>&lt;hello-world sayhello=&quot;mars&quot;&gt;&lt;/hello-world&gt;</code> would't work in the previous setup. A common workaround is archived by using the previous mentioned <code>attributeChangedCallback</code> lifecycle method to <strong>reflect changing HTML attributes to JS</strong> and/or map JS attributes to HTML with <code>this.setAttributes(...)</code> respectively. On <strong>insertion time</strong> html attributes might raise their hand with <code>this.hasAttributes(...)</code> and <code>this.getAttributes(...)</code>. Native DOM properties will reflect their values between HTML and JS automatically.<span class="citation" data-cites="HTML">(<em>HTML Living Standard — Last Updated 11 January 2017</em>, n.d., para. 2.6.1)</span></p>
+<p>Concluding this section, a reader might already discover the <strong>mental model</strong> behind <em>web compontents</em>. A custom element is similar to a named function where attributes treated as <strong>input variables</strong>. In the hierarchical nature of DOM, input can occur either top-down via assignments and bottom-up via captured events. The same goes true when talking about output. Even though it seems obvious, it might be helpful to keep this point in mind.</p>
+<h3 id="customized-build-in-elements">Customized build-in elements</h3>
+<p>One aspect didn't mentioned yet is the possibility of creating sub-classes of <strong>build-in elements</strong> by extending the native Interfaces like the <code>HTMLButtonElement</code> interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Most likely the spec will change in future in one or other way on this issue and therefore <strong>customized build-in elements</strong> left out of this paper intentionally.</p>
+<h2 id="shadow-dom-w3c">Shadow DOM <a href="http://w3c.github.io/webcomponents/spec/shadow/">(w3c)</a></h2>
+<p>The second most important concept of <em>web components</em> rewards to the <em>shadow DOM</em> spec. The concept isn't the easiest to wrap ones head around. Basically it's an isolated DOM tree living inside an hosting DOM tree. The spec referencing the hosting tree as <strong>light tree</strong> and the attached DOM as <strong>shadow tree</strong>. Conceptually, the Shadow DOM issues a single topic: <strong>Style Encapsulation</strong>.</p>
+<p>With an ever increasing complexity of an single-page application, the global nature of the DOM creates a challenging situation for the web developer and often ends up in highly fragmented bits of CSS and obscure CSS selectors. Of course, this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm effectively is to allow separate pieces of encapsulated code sit on top of the global DOM - introducing the shadowed DOM approach!</p>
+<p>Enhancing the previous example the new encapsulated <code>HelloWorld</code> would like this:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
+<span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+  <span class="at">constructor</span>() <span class="op">{</span>
+    <span class="kw">super</span>()<span class="op">;</span> <span class="co">// mandatory!</span>
+    <span class="kw">const</span> shadowRoot <span class="op">=</span>
+          <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
+    <span class="va">shadowRoot</span>.<span class="at">innerHTML</span> <span class="op">=</span> <span class="st">&quot;hello&quot;</span><span class="op">;</span>
+    <span class="kw">this</span>.<span class="at">onclick</span> <span class="op">=</span> e <span class="op">=&gt;</span> <span class="at">alert</span>(<span class="st">&quot;hello&quot;</span>)<span class="op">;</span>
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>The new global method <code>attachShadow</code> adds a new document root to the <code>HelloWorld</code> which has the same properties as a normal DOM. Therefore, it's possible to call the <code>innerHTML</code> method to fill the new document (fragment) with some content. Note that shadowRoot is attached as <strong>open</strong> which ensures that some events can bubble out and outside JS can reach in the new root. Nested children and other content in the light DOM are &quot;shadowed&quot; by the new root and must be invited in by so called <code>slots</code>.</p>
+<h3 id="slots">Slots</h3>
 <p>Macroperspektive / Composition</p>
+<h3 id="assumptions-about-custom-elements">Assumptions about custom elements</h3>
+<p>Apart from the spec'd perspective there is mental model a webdeveloper might</p>
+<p>Creating and using webcomponents might require a new mental model how do design a</p>
+<p>containers</p>
 <p>http://alistair.cockburn.us/Hexagonal+architecture</p>
 <p>MVC Pattern</p>
 <p>Pure frontend vs heavy backend</p>
@@ -140,6 +203,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="ref-Fowler2014">
 <p>Fowler, Martin, and James Lewis. 2014. “Microservices: A Definition of This New Architectural Term,” January. <a href="http://www.martinfowler.com/articles/microservices.html" class="uri">http://www.martinfowler.com/articles/microservices.html</a>.</p>
 </div>
+<div id="ref-HTML">
+<p><em>HTML Living Standard — Last Updated 11 January 2017</em>. n.d. <a href="https://html.spec.whatwg.org/multipage/" class="uri">https://html.spec.whatwg.org/multipage/</a>.</p>
+</div>
 <div id="ref-Issa2016">
 <p>Issa, Ben. 2016. “The Way of the Web.” Polymer Summit 2016. <a href="https://www.youtube.com/watch?v=8ZTFEhPBJEE" class="uri">https://www.youtube.com/watch?v=8ZTFEhPBJEE</a>.</p>
 </div>
@@ -157,6 +223,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <hr />
 <ol>
 <li id="fn1"><p><a href="https://www.youtube.com/watch?v=rI8tNMsozo0&amp;t=48s">Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Discussion on the topic: https://github.com/w3c/webcomponents/issues/509<a href="#fnref2">↩</a></p></li>
 </ol>
 </section>
 </div>
