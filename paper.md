@@ -78,38 +78,139 @@ The ideas transcending from the microservice approach offers plenty of choices a
 
 # W3C specifications
 
-For building a native microservice running on the "bare-metal" browser engine requires a bunch of new specifications and assumptions. Starting right into it, the first and foremost the quasi specification *Web Components*  is needed. *Web Components* is not a real standard.  It's an amalgam  of APIs from multiple w3c specs which can be used independently, too. Some people argue for only two specs[@Buchner2016], some people go for three specs [@vanKesteren2014], but the majority advocating the four specs variant, which can looked up on ~~the official~~ [webcomponents.org](http://webcomponents.org) website. For the purpose of this article, those four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.
+For building a native microservice running on the "bare-metal" browser engine requires a bunch of new specifications and assumptions. Most importantly the quasi specification **Web Components** is needed. *Web Components* is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently, too. A webdeveloper may choose one spec and embrace the freedom in architecture which can be combined with other frameworks/libraries.
+
+Depending on the context, some people argue for only two specs which essentially make it possible to create a scoped component but not caring too much on it's distribution[@Buchner2016]. Some people prefer the three specs [@vanKesteren2014], but the majority advocating the four specs variant, which is listed on ~~the official~~ [webcomponents.org](http://webcomponents.org) website. For the purpose of this article, all four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.
 
 ## Custom Elements [(w3c)](http://w3c.github.io/webcomponents/spec/custom/)
 
-*Custom Elements* are the fundamental building block for browsernative microservices. They provide a way to create customized HTML tags.  An obligatory **HelloWorld** will help to understand the spec quickly:
+*Custom elements* are the fundamental building blocks for web components. Essentially, they provide a way to create custom HTML tags enriched with behavior, design and functionality. An obligatory **HelloWorld** will help to grasp the spec:
 
 ````javascript
 > main.js
 class HelloWorld extends HTMLElement {
-	constructor() {
-		super(); // mandatory!
-		this.innerHTML = "hello world";
-		this.onclick = e => alert(this.innerHTML);
-	}
+  constructor() {
+    super(); // mandatory!
+    this.onclick = e => alert("hello");
+    this.addEventListener(...);
+  }
 }
 customElements.define('hello-world', HelloWorld)
 ````
 
 ````html
 > index.html
-<hello-world></hello-world>
+<hello-world>say hello</hello-world>
 ````
 
-Most obvious, this spec relies on the new *ES6 Class Syntax* in favor of the original prototype-based inheritance model. "Extending `HTMLElement` ensures the custom element inherits the entire DOM API and means any properties/methods that you add to the class become part of the element's DOM interface."[@Bidelman2016]  The keyword `this` points to the element itself and let us easily define and access properties of the element. The so called *fat-arrow* (`=>`) is just a new feature of ES6 and nothing more than a `function()`.
+Most obvious, this spec relies on the new *ES6 Class Syntax* in favor of the original prototype-based inheritance model. "Extending `HTMLElement` ensures the custom element inherits the entire DOM API and means any properties/methods that you add to the class become part of the element's DOM interface."[@Bidelman2016] Like any other *ES6 class*, *custom element*s can be sub-classed further on with the typical `extends` inheritance. 
 
-After defining the element it needs to be registered in the new global build-in `customElements` with an DOM alias like `hello-world`. Note that there must be a dash inside the name to be valid. Finally, the new element can go live inside the HTML Document `index.html`.
+The beauty of *custom elements* comes with the keyword `this` which points to the element itself. Instead of querying and assigning behavior AFTER creation of the node in question `this` functionality allows a **declarative programming style**. Assigning functionality happens right in place BEFORE creation or insertion of the DOM. The so called *fat-arrow* (`=>`) is just a new feature of ES6 and nothing more than an anonymous `function()`.
+
+After definition, the element needs to be registered in the new global build-in `customElements` with an tag name like `<hello-world>`. Mind the dash inside the tag name to conform the spec. Finally, the new element can go live inside the HTML Document `index.html`.
+
+### Lifecycle methods
+
+In addition to the `constructor()`,  the spec defines so called *lifecycle callbacks* for controlling the **behaviour in the DOM**. Many popular frameworks like ReactJS or AngularJS rely on similar approaches:
+
+* `connectedCallback()`  
+  Called upon the time of *connecting or upgrading the node* which means the moment the node is inserted and rendered inside the DOM. Typically this block of code contains setup code, such as fetching resources or rendering.[@Bidelman2016] For performance issues it's highly preferable to put much code in here.
+* `disconnectedCallback()`  
+  Called upon the time of *node removal*. Cleanup code like removing eventListeners or disconnecting websockets can be put here.
+* `attributeChangedCallback(attrName, oldVal, newVal)`  
+  This method provides an *Onchange handler* that runs for certain attributes called with three values as defined in the signature. It is meant to control an elements' transition from on `oldVal` to a `newVal`. Due to performance issues, this callback is only triggered for attributes registered in an *observedAttributes* array.
+* `adoptedCallback()`  
+  Called when moving the node *between documents*.
+
+### Custom attributes 
+
+As previously mentioned, the custom elements must `extend` the `HTMLElement`. Consequently, the new element inherits properties and methods from it (and it's parent `Element`) and things like `id, class, addEventListner, ...` run out-of-the-box. Additionally, it is possible to define custom attributes using the *custom elements'* **getter / setter interface** to steer the behavior of the element.
+
+````javascript
+> main.js
+class HelloWorld extends HTMLElement {
+  ...
+  set sayhello(val) {
+    this._hello = val;
+    console.log(this._hello);
+  }
+  get sayhello() {
+    return this._hello;
+  }
+}
+customElements.define('hello-world', HelloWorld);
+var el = new HelloWorld();
+el.sayhello = "earth";
+el.sayhello;//"earth"
+````
+
+While getters and setters work great in the JS world they fail crossing the boundaries to the corresponding HTML node. Declaring `<hello-world sayhello="mars"></hello-world>` would't work in the previous setup. A common workaround is archived by using the previous mentioned `attributeChangedCallback` lifecycle method to **reflect changing HTML attributes to JS** and/or map JS attributes to HTML with `this.setAttributes(...)` respectively. On **insertion time** html attributes might raise their hand with `this.hasAttributes(...)` and `this.getAttributes(...)`.  Native DOM properties will reflect their values between HTML and JS automatically.[@HTML, para. 2.6.1]
+
+Concluding this section, a reader might already discover the **mental model** behind *web compontents*. A custom element is similar to a named function where attributes treated as **input variables**. In the hierarchical nature of DOM, input can occur either top-down via assignments and bottom-up via captured events. The same goes true when talking about output. Even though it seems obvious,  it might be helpful to keep this point in mind.
+
+### Customized build-in elements
+
+One aspect didn't mentioned yet is the possibility of creating sub-classes of **build-in elements** by extending the native Interfaces like the `HTMLButtonElement` interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.[^github] Most likely the spec will change in future in one or other way on this issue and therefore **customized build-in elements** left out of this paper intentionally.
+
+[^github]: Discussion on the topic: https://github.com/w3c/webcomponents/issues/509
+
+## Shadow DOM [(w3c)](http://w3c.github.io/webcomponents/spec/shadow/)
+
+The second most important concept of *web components* rewards to the *shadow DOM* spec. The concept isn't the easiest to wrap ones head around. Basically it's an isolated DOM tree living inside an hosting DOM tree. The spec referencing the hosting tree as **light tree** and the attached DOM as **shadow tree**. Conceptually, the Shadow DOM issues a single topic: **Style Encapsulation**.
+
+With an ever increasing complexity of an single-page application, the global nature of the DOM creates a challenging situation for the web developer and often ends up in highly fragmented bits of CSS and obscure CSS selectors. Of course, this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm effectively is to allow separate pieces of encapsulated code sit on top of the global DOM  - introducing the shadowed DOM approach!
+
+Enhancing the previous example the new encapsulated `HelloWorld` would like this:
+
+````javascript
+> main.js
+class HelloWorld extends HTMLElement {
+  constructor() {
+    super(); // mandatory!
+    const shadowRoot =
+          this.attachShadow({mode: 'open'});
+    shadowRoot.innerHTML = "hello";
+    this.onclick = e => alert("hello");
+  }
+}
+````
+The new global method `attachShadow` adds a new document root to the `HelloWorld` which has the same properties as a normal DOM. Therefore, it's possible to call the `innerHTML` method to fill the new document (fragment) with some content. Note that shadowRoot is attached as **open** which ensures that some events can bubble out and outside JS can reach in the new root. Nested children and other content in the light DOM are "shadowed" by the new root and must be invited in by so called `slots`.
+
+### Slots
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 Macroperspektive / Composition
+
+
+
+### Assumptions about custom elements
+
+Apart from the spec'd perspective there is mental model a webdeveloper might 
+
+Creating and using webcomponents might require a new mental model how do design a
+
+containers
+
+
+
+
 
 http://alistair.cockburn.us/Hexagonal+architecture
 
