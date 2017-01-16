@@ -129,7 +129,7 @@ As previously mentioned, the custom elements must `extend` the `HTMLElement`. Co
 ````javascript
 > main.js
 class HelloWorld extends HTMLElement {
-  ...
+  constructor() {...}
   set sayhello(val) {
     this._hello = val;
     console.log(this._hello);
@@ -156,9 +156,9 @@ One aspect didn't mentioned yet is the possibility of creating sub-classes of **
 
 ## Shadow DOM [(w3c)](http://w3c.github.io/webcomponents/spec/shadow/)
 
-The second most important concept of *web components* rewards to the *shadow DOM* spec. The concept isn't the easiest to wrap ones head around. Basically it's an isolated DOM tree living inside an hosting DOM tree. The spec referencing the hosting tree as **light tree** and the attached DOM as **shadow tree**. Conceptually, the Shadow DOM issues a single topic: **Style Encapsulation**.
+The second most important concept of *web components* rewards to the *shadow DOM* spec. In terms of complexity this spec outpacing all others by far. A *shadow DOM* is basically an isolated DOM tree living inside an another (hosting) DOM tree. The spec refers the hosting tree as *light DOM tree* and the attached DOM as *shadow DOM tree*. Conceptually, the *shadow DOM* issues a single important topic in software development: **Encapsulation**. While the first spec *custom elements* provides a sufficient way to encapsulate JS behavior,  *shadow DOM* coined strongly to in the direction of style encapsulation.
 
-With an ever increasing complexity of an single-page application, the global nature of the DOM creates a challenging situation for the web developer and often ends up in highly fragmented bits of CSS and obscure CSS selectors. Of course, this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm effectively is to allow separate pieces of encapsulated code sit on top of the global DOM  - introducing the shadowed DOM approach!
+With an ever increasing complexity of an single-page application, the global nature of the DOM creates a daunting situation for code organization and leads over times to highly fragmented bits of CSS and obscure CSS selectors or html wrappers. Of course, this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm effectively is to allow separate pieces of encapsulated code sit on top of the global DOM  - introducing the shadowed DOM approach!
 
 Enhancing the previous example the new encapsulated `HelloWorld` would like this:
 
@@ -166,26 +166,132 @@ Enhancing the previous example the new encapsulated `HelloWorld` would like this
 > main.js
 class HelloWorld extends HTMLElement {
   constructor() {
-    super(); // mandatory!
+    ...
     const shadowRoot =
           this.attachShadow({mode: 'open'});
-    shadowRoot.innerHTML = "hello";
-    this.onclick = e => alert("hello");
+    shadowRoot.innerHTML = '<p>hello</p>';
   }
 }
 ````
-The new global method `attachShadow` adds a new document root to the `HelloWorld` which has the same properties as a normal DOM. Therefore, it's possible to call the `innerHTML` method to fill the new document (fragment) with some content. Note that shadowRoot is attached as **open** which ensures that some events can bubble out and outside JS can reach in the new root. Nested children and other content in the light DOM are "shadowed" by the new root and must be invited in by so called `slots`.
+The new global method `attachShadow` adds a new document root to the `HelloWorld` which has the same properties as a normal DOM. Therefore, invoking `innerHTML` method would fill the new document (fragment) with some arbitrary content. Note that `shadowRoot` is marked as **open** which ensures that some events can bubble out and outside JS can reach in the new root. Nested children nodes and other content in the light DOM are "shadowed" by the new root and must be invited in by so called `slots`.
 
 ### Slots
 
+Contradicting to the simplified `HelloWorld` example, a *shadow DOM* shouldn't contain any ~~valuable~~ content. While technical possible any change of an element would require deeply nested calls from the *light DOM* to the *shadow DOM* to update the element in place. That's why *shadow DOM* should be perceived more as **static HTML template** and provide therefore a kind of internal frame for the render engine. `Slots` are placeholders for *light DOM* nodes used to mark the endpoints in question. 
+
+Technically, the *light DOM* nodes are not moved inside the *shadow DOM*. Their just rendered in place. It's an subtle but important difference towards handling a node. JS behaviour and CSS styles applied in the *light DOM* will still be valid in the *shadow DOM*. The render engine literally taking the nodes and putting them inside the `slot`. This procedure is commonly referred as **flattening**  of the DOM trees.
+
+#### Named slots
+
+ A named slot is the preferable way for clear code organization. Taking for example `<slot name="hello">Drop me a "hello" node</slot>` targets all direct *light DOM* child nodes of the hosting node matching the slot name like `<div slot="hello"></div>`. Writing a little documentation inside the `<slot>` tag is considered as a good practice as it will be rendered only if no matching *light DOM* node is available. This functionality makes a *custom element* pretty much self-explanatory. 
+
+#### Unnamed slots
+
+Inside a so-called *default slot* which looks like `<slot>Unnamed content goes here</slot>`, the render engine expands all direct *light DOM* children without a `slot` attribute. In case of multiple default slots, the first slot takes it all.
+
+### Styling
+
+As mentioned in the last section, there is a distinct difference about the nature of nodes. Nodes declared and rendered exclusively in the *shadow DOM* are not affected by any styling from outside. Nodes which are declared outside and distributed via `slots` will be styled in the *light DOM* and can be additionally painted in the *shadow DOM* through the new CSS-Selector `::slotted()`.
+
+Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. Due to the cascading nature of CSS, styles will still "bleed in" from ancestors to the *light DOM* nodes. Therefore  it's strongly recommended to begin every *shadow DOM* with a ***CSS reset:* `:host {all: initial;}`**.
+
+Regarding the importance style encapsulation, a couple of new CSS rules emerged that are exclusively targeting the *shadow DOM*. The table below outlines styling possibilities for the use INSIDE the *shadow DOM*:
+
+[[  CSS Selectors  ]]
+
+Using the *functional selector* of `:host()` or even the only-functional `:host-contest()` allows the creation of **context-aware custom elements**. A possible use case would be "theming" a component (example taken from [@Bidelman2016shadow]):
+
+```html
+> index.html
+<body class="darktheme">
+  <fancy-tabs>
+    ...
+  </fancy-tabs>
+</body>
+```
+
+```CSS
+> fancy-tabs shadowRoot
+<style>
+:host-context(.darktheme) {
+  color: white;
+  background: black;
+}
+</style>
+```
+
+### JS Behavior
+
+As mentioned earlier any logic applied to *light DOM* nodes stays with the node even after redistribution. For the sake of separation of concerns the business logic should be part of the *custom element* (the *light DOM*) and not the part of the *shadow DOM*. On the other hand there are numerous scenarios where JS is just concerned with **styling or animation of an element**.In this case it might be more straightforward to apply JS inside the *shadow DOM* to avoid mixing with business logic handlers.
+
+Drilling down to a *light DOM* node from an *shadow DOM* context is not possible with querying the node directly with `.querySelector()` or `.getElementById()` as the node is not part of the context. To get a distributed node in question it needs the way over the slot node and call `slot.assinedNodes()` to receive an array of distributed node(s) which can be accessed and manipulated like any other node. Calling `.assignedNodes()` on an empty `slot` returns an empty array.
+
+Wrapping up this section, *shadow DOM* provides a non-hacky way to create uniform looking *custom elements* and even enhance styling possibilities without adding much overhead. Still, for smaller components with only one or two child nodes, just a little styling and/or no structured redistribution a *shadow DOM* might be to hard to reason about. Eventually it all depends on the question of "how hard is it to implement it without shadow DOM" - which can't be answered universally. For a more in-depth guide, Google Engineer Eric Bidelman wroten a great primer on *shadow DOM*[@Bidelman2016shadow].
+
+So far, there is still a missing link between *light DOM* and *shadow DOM*. The observant reader may have already noticed the weak point in the `HelloWorld` example: how to "vitalize" the *shadow DOM*. Recapturing the last `HelloWorld` example a string of markup was assigned to the  `shadowRoot.innerHTML` property. While it works perfectly fine in this simple case, a string of markup is rather cumbersome and error-prone and doesn't scale well. When putting quotes inside another quotes things break quickly. It makes the life hard for developers to work with it because it requires manual indentation and is out of syntax highlighting. That's the time templates come into play.
+
+## HTML Templates [(w3c)](https://www.w3.org/TR/html5/scripting-1.html#the-template-element)
+
+Among all other new standards *HTML templates* are the most mature and adopted standard in the browser environment. All major browsers, except from Internet Explorer, support this standard. 
+
+One core concept in templates is efficiency: Whatever dropped inside a `template` tag ~~bucket~~ will be parsed on runtime - but not constructed into the *content tree*. It remains plain HTML Markup sitting somewhere in the document until the time of activation.
+
+Activation typically takes four steps:
+
+1. **Querying the template node in question**  
+   `const t = document.querySelector('#helloworld');`
+2. **Preparing the templates' content**   
+   The templates' `content` property contains all nodes a *DocumentFragment* object. Handling should be straight forward  
+   `t.content.querySelector('img').src = 'logo.png';` 
+3. **Optional: Cloning the *DocumentFragment* for multiple use**  
+   `const clone = t.content.cloneNode("deep");` 
+4. **Appending the clone/original to destination**   
+   `document.body.appendChild(clone);`
 
 
+As easy  and minimal *HTML templates* are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as **placeholders** where content should appear. Of course, with heavy use of JS things could be modeled this way. But the idiomatic way tends more towards a *Shadow DOM & HTML Templates* symbiosis.
 
+````html
+> hello-component.html
+<hello-world>
+  <p id="sendto" slot="placeholder">
+    Hello World    
+  </p>
+</hello-world>
 
+<template id="hello">
+  <style>
+    #stylewrapper {
+      font-weight: bold;
+      color: orange;
+    }
+  </style>
+  <!-- CONTENT -->
+  <div id="stylewrapper">
+    <slot name="placeholder">
+      Named placeholder
+    </slot>
+  </div>
+</template>
 
+<script>
+  class HelloWorld extends HTMLElement {
+    constructor() {
+   	  super();
+      const shadowRoot =
+        this.attachShadow({mode: 'open'});
+      const template =
+        document.querySelector('#hello').content;
+      
+      this.shadowRoot.appendChild(template);
+    }
+  }
+  customElements.define('hello-world', HelloWorld);
+</script>
+````
+The updated `HelloWorld` example looks already pretty mature. It combines all the previous mentioned standards into one blob of HTML. *Custom Elements* serves the logic, *Shadow DOM* scopes the styles and *HTML Template* efficiently glues DOM and *Shadow DOM* together. The last standard in the row of four is not concerned with the internals of a *web component*. *HTML Imports* serves the need for an efficient distribution mechanism of components.
 
-
-
+## HTML Imports [(w3c)](https://www.w3.org/TR/html-imports/) 
 
 
 
