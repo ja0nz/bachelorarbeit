@@ -68,7 +68,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#js-behavior">JS Behavior</a></li>
 </ul></li>
 <li><a href="#html-templates-w3c">HTML Templates <a href="https://www.w3.org/TR/html5/scripting-1.html#the-template-element">(w3c)</a></a></li>
-<li><a href="#html-imports-w3c">HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></a><ul>
+<li><a href="#html-imports-w3c">HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></a></li>
+<li><a href="#appendix-custom-events">Appendix: Custom Events</a><ul>
 <li><a href="#assumptions-about-custom-elements">Assumptions about custom elements</a></li>
 </ul></li>
 </ul></li>
@@ -173,8 +174,7 @@ Called when moving the node <em>between documents</em>.</li>
 <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
   <span class="at">constructor</span>() <span class="op">{</span>
     ...
-    <span class="kw">const</span> shadowRoot <span class="op">=</span>
-          <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
+    <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
     <span class="va">shadowRoot</span>.<span class="at">innerHTML</span> <span class="op">=</span> <span class="st">&#39;&lt;p&gt;hello&lt;/p&gt;&#39;</span><span class="op">;</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
@@ -216,24 +216,26 @@ Called when moving the node <em>between documents</em>.</li>
 <p>Activation typically takes four steps:</p>
 <ol type="1">
 <li><strong>Querying the template node in question</strong><br />
-<code>const t = document.querySelector('#helloworld');</code></li>
-<li><strong>Preparing the templates' content</strong><br />
-The templates' <code>content</code> property contains all nodes a <em>DocumentFragment</em> object. Handling should be straight forward<br />
-<code>t.content.querySelector('img').src = 'logo.png';</code></li>
+const node = document.querySelector('template');</li>
+<li><strong>Parsing the content and preparing the templates' content</strong><br />
+const content = node.content;<br />
+-&gt; Returns a <em>DocumentFragment</em> object. Handling is straight forward<br />
+content.querySelector('img').src = 'logo.png';</li>
 <li><strong>Optional: Cloning the <em>DocumentFragment</em> for multiple use</strong><br />
-<code>const clone = t.content.cloneNode(&quot;deep&quot;);</code></li>
+const clone = content.cloneNode(&quot;deep&quot;);</li>
 <li><strong>Appending the clone/original to destination</strong><br />
-<code>document.body.appendChild(clone);</code></li>
+document.body.appendChild(clone);</li>
 </ol>
-<p>As easy and minimal <em>HTML templates</em> are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as <strong>placeholders</strong> where content should appear. Of course, with heavy use of JS things could be modeled this way. But the idiomatic way tends more towards a <em>Shadow DOM &amp; HTML Templates</em> symbiosis.</p>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; hello-component.html
+<p>As easy and minimal <em>HTML templates</em> are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as <strong>placeholders</strong> where content should appear. Of course, with heavy use of JS things could be modeled this way. The idiomatic way tends more towards a <em>Shadow DOM &amp; HTML templates</em> symbiosis.</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; index.html
 <span class="kw">&lt;hello-world&gt;</span>
   <span class="kw">&lt;p</span><span class="ot"> id=</span><span class="st">&quot;sendto&quot;</span><span class="ot"> slot=</span><span class="st">&quot;placeholder&quot;</span><span class="kw">&gt;</span>
-    Hello World    
+    Hello World Web Component    
   <span class="kw">&lt;/p&gt;</span>
 <span class="kw">&lt;/hello-world&gt;</span>
-
+<span class="co">&lt;!-- COMPONENT STARTS HERE --&gt;</span>
 <span class="kw">&lt;template</span><span class="ot"> id=</span><span class="st">&quot;hello&quot;</span><span class="kw">&gt;</span>
+  <span class="co">&lt;!-- STYLES --&gt;</span>
   <span class="kw">&lt;style&gt;</span>
     <span class="fl">#stylewrapper</span> <span class="kw">{</span>
       <span class="kw">font-weight:</span> <span class="dt">bold</span><span class="kw">;</span>
@@ -249,21 +251,35 @@ The templates' <code>content</code> property contains all nodes a <em>DocumentFr
 <span class="kw">&lt;/template&gt;</span>
 
 <span class="kw">&lt;script&gt;</span>
-  <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
-    <span class="at">constructor</span>() <span class="op">{</span>
-      <span class="kw">super</span>()<span class="op">;</span>
-      <span class="kw">const</span> shadowRoot <span class="op">=</span>
-        <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
-      <span class="kw">const</span> template <span class="op">=</span>
-        <span class="va">document</span>.<span class="at">querySelector</span>(<span class="st">&#39;#hello&#39;</span>).<span class="at">content</span><span class="op">;</span>
-      
-      <span class="kw">this</span>.<span class="va">shadowRoot</span>.<span class="at">appendChild</span>(template)<span class="op">;</span>
-    <span class="op">}</span>
-  <span class="op">}</span>
-  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> HelloWorld)<span class="op">;</span>
+  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span>
+    <span class="kw">class</span> <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+     <span class="at">constructor</span>() <span class="op">{</span>
+       <span class="kw">super</span>()<span class="op">;</span>
+       <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
+       <span class="kw">const</span> template <span class="op">=</span>
+         <span class="va">document</span>.<span class="at">querySelector</span>(<span class="st">&#39;#hello&#39;</span>)<span class="op">;</span>
+       <span class="kw">this</span>.<span class="at">shadowRoot</span>
+         .<span class="at">appendChild</span>(<span class="va">template</span>.<span class="at">content</span>)<span class="op">;</span>
+     <span class="op">}</span>
+   <span class="op">}</span>)<span class="op">;</span>
 <span class="op">&lt;</span><span class="ss">/script&gt;</span></code></pre></div>
-<p>The updated <code>HelloWorld</code> example looks already pretty mature. It combines all the previous mentioned standards into one blob of HTML. <em>Custom Elements</em> serves the logic, <em>Shadow DOM</em> scopes the styles and <em>HTML Template</em> efficiently glues DOM and <em>Shadow DOM</em> together. The last standard in the row of four is not concerned with the internals of a <em>web component</em>. <em>HTML Imports</em> serves the need for an efficient distribution mechanism of components.</p>
+<p>The updated <code>HelloWorld</code> component looks already pretty mature. It combines all the previous mentioned standards into one blob of HTML. <em>Custom Elements</em> serves the logic, <em>Shadow DOM</em> scopes the styles and <em>HTML Templates</em> efficiently glues DOM and <em>Shadow DOM</em> together. This separation of concerns comes with a huge gain in flexibility. In a real world scenario <code>HelloWorld</code> would contain/reference multiple <em>HTML Templates</em> and could switch them around without any fuss. A developer might to split up templates into <strong>STYLE</strong> templates and <strong>CONTENT</strong> templates to increase reusability even further.</p>
+<p>The last standard in the row of four is not concerned with the internals of a <em>web component</em>. <em>HTML Imports</em> serves the need for an efficient distribution mechanism of components.</p>
 <h2 id="html-imports-w3c">HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></h2>
+<p>Importing the <code>HelloWorld</code> component is a one-liner:</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;import&quot;</span><span class="ot"> href=</span><span class="st">&quot;Hello.html&quot;</span><span class="ot"> async</span><span class="kw">&gt;</span></code></pre></div>
+<p>The <code>async</code> flag is optional but like in any other fetching event, strongly recommended. Once the imported HTML document comes into scope, activation follows a very similar pattern like the previously mentioned <em>HTML templates</em>:</p>
+<ol type="1">
+<li><p><strong>Querying the link node</strong></p></li>
+<li><p><strong>Parsing the content and preparing the render</strong><br />
+const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the content a fully equipped document object.</p></li>
+<li><p><strong>Optional: Cloning some nodes for multiple use</strong></p></li>
+<li><p><strong>Appending the clone/original to destination</strong></p></li>
+</ol>
+<p>This again is the imperative way to handle a generic <em>HTML Import</em>. In the declarative world of <em>web components</em> a component is activated, parsed and anchored solely by its' tag name <code>&lt;hello-world&gt;&lt;/hello-world&gt;</code>. Preliminary, the component needs proper configuration as the last <code>HelloWorld</code> example wouldn't work like it is currently. The next section will provide a better understanding about the right configuration and composition of a component to work out-of-the-box.</p>
+<p>Despite from being just a practical document importer <em>HTML imports</em> acts like a fully fledged dependency manager for the browser. Multiple resources, ranging from stylesheets, scripts, documents, media files and even other <code>imports</code> can be grouped together in a logical <code>import</code> statement. Internally, the browser engine keeps track for every imported resource so it won't be loaded twice. The inherent complexity is in fact a stumbling block for wider browser adoption. Currently only Googles blink web engine supports <em>HTML Imports</em> as they are the driving force behind the <em>web components</em> spec in general. Mozilla and Apple imposed distaste for <em>HTML Imports</em> as a whole. One reason for this can be found in the incompatibility of the spec with the upcoming <em>ES6 module loader</em>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>Despite the discrepancies among browser vendors <em>HTML Imports</em> should still be part of the paper and future <em>web components</em> as no other browser technology can bundle up CSS, JS and HTML that efficient. As of today, January 2017, only Googles Chrome and related Opera browser supporting the full spec and despite from <em>HTML Imports</em> all other browser vendors most likely will catch up within this year. In the meantime, the full <em>web components</em> standard can be <strong>polyfilled</strong> and used across all browsers.</p>
+<h2 id="appendix-custom-events">Appendix: Custom Events</h2>
 <p>Macroperspektive / Composition</p>
 <h3 id="assumptions-about-custom-elements">Assumptions about custom elements</h3>
 <p>Apart from the spec'd perspective there is mental model a webdeveloper might</p>
@@ -314,7 +330,8 @@ The templates' <code>content</code> property contains all nodes a <em>DocumentFr
 <hr />
 <ol>
 <li id="fn1"><p><a href="https://www.youtube.com/watch?v=rI8tNMsozo0&amp;t=48s">Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey</a><a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Discussion on the topic: https://github.com/w3c/webcomponents/issues/509<a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>https://github.com/w3c/webcomponents/issues/509<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>https://hacks.mozilla.org/2014/12/mozilla-and-web-components/<a href="#fnref3">↩</a></p></li>
 </ol>
 </section>
 </div>
