@@ -152,7 +152,7 @@ Concluding this section, a reader might already discover the **mental model** be
 
 One aspect didn't mentioned yet is the possibility of creating sub-classes of **build-in elements** by extending the native Interfaces like the `HTMLButtonElement` interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.[^github] Most likely the spec will change in future in one or other way on this issue and therefore **customized build-in elements** left out of this paper intentionally.
 
-[^github]: Discussion on the topic: https://github.com/w3c/webcomponents/issues/509
+[^github]: https://github.com/w3c/webcomponents/issues/509
 
 ## Shadow DOM [(w3c)](http://w3c.github.io/webcomponents/spec/shadow/)
 
@@ -167,8 +167,7 @@ Enhancing the previous example the new encapsulated `HelloWorld` would like this
 class HelloWorld extends HTMLElement {
   constructor() {
     ...
-    const shadowRoot =
-          this.attachShadow({mode: 'open'});
+    this.attachShadow({mode: 'open'});
     shadowRoot.innerHTML = '<p>hello</p>';
   }
 }
@@ -239,27 +238,29 @@ One core concept in templates is efficiency: Whatever dropped inside a `template
 Activation typically takes four steps:
 
 1. **Querying the template node in question**  
-   `const t = document.querySelector('#helloworld');`
-2. **Preparing the templates' content**   
-   The templates' `content` property contains all nodes a *DocumentFragment* object. Handling should be straight forward  
-   `t.content.querySelector('img').src = 'logo.png';` 
+    	const node = document.querySelector('template');
+2. **Parsing the content and preparing the templates' content**   
+    	const content = node.content;    
+    	-> Returns a *DocumentFragment* object. Handling is straight forward  
+    	content.querySelector('img').src = 'logo.png';
 3. **Optional: Cloning the *DocumentFragment* for multiple use**  
-   `const clone = t.content.cloneNode("deep");` 
+    	const clone = content.cloneNode("deep");
 4. **Appending the clone/original to destination**   
-   `document.body.appendChild(clone);`
+    	document.body.appendChild(clone);
 
 
-As easy  and minimal *HTML templates* are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as **placeholders** where content should appear. Of course, with heavy use of JS things could be modeled this way. But the idiomatic way tends more towards a *Shadow DOM & HTML Templates* symbiosis.
+As easy  and minimal *HTML templates* are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as **placeholders** where content should appear. Of course, with heavy use of JS things could be modeled this way. The idiomatic way tends more towards a *Shadow DOM & HTML templates* symbiosis.
 
 ````html
-> hello-component.html
+> index.html
 <hello-world>
   <p id="sendto" slot="placeholder">
-    Hello World    
+    Hello World Web Component    
   </p>
 </hello-world>
-
+<!-- COMPONENT STARTS HERE -->
 <template id="hello">
+  <!-- STYLES -->
   <style>
     #stylewrapper {
       font-weight: bold;
@@ -275,24 +276,52 @@ As easy  and minimal *HTML templates* are, they're missing out a crucial feature
 </template>
 
 <script>
-  class HelloWorld extends HTMLElement {
-    constructor() {
-   	  super();
-      const shadowRoot =
-        this.attachShadow({mode: 'open'});
-      const template =
-        document.querySelector('#hello').content;
-      
-      this.shadowRoot.appendChild(template);
-    }
-  }
-  customElements.define('hello-world', HelloWorld);
+  customElements.define('hello-world',
+    class extends HTMLElement {
+     constructor() {
+   	   super();
+       this.attachShadow({mode: 'open'});
+       const template =
+         document.querySelector('#hello');
+       this.shadowRoot
+         .appendChild(template.content);
+     }
+   });
 </script>
 ````
-The updated `HelloWorld` example looks already pretty mature. It combines all the previous mentioned standards into one blob of HTML. *Custom Elements* serves the logic, *Shadow DOM* scopes the styles and *HTML Template* efficiently glues DOM and *Shadow DOM* together. The last standard in the row of four is not concerned with the internals of a *web component*. *HTML Imports* serves the need for an efficient distribution mechanism of components.
+The updated `HelloWorld` component looks already pretty mature. It combines all the previous mentioned standards into one blob of HTML. *Custom Elements* serves the logic, *Shadow DOM* scopes the styles and *HTML Templates* efficiently glues DOM and *Shadow DOM* together. This separation of concerns comes with a huge gain in flexibility. In a real world scenario `HelloWorld` would contain/reference multiple *HTML Templates* and could switch them around without any fuss. A developer might to split up templates into **STYLE** templates and **CONTENT** templates to increase reusability even further.
+
+The last standard in the row of four is not concerned with the internals of a *web component*. *HTML Imports* serves the need for an efficient distribution mechanism of components.
 
 ## HTML Imports [(w3c)](https://www.w3.org/TR/html-imports/) 
 
+Importing the `HelloWorld` component is a one-liner:
+
+```html
+<link rel="import" href="Hello.html" async>
+```
+
+The `async ` flag is optional but like in any other fetching event, strongly recommended. Once the imported HTML document comes into scope, activation follows a very similar pattern like the previously mentioned *HTML templates*:
+
+1. **Querying the link node**
+
+2. **Parsing the content and preparing the render**   
+    	const content = linknode.import;
+    	-> Unlike the *HTML template* the content a fully equipped document object.
+
+3. **Optional: Cloning some nodes for multiple use**
+
+4. **Appending the clone/original to destination**
+
+This again is the imperative way to handle a generic *HTML Import*. In the declarative world of *web components* a component is activated, parsed and anchored solely by its' tag name `<hello-world></hello-world>`. Preliminary, the component needs proper configuration as the last `HelloWorld` example wouldn't work like it is currently. The next section will provide a better understanding about the right configuration and composition of a component to work out-of-the-box.
+
+Despite from being just a practical document importer *HTML imports* acts like a fully fledged dependency manager for the browser. Multiple resources, ranging from stylesheets, scripts, documents, media files and even other `imports` can be grouped together in a logical `import` statement. Internally, the browser engine keeps track for every imported resource so it won't be loaded twice. The inherent complexity is in fact a stumbling block for wider browser adoption. Currently only Googles blink web engine supports *HTML Imports* as they are the driving force behind the *web components* spec in general. Mozilla and Apple imposed distaste for *HTML Imports* as a whole. One reason for this can be found in the incompatibility of the spec with the upcoming *ES6 module loader*.[^mozilla]
+
+[^mozilla]: https://hacks.mozilla.org/2014/12/mozilla-and-web-components/
+
+Despite the discrepancies among  browser vendors *HTML Imports* should still be part of the paper and future *web components* as no other browser technology can bundle up CSS, JS and HTML that efficient. As of today, January 2017, only Googles Chrome and related Opera browser supporting the full spec and despite from *HTML Imports* all other browser vendors most likely will catch up within this year. In the meantime, the full *web components* standard can be **polyfilled** and used across all browsers.
+
+## Appendix: Custom Events
 
 
 

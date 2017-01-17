@@ -455,11 +455,10 @@ One aspect didn't mentioned yet is the possibility of creating
 sub-classes of \textbf{build-in elements} by extending the native
 Interfaces like the \texttt{HTMLButtonElement} interface. While this
 functionality is perfectly spec'd it is strongly rejected by some
-browser vendors.\footnote{Discussion on the topic:
-  https://github.com/w3c/webcomponents/issues/509} Most likely the spec
-will change in future in one or other way on this issue and therefore
-\textbf{customized build-in elements} left out of this paper
-intentionally.
+browser vendors.\footnote{https://github.com/w3c/webcomponents/issues/509}
+Most likely the spec will change in future in one or other way on this
+issue and therefore \textbf{customized build-in elements} left out of
+this paper intentionally.
 
 \subsection{\texorpdfstring{Shadow DOM
 \href{http://w3c.github.io/webcomponents/spec/shadow/}{(w3c)}}{Shadow DOM (w3c)}}\label{shadow-dom-w3c}
@@ -493,8 +492,7 @@ would like this:
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
   \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
     \NormalTok{...}
-    \KeywordTok{const} \NormalTok{shadowRoot }\OperatorTok{=}
-          \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
     \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{'<p>hello</p>'}\OperatorTok{;}
   \OperatorTok{\}}
 \OperatorTok{\}}
@@ -665,19 +663,20 @@ Activation typically takes four steps:
 \tightlist
 \item
   \textbf{Querying the template node in question}\\
-  \texttt{const\ t\ =\ document.querySelector(\textquotesingle{}\#helloworld\textquotesingle{});}
+  const node = document.querySelector(`template');
 \item
-  \textbf{Preparing the templates' content}\\
-  The templates' \texttt{content} property contains all nodes a
-  \emph{DocumentFragment} object. Handling should be straight forward\\
-  \texttt{t.content.querySelector(\textquotesingle{}img\textquotesingle{}).src\ =\ \textquotesingle{}logo.png\textquotesingle{};}
+  \textbf{Parsing the content and preparing the templates' content}\\
+  const content = node.content;\\
+  -\textgreater{} Returns a \emph{DocumentFragment} object. Handling is
+  straight forward\\
+  content.querySelector(`img').src = `logo.png';
 \item
   \textbf{Optional: Cloning the \emph{DocumentFragment} for multiple
   use}\\
-  \texttt{const\ clone\ =\ t.content.cloneNode("deep");}
+  const clone = content.cloneNode(``deep'');
 \item
   \textbf{Appending the clone/original to destination}\\
-  \texttt{document.body.appendChild(clone);}
+  document.body.appendChild(clone);
 \end{enumerate}
 
 As easy and minimal \emph{HTML templates} are, they're missing out a
@@ -685,19 +684,20 @@ crucial feature other template implementations usually have. As
 templates are basically just dump containers for HTML Markup, there is
 no way to define some logic as \textbf{placeholders} where content
 should appear. Of course, with heavy use of JS things could be modeled
-this way. But the idiomatic way tends more towards a \emph{Shadow DOM \&
-HTML Templates} symbiosis.
+this way. The idiomatic way tends more towards a \emph{Shadow DOM \&
+HTML templates} symbiosis.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{> hello-component.html}
+\NormalTok{> index.html}
 \KeywordTok{<hello-world>}
   \KeywordTok{<p}\OtherTok{ id=}\StringTok{"sendto"}\OtherTok{ slot=}\StringTok{"placeholder"}\KeywordTok{>}
-    \NormalTok{Hello World    }
+    \NormalTok{Hello World Web Component    }
   \KeywordTok{</p>}
 \KeywordTok{</hello-world>}
-
+\CommentTok{<!-- COMPONENT STARTS HERE -->}
 \KeywordTok{<template}\OtherTok{ id=}\StringTok{"hello"}\KeywordTok{>}
+  \CommentTok{<!-- STYLES -->}
   \KeywordTok{<style>}
     \FloatTok{#stylewrapper} \KeywordTok{\{}
       \KeywordTok{font-weight:} \DataTypeTok{bold}\KeywordTok{;}
@@ -713,32 +713,99 @@ HTML Templates} symbiosis.
 \KeywordTok{</template>}
 
 \KeywordTok{<script>}
-  \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
-      \KeywordTok{const} \NormalTok{shadowRoot }\OperatorTok{=}
-        \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-      \KeywordTok{const} \NormalTok{template }\OperatorTok{=}
-        \VariableTok{document}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#hello'}\NormalTok{).}\AttributeTok{content}\OperatorTok{;}
-      
-      \KeywordTok{this}\NormalTok{.}\VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{appendChild}\NormalTok{(template)}\OperatorTok{;}
-    \OperatorTok{\}}
-  \OperatorTok{\}}
-  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
+  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,}
+    \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+     \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+       \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+       \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+       \KeywordTok{const} \NormalTok{template }\OperatorTok{=}
+         \VariableTok{document}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#hello'}\NormalTok{)}\OperatorTok{;}
+       \KeywordTok{this}\NormalTok{.}\AttributeTok{shadowRoot}
+         \NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{template}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
+     \OperatorTok{\}}
+   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \OperatorTok{<}\SpecialStringTok{/script>}
 \end{Highlighting}
 \end{Shaded}
 
-The updated \texttt{HelloWorld} example looks already pretty mature. It
-combines all the previous mentioned standards into one blob of HTML.
+The updated \texttt{HelloWorld} component looks already pretty mature.
+It combines all the previous mentioned standards into one blob of HTML.
 \emph{Custom Elements} serves the logic, \emph{Shadow DOM} scopes the
-styles and \emph{HTML Template} efficiently glues DOM and \emph{Shadow
-DOM} together. The last standard in the row of four is not concerned
-with the internals of a \emph{web component}. \emph{HTML Imports} serves
-the need for an efficient distribution mechanism of components.
+styles and \emph{HTML Templates} efficiently glues DOM and \emph{Shadow
+DOM} together. This separation of concerns comes with a huge gain in
+flexibility. In a real world scenario \texttt{HelloWorld} would
+contain/reference multiple \emph{HTML Templates} and could switch them
+around without any fuss. A developer might to split up templates into
+\textbf{STYLE} templates and \textbf{CONTENT} templates to increase
+reusability even further.
+
+The last standard in the row of four is not concerned with the internals
+of a \emph{web component}. \emph{HTML Imports} serves the need for an
+efficient distribution mechanism of components.
 
 \subsection{\texorpdfstring{HTML Imports
 \href{https://www.w3.org/TR/html-imports/}{(w3c)}}{HTML Imports (w3c)}}\label{html-imports-w3c}
+
+Importing the \texttt{HelloWorld} component is a one-liner:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{<link}\OtherTok{ rel=}\StringTok{"import"}\OtherTok{ href=}\StringTok{"Hello.html"}\OtherTok{ async}\KeywordTok{>}
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{async} flag is optional but like in any other fetching
+event, strongly recommended. Once the imported HTML document comes into
+scope, activation follows a very similar pattern like the previously
+mentioned \emph{HTML templates}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Querying the link node}
+\item
+  \textbf{Parsing the content and preparing the render}\\
+  const content = linknode.import; -\textgreater{} Unlike the \emph{HTML
+  template} the content a fully equipped document object.
+\item
+  \textbf{Optional: Cloning some nodes for multiple use}
+\item
+  \textbf{Appending the clone/original to destination}
+\end{enumerate}
+
+This again is the imperative way to handle a generic \emph{HTML Import}.
+In the declarative world of \emph{web components} a component is
+activated, parsed and anchored solely by its' tag name
+\texttt{\textless{}hello-world\textgreater{}\textless{}/hello-world\textgreater{}}.
+Preliminary, the component needs proper configuration as the last
+\texttt{HelloWorld} example wouldn't work like it is currently. The next
+section will provide a better understanding about the right
+configuration and composition of a component to work out-of-the-box.
+
+Despite from being just a practical document importer \emph{HTML
+imports} acts like a fully fledged dependency manager for the browser.
+Multiple resources, ranging from stylesheets, scripts, documents, media
+files and even other \texttt{imports} can be grouped together in a
+logical \texttt{import} statement. Internally, the browser engine keeps
+track for every imported resource so it won't be loaded twice. The
+inherent complexity is in fact a stumbling block for wider browser
+adoption. Currently only Googles blink web engine supports \emph{HTML
+Imports} as they are the driving force behind the \emph{web components}
+spec in general. Mozilla and Apple imposed distaste for \emph{HTML
+Imports} as a whole. One reason for this can be found in the
+incompatibility of the spec with the upcoming \emph{ES6 module
+loader}.\footnote{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
+
+Despite the discrepancies among browser vendors \emph{HTML Imports}
+should still be part of the paper and future \emph{web components} as no
+other browser technology can bundle up CSS, JS and HTML that efficient.
+As of today, January 2017, only Googles Chrome and related Opera browser
+supporting the full spec and despite from \emph{HTML Imports} all other
+browser vendors most likely will catch up within this year. In the
+meantime, the full \emph{web components} standard can be
+\textbf{polyfilled} and used across all browsers.
+
+\subsection{Appendix: Custom Events}\label{appendix-custom-events}
 
 Macroperspektive / Composition
 
