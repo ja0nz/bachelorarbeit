@@ -110,49 +110,106 @@ specifications build right into the browserengine provide a native
 service API to overcome tricky abstraction constraints.
 \end{abstract}
 
-\section{Introduction}\label{introduction}
+\section{Simplicity and the state of the
+web}\label{simplicity-and-the-state-of-the-web}
 
 \begin{quote}
 Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 \end{quote}
 
-Introduction: from simplicity to Microservices to extensible web
-manifesto to w3c specifications \ldots{} and beyond
+Computers can scale, humans can't. Ever since, a program or complex
+system made by humans has been constrained by our mental capabilities.
+Like in the analogy of juggling balls, our brain can just ``juggle'' a
+few things at a time. Rich Hickey, the inventor of the programming
+language \emph{Clojure} gave an inspirational keynote on the topic of
+\textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
+  Conf 2012 Keynote: Simplicity Matters by Rich Hickey}} In every sphere
+of a humans life, simplicity aligns perception with our mental
+capacities. Understanding the word \textbf{simple} alone will outline
+the this paper on its own.
 
-Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne
-Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von
-komplexen Systemen. In einer vielbeachteten Keynote aus dem Jahr 2012
-geht er auf etymologisch-philosophische Spurensuche nach dem Wort
-\textbf{simplicity } aus Sicht eines Softwareentwicklers.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=48s}{Rails
-  Conf 2012 Keynote: Simplicity Matters by Rich Hickey}} Das Adjektiv
-\emph{simple} hat demnach seinen Ursprung im lateinischen Wort
-\emph{simplex}, was soviel wie \emph{einfach} oder \emph{einzeln}
-bedeutet. In Gegensatz dazu stehen Eigenschaften wie \emph{complex} oder
-\emph{multiplex}. Qualitative Software ist, so Hickey, vor allem simpel
-- im Prozess, im Design, in der Struktur und in der Entwicklung.
+Derived from the ancient Latin word \textbf{simplex}, simple can be
+understood as ``literally, uncompounded or onefold''\footnote{\href{http://www.etymonline.com/index.php?term=simple}{Etymology
+  Dictionary}} which points directly to the unidimensional aspect. While
+complexity describes the multilayered und entangled nature of
+conditions, simplicity empowers the human brain to reason about issues
+in a straightforward manner. It certainly has some overlapping's with
+\emph{easy}, but while \emph{easy} is more of a relative nature, simple
+can be laid out as a objective manner - a goal software development
+should pursuit and praise.
 
-Bezeichnend für diese Keynote ist, dass sie von Rich Hickey im Rahmen
-einer Webentwicklerkonferenz gehalten wurde. Software für den Browser
-war (und ist) seit langer Zeit maßgeblich geprägt von
-\textbf{Komplexität} auf mehreren Ebenen. Im Laufe dieser Bachelorarbeit
-werden diese Stru
+Software development is undoubtedly rich in complexity and full of
+subtle pitfalls for the human brain. In a typical scenario, a piece of
+software evolves over time in one or another \sout{opinionated}
+direction. Layers of new abstractions wrestling with old legacy
+abstractions and mutating objects will get out of control. Subtle bugs
+start to creep in. Eventually the small piece of software ends up in a
+highly complected monolith which will determine future design decisions
+to a painful degree. Any company will be highly determined by the
+current state trying to ``keep the lights on''.
 
-\begin{itemize}
-\tightlist
-\item
-  Das \emph{Document Object Model} als Rückgrad jeder Webapplikation ist
-  hierarchisch strukturiert und deren Elemente damit keinesfalls
-  unabhängig in ihrer Darstellung und Reihenfolge.
-\item
-  JavaScript als single-threaded Skriptsprache lässt sich schlecht ihn
-  ihrem Verhalten isolieren, ist Fehleranfällig und hatte lange Zeit nur
-  sehr wenig idiomatische Lösungsansätze für komplexe Probleme, wie
-  beispielsweise Asynchronität
-\item
-  CSS ist geprägt von stetigem Überschreiben vorher definierter Regeln
-  und verletzt damit Simplizität in ihrer Struktur, Design und dem
-  Entwicklungsprozesses auf bester Art und Weise.
-\end{itemize}
+On the other hand, any truly agile system architecture is laid out in a
+fine-grained manner. As Rich Hickey argues, design decisions should be
+made under the \textbf{impression of extending, substitution, moving,
+combining and repurposing}. The ability to reason about the program at
+any given time is crucial for future decisions and implementations.
+Recalling again the unidimensional nature of simplicity.
+
+The \emph{state of the web} is certainly a different kind of complex
+multidimensional beast. ``The web'' is coined to be meant ``everything
+that runs in the browser''. While simplicity in the backend is mostly a
+matter of principles, any frontend developer is highly restricted on the
+entangled nature of the browser platform. Every call to an webpage
+results in a single \textbf{global DOM tree} managed by the browser
+engine. In the early days of the web a typical static page contained
+just a bunch of text nodes and some styling. Nowadays a typical webapp
+contains text nodes, functionality and styling from different resources
+and is expected to work highly dynamic and frictionless.
+
+In the last four years the average transfer size of a webpage doubled to
+currently around 2.5 MB.{[}\^{}http {]}Subtracting images, fonts or
+other content the size of HTML, CSS and JS sums up to a total average of
+550 kb. One character weights around 1 byte which means an average
+webpage is delivering 550.000 character or around 125 pages of
+single-spaced text. Frederic Filloux calculated the ratio of real
+content on different newspaper websites and came to the conclusion, that
+only round about 5-6 \% of the transferred characters made for
+consumption.{[}1{]}
+
+Having an 95 \% overhead is rather undesirable for both the consumers
+and creators of the website. Since it's a widespread problem without a
+single point of failure one can argue the platform itself is the
+failure. In the recent years many frameworks, libraries and
+methodologies tried to simplify the way of building user interfaces by
+scoping assets and design rules into maintainable components. One of the
+most adopted technique was the \textbf{virtual DOM} approach essential
+ditching the old rule of separated HTML, CSS and JS in favor of
+\textbf{scoped JS components} (containing HTML and CSS). While
+frameworks are a valid approach to solve the problem they remain highly
+opinionated.
+
+In 2013 thinkers, creators and browser vendors joined together to
+propose \emph{The Extensible Web Manifesto}.\footnote{\href{https://extensiblewebmanifesto.org/}{The
+  Extensible Web Manifesto}} The claim of the Manifesto is to enhance
+the current web with new low-level capacities. Those capacities should
+empower creators of the web to write more declarative code and therefore
+overcome known bottlenecks and artificial abstractions. Four years
+later, the new capabilities of JavaScript leapfrogged and many new
+low-level APIs brought to life. With the new APIs at hand a webdeveloper
+can create scoped and highly reusable microservices without additional
+libraries even directly in the browser console.
+
+\emph{Disclaimer:} Currently, many of the new standards proposed
+throughout this paper can only tried and tested inside Google Chrome or
+Opera. As the innovation cycle is pretty short it is expected to see
+those standards go live in all major browsers soon.In the meantime all
+of those functionalities can be safely \textbf{polyfilled}.
+
+\subsection{Microservices}\label{microservices}
+
+Microserve
+
+untangle the web
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
@@ -169,14 +226,14 @@ nehmen keinerlei Einfluss auf Informationen oder anderen Komponenten um
 sich herum. Sie sind im wahrsten Sinne passiv und fremdgesteuert über
 klar definierte Schnittstellen. Diese Komponenten sind häufig flexibel
 einsetzbar und hochgradig wiederwerwendbar. Abramov nennt diese
-Komponenten ``Presentational Components''.{[}1{]} Verortet man diese Art
+Komponenten ``Presentational Components''.{[}2{]} Verortet man diese Art
 von Komponenten innerhalb des \emph{MVC Pattern}, sind die Komponenten
 reine \emph{View-Elemente}.
 
 Im Gegensatz dazu stehen Komponenten, die für die \textbf{Verarbeitung
 von Informationen} zuständig sind. Diese so genannten ``Container
 Components'' haben oft einen internen Zustand, den sie verändern können
-und an ihre Kindkomponenten weiterreichen können.{[}1{]} Im \emph{MVC
+und an ihre Kindkomponenten weiterreichen können.{[}2{]} Im \emph{MVC
 Pattern} handelt es sich um die \emph{Controller}. In der funktionalen
 Programmiersprache Elm werden diese Elemente \emph{Updater} genannt, was
 ihre Funktion noch besser umschreibt.
@@ -190,7 +247,7 @@ orchestriert. In der Analogie des Orchesters gesprochen, benötigt der
 Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der
 für die Steuerung verantwortlich ist.
 
-\section{Microservices}\label{microservices}
+\section{Microservices}\label{microservices-1}
 
 Opening up the case for \emph{Browsernative Microservices} brings up the
 question about the concept microservices in general. In fact the concept
@@ -203,14 +260,14 @@ this section is to match those ideas against the manifestations of web
 components.
 
 In a nutshell a microservice is a small, autonomous service that works
-together with other services seamlessly.{[}2, p. 2{]} or with the words
+together with other services seamlessly.{[}3, p. 2{]} or with the words
 of Fowler and Lewis: ``It is an approach to developing a single
 application as a suite of small services, each running in its own
-process and communicating with lightweight mechanisms,\ldots{}''{[}3{]}
+process and communicating with lightweight mechanisms,\ldots{}''{[}4{]}
 Microservices incorporate many ideas, like \emph{domain-driven design}
-where we try to represent the real world in our code.{[}2, p. 2{]} Or
+where we try to represent the real world in our code.{[}3, p. 2{]} Or
 making use of \emph{continuous delivery} for pushing software rapidly
-through \emph{automated deployment} mechanisms in production.{[}3{]}
+through \emph{automated deployment} mechanisms in production.{[}4{]}
 And, last but not least, microservices utilizes the idea of small teams
 with a lot of product knowledge working mostly autonomous on their very
 own service with their very own set of tools and techniques.
@@ -223,7 +280,7 @@ like APIs Databanks / Deployment
 Talking about microservices in a browsernative context isn't that far
 fetched as microservices themselves incorporate many ideas from the web.
 Exemplary, microservices often communicate via an HTTP request-response
-with resource API's and lightweight messaging.{[}3{]} Nevertheless,
+with resource API's and lightweight messaging.{[}4{]} Nevertheless,
 while (server-side) microservices offer wide ranges of technical
 possibilities, we must take into account that (client-side) browsers
 come with certain constraints and limitations.
@@ -234,14 +291,14 @@ replaceable and upgradeable. The main advantage of a component in
 contrast of library is the possibility of an independent deployment. It
 aligns perfectly with the main goal of a microservice architecture to
 strip away most of the dependencies in favour of clean
-interfaces.{[}3{]}
+interfaces.{[}4{]}
 
 Components
 
 First of all, from a technical perspective, a microservice reinforces
 the \emph{Single Responsibility Principle} defined by Robert C. Martin:
 ``Gather together those things that change for the same reason and
-separate those things that change for different reasons.''{[}4{]} An a
+separate those things that change for different reasons.''{[}5{]} An a
 way this principle tackles another often cited design principle of the
 \emph{seperation of concerns}. Web Components incorporate this principle
 in multiple ways while still remaining flexible.
@@ -264,22 +321,22 @@ approach will be explained further in the upcoming sections.
 
 The concept of microservices incooperates not only a technical
 perspective. Microservice patterns are a product of real-world
-usage.{[}2, p. 1{]} In a real world we typical have to deal with the so
+usage.{[}3, p. 1{]} In a real world we typical have to deal with the so
 called \emph{Conway's Law}:
 
 \begin{quote}
 ``organizations which design systems \ldots{} are constrained to produce
 designs which are copies of the communication~structures~of these
-organizations''. {[}5{]}
+organizations''. {[}6{]}
 \end{quote}
 
 Following this logic any company, whether it is web-related or not,
 should be devided in units grouped around a destinct business service to
 optimise the workflow. Fowler and Lewis outlines this approach as an
-``alignment of business capabilities''{[}3{]} While this kind of
+``alignment of business capabilities''{[}4{]} While this kind of
 structure may be true for companies like Google or Amazon, there is a
 vast majority of companies developing for the web which are grouped
-around tasks.{[}6{]} A very common structure is formed by the technology
+around tasks.{[}7{]} A very common structure is formed by the technology
 stack (UX Designers, Frontend- \& Backend Developers) or by separating
 teams along the product lifecycle (development, testing, deployment).
 
@@ -305,8 +362,8 @@ which can be combined with other frameworks/libraries.
 
 Depending on the context, some people argue for only two specs which
 essentially make it possible to create a scoped component but not caring
-too much on it's distribution{[}7{]}. Some people prefer the three specs
-{[}8{]}, but the majority advocating the four specs variant, which is
+too much on it's distribution{[}8{]}. Some people prefer the three specs
+{[}9{]}, but the majority advocating the four specs variant, which is
 listed on \sout{the official}
 \href{http://webcomponents.org}{webcomponents.org} website. For the
 purpose of this article, all four specs will be discussed briefly to
@@ -346,7 +403,7 @@ Most obvious, this spec relies on the new \emph{ES6 Class Syntax} in
 favor of the original prototype-based inheritance model.
 ``Extending~\texttt{HTMLElement}~ensures the custom element inherits the
 entire DOM API and means any properties/methods that you add to the
-class become part of the element's DOM interface.''{[}9{]} Like any
+class become part of the element's DOM interface.''{[}10{]} Like any
 other \emph{ES6 class}, \emph{custom element}s can be sub-classed
 further on with the typical \texttt{extends} inheritance.
 
@@ -377,10 +434,11 @@ approaches:
 \item
   \texttt{connectedCallback()}\\
   Called upon the time of \emph{connecting or upgrading the node} which
-  means the moment the node is inserted and rendered inside the DOM.
-  Typically this block of code contains setup code, such as fetching
-  resources or rendering.{[}9{]} For performance issues it's highly
-  preferable to put much code in here.
+  means the moment the node is rendered inside the DOM. Typically this
+  method is called straight after the \texttt{constructor()} on insert.
+  This block of code contains setup code, such as fetching resources or
+  rendering elements according to attributes.{[}10{]} For performance
+  issues it's highly preferable to put much code in here.
 \item
   \texttt{disconnectedCallback()}\\
   Called upon the time of \emph{node removal}. Cleanup code like
@@ -420,8 +478,9 @@ behavior of the element.
   \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
     \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
   \OperatorTok{\}}
-\OperatorTok{\}}
+\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
+\CommentTok{// Instantiation}
 \KeywordTok{var} \NormalTok{el }\OperatorTok{=} \KeywordTok{new} \AttributeTok{HelloWorld}\NormalTok{()}\OperatorTok{;}
 \VariableTok{el}\NormalTok{.}\AttributeTok{sayhello} \OperatorTok{=} \StringTok{"earth"}\OperatorTok{;}
 \VariableTok{el}\NormalTok{.}\AttributeTok{sayhello}\OperatorTok{;}\CommentTok{//"earth"}
@@ -438,7 +497,7 @@ attributes to HTML with \texttt{this.setAttributes(...)} respectively.
 On \textbf{insertion time} html attributes might raise their hand with
 \texttt{this.hasAttributes(...)} and \texttt{this.getAttributes(...)}.
 Native DOM properties will reflect their values between HTML and JS
-automatically.{[}10, Para. 2.6.1{]}
+automatically.{[}11, Para. 2.6.1{]}
 
 Concluding this section, a reader might already discover the
 \textbf{mental model} behind \emph{web compontents}. A custom element is
@@ -577,7 +636,7 @@ DOM}:
 Using the \emph{functional selector} of \texttt{:host()} or even the
 only-functional \texttt{:host-contest()} allows the creation of
 \textbf{context-aware custom elements}. A possible use case would be
-``theming'' a component (example taken from {[}11{]}):
+``theming'' a component (example taken from {[}12{]}):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -630,7 +689,7 @@ and/or no structured redistribution a \emph{shadow DOM} might be to hard
 to reason about. Eventually it all depends on the question of ``how hard
 is it to implement it without shadow DOM'' - which can't be answered
 universally. For a more in-depth guide, Google Engineer Eric Bidelman
-wroten a great primer on \emph{shadow DOM}{[}11{]}.
+wroten a great primer on \emph{shadow DOM}{[}12{]}.
 
 So far, there is still a missing link between \emph{light DOM} and
 \emph{shadow DOM}. The observant reader may have already noticed the
@@ -713,6 +772,8 @@ HTML templates} symbiosis.
 \KeywordTok{</template>}
 
 \KeywordTok{<script>}
+  \CommentTok{// Switched to anonymous class notation}
+  \CommentTok{// for keeping associated code together.}
   \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,}
     \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
      \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
@@ -779,8 +840,8 @@ activated, parsed and anchored solely by its' tag name
 \texttt{\textless{}hello-world\textgreater{}\textless{}/hello-world\textgreater{}}.
 Preliminary, the component needs proper configuration as the last
 \texttt{HelloWorld} example wouldn't work like it is currently. The next
-section will provide a better understanding about the right
-configuration and composition of a component to work out-of-the-box.
+section will elaborate the right configuration and composition of a
+component to work out-of-the-box.
 
 Despite from being just a practical document importer \emph{HTML
 imports} acts like a fully fledged dependency manager for the browser.
@@ -798,14 +859,138 @@ loader}.\footnote{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
 
 Despite the discrepancies among browser vendors \emph{HTML Imports}
 should still be part of the paper and future \emph{web components} as no
-other browser technology can bundle up CSS, JS and HTML that efficient.
-As of today, January 2017, only Googles Chrome and related Opera browser
-supporting the full spec and despite from \emph{HTML Imports} all other
-browser vendors most likely will catch up within this year. In the
-meantime, the full \emph{web components} standard can be
+other native browser technology can bundle up CSS, JS and HTML that
+efficient. As of today, January 2017, only Googles Chrome and related
+Opera browser supporting the full \emph{web components} spec and,
+despite from \emph{HTML Imports}, all other browser vendors most likely
+will catch up with \emph{Custom Elements} and \emph{Shadow DOM} within
+this year. In the meantime, the full \emph{web components} stack can be
 \textbf{polyfilled} and used across all browsers.
 
-\subsection{Appendix: Custom Events}\label{appendix-custom-events}
+\subsection{\texorpdfstring{Appendix A: Custom Events
+\href{https://dom.spec.whatwg.org/\#interface-customevent}{(whatwg)}}{Appendix A: Custom Events (whatwg)}}\label{appendix-a-custom-events-whatwg}
+
+Events are first-class citizens in the browser world and \emph{Custom
+Events} are no exception. The \emph{Custom Elements} interface is part
+of the DOM since years but with the rise of \emph{Custom Elements} they
+will most likely become an indispensable building block of \emph{web
+components}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{> index.html}
+\KeywordTok{<hello-world>}
+  \KeywordTok{<button>}\NormalTok{Launch CustomEvent}\KeywordTok{</button>}
+\KeywordTok{</hello-world>}
+\CommentTok{<!-- COMPONENT STARTS HERE -->}
+\KeywordTok{<script>}
+  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} 
+  \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+      \CommentTok{// Craft a CustomEvent e}
+      \KeywordTok{const} \NormalTok{e }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \OperatorTok{\{}
+        \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,} \CommentTok{//important!}
+        \DataTypeTok{detail}\OperatorTok{:} \StringTok{'Contains string or object'}
+      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+      \CommentTok{// Launch e on child button click}
+      \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'click'}\OperatorTok{,} \NormalTok{click }\OperatorTok{=>} \OperatorTok{\{}
+        \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(e)}
+        \VariableTok{click}\NormalTok{.}\AttributeTok{stopPropagation}\NormalTok{()}\OperatorTok{;}
+      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+      \CommentTok{// Catch e. Typically done by some parent}
+      \CommentTok{// node. Message in detail property}
+      \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>} \OperatorTok{\{}
+        \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\VariableTok{e}\NormalTok{.}\AttributeTok{detail}\NormalTok{)}
+      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+    \OperatorTok{\}}
+  \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+\OperatorTok{<}\SpecialStringTok{/script>}
+\end{Highlighting}
+\end{Shaded}
+
+Naming events after the emitting tag makes the API almost
+self-explanatory. Fortunately the \texttt{detail} property can transmit
+even objects witch allows the developer to craft almost all
+functionality inside one event. The further sections will elaborate a
+feasible architecture for building a scaling microservice architecture.
+
+Chaining and aggregating events from child nodes should be practiced and
+exercised quiet frequently. As mentioned earlier in the \emph{Custom
+Elements} section, the pattern of \textbf{extending native elements}
+should be somewhat dismissed as it may be implemented outside of Chrome.
+Nevertheless, it is possible to create own kind of quasi native buttons
+when chaining a \emph{CustomEvent} directly after the native click
+event.
+
+Another typical \emph{custom element} use case can be as an actor on
+(native) child elements. In this case, the \emph{Custom Element} catches
+events from children, buffers or rebuild them and eventuall fires an
+event towards the document root.
+
+Unfortunately events only work ``upstream'' towards parent nodes. Still
+the web platform offers plenty of possibilities to talk back to child
+nodes.
+
+\subsection{\texorpdfstring{Appendix B: Web Worker
+\href{https://html.spec.whatwg.org/multipage/workers.html}{(whatwg)}}{Appendix B: Web Worker (whatwg)}}\label{appendix-b-web-worker-whatwg}
+
+Like \emph{Custom Events}, \emph{Web Workers} had been around for a long
+time and therefore embrace full support among major browser vendors.
+They emerged at around 2009 when discussions about browser performance
+was in the early stages of development. Nevertheless, the addressed
+problem of \emph{Web Workers} is a fundamental language problem of JS
+itself.
+
+JS runs in a single-threaded language environment. Every script in the
+browser environment, from handling UI events to query and process larget
+amounts of API data and manipulating the DOM, runs on the same
+thread{[}13{]}. Putting a lot of work to the single main thread can slow
+down the web service significantly. From time to time scripts can block
+or fail to whatever reason which leads to a frozen UI on the users side.
+A worker can overcome the bottleneck of the single-threaded nature with
+spawning a new \textbf{background thread}. Most of the browsers work can
+be leveraged to this new thread. Todays web architectures aims to
+leverage an increasing amout of proccessing to the client to avoid
+time-consuming roundtrips especially in mobiles networks.\footnote{Latency
+  numbers: https://gist.github.com/jboner/2841832} While many native
+APIs like \texttt{fetch} work seamlessly in the new thread, a worker has
+no access to the DOM at all.
+
+A \emph{Web Worker} spawns a new background thread where scripts can run
+concurrent to the main thread. Usually a worker is loaded from a workers
+dedicated file to embrace this kind of separation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{const} \NormalTok{worker }\OperatorTok{=} \KeywordTok{new} \AttributeTok{Worker}\NormalTok{(}\StringTok{'worker.js'}\NormalTok{)}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+After initialization a worker communicates over a simple \textbf{message
+based interface} with the main thread.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\CommentTok{// Send to worker}
+\VariableTok{worker}\NormalTok{.}\AttributeTok{postMessage}\NormalTok{(}\StringTok{'Hello World'}\NormalTok{)}\OperatorTok{;}
+\CommentTok{// Receive msg from worker}
+\VariableTok{worker}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'message'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>}
+  \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\StringTok{'Worker said: '}\OperatorTok{,} \VariableTok{e}\NormalTok{.}\AttributeTok{data}\NormalTok{))}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{>} \VariableTok{worker}\NormalTok{.}\AttributeTok{js}
+\CommentTok{// Receive msg and echo back}
+\KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'message'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>}
+  \KeywordTok{this}\NormalTok{.}\AttributeTok{postMessage}\NormalTok{(}\StringTok{"Echo "} \OperatorTok{+} \VariableTok{e}\NormalTok{.}\AttributeTok{data}\NormalTok{))}\OperatorTok{;}
+\end{Highlighting}
+\end{Shaded}
+
+Having no access to the DOM can be seen as hinderance,but i
 
 Macroperspektive / Composition
 
@@ -831,59 +1016,68 @@ Pure frontend vs heavy backend
 Chapter about progressive enhancement
 
 \hypertarget{refs}{}
+\hypertarget{ref-Filloux2016}{}
+{[}1{]} F. Filloux, ``Bloated html, the best and the worse,'' 2016
+{[}Online{]}. Available:
+\url{https://mondaynote.com/bloated-html-the-best-and-the-worse-cac6eb06496d}
+
 \hypertarget{ref-Abramov2015}{}
-{[}1{]} D. Abramov, ``Presentational and Container Components --
+{[}2{]} D. Abramov, ``Presentational and Container Components --
 Medium.'' 2015 {[}Online{]}. Available:
 \url{https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0}.
 {[}Accessed: 01-Dec-2016{]}
 
 \hypertarget{ref-Newman2015}{}
-{[}2{]} S. Newman, \emph{Building microservices}. O'Reilly Media, Inc.,
+{[}3{]} S. Newman, \emph{Building microservices}. O'Reilly Media, Inc.,
 2016 {[}Online{]}. Available:
 \url{http://www.ebook.de/de/product/22539693/sam_newmann_building_microservices.html}
 
 \hypertarget{ref-Fowler2014}{}
-{[}3{]} M. Fowler and J. Lewis, ``Microservices: A definition of this
+{[}4{]} M. Fowler and J. Lewis, ``Microservices: A definition of this
 new architectural term,'' Jan. 2014 {[}Online{]}. Available:
 \url{http://www.martinfowler.com/articles/microservices.html}
 
 \hypertarget{ref-Martin}{}
-{[}4{]} R. C. Martin, ``The single responsibility principle.''
+{[}5{]} R. C. Martin, ``The single responsibility principle.''
 {[}Online{]}. Available:
 \url{http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle}
 
 \hypertarget{ref-Conway1968}{}
-{[}5{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
+{[}6{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
 Available: \url{http://www.melconway.com/Home/Committees_Paper.html}
 
 \hypertarget{ref-Issa2016}{}
-{[}6{]} B. Issa, ``The way of the web.'' Polymer Summit 2016, Oct-2016
+{[}7{]} B. Issa, ``The way of the web.'' Polymer Summit 2016, Oct-2016
 {[}Online{]}. Available:
 \url{https://www.youtube.com/watch?v=8ZTFEhPBJEE}
 
 \hypertarget{ref-Buchner2016}{}
-{[}7{]} D. Buchner, ``Demythstifying web components,'' 2016
+{[}8{]} D. Buchner, ``Demythstifying web components,'' 2016
 {[}Online{]}. Available:
 \url{http://www.backalleycoder.com/2016/08/26/demythstifying-web-components/}
 
 \hypertarget{ref-vanKesteren2014}{}
-{[}8{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
+{[}9{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
 {[}Online{]}. Available:
 \url{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
 
 \hypertarget{ref-Bidelman2016}{}
-{[}9{]} E. Bidelman, ``Custom elements v1: reusable web components.''
+{[}10{]} E. Bidelman, ``Custom elements v1: reusable web components.''
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/primers/customelements/}.
 {[}Accessed: 01-Dec-2016{]}
 
 \hypertarget{ref-HTML}{}
-{[}10{]} \emph{HTML living standard --- last updated 11 january 2017}.
+{[}11{]} \emph{HTML living standard --- last updated 11 january 2017}.
 {[}Online{]}. Available: \url{https://html.spec.whatwg.org/multipage/}
 
 \hypertarget{ref-Bidelman2016shadow}{}
-{[}11{]} E. Bidelman, ``Shadow dom v1: Self-contained web components.''
+{[}12{]} E. Bidelman, ``Shadow dom v1: Self-contained web components.''
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/getting-started/primers/shadowdom}
+
+\hypertarget{ref-Bidelman2010}{}
+{[}13{]} E. Bidelman, ``The basics of web workers.'' 2010 {[}Online{]}.
+Available: \url{https://www.html5rocks.com/en/tutorials/workers/basics/}
 
 \end{document}
