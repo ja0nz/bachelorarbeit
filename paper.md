@@ -1,26 +1,36 @@
-
-
-# Introduction
+# Simplicity and the state of the web
 
 > Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 
+Computers can scale, humans can't. Ever since, a program or complex system made by humans has been constrained by our mental capabilities. Like in the analogy of juggling balls, our brain can just "juggle" a few things at a time. Rich Hickey, the inventor of the programming language *Clojure* gave an inspirational keynote on the topic of **simplicity**.[^rich] In every sphere of a humans life, simplicity aligns perception with our mental capacities. Understanding the word **simple** alone will outline the this paper on its own.
 
+Derived from the ancient Latin word **simplex**, simple can be understood as "literally, uncompounded or onefold"[^dict] which points directly to the unidimensional aspect. While complexity describes the multilayered und entangled nature of conditions, simplicity empowers the human brain to reason about issues in a straightforward manner. It certainly has some overlapping's with *easy*, but while *easy* is more of a relative nature, simple can be laid out as a objective manner - a goal software development should pursuit and praise. 
 
-Introduction: from simplicity to Microservices to extensible web manifesto to w3c specifications ... and beyond
+Software development is undoubtedly rich in complexity and full of subtle pitfalls for the human brain. In a typical scenario, a piece of software evolves over time in one or another ~~opinionated~~ direction. Layers of new abstractions wrestling with old legacy abstractions and mutating objects will get out of control. Subtle bugs start to creep in. Eventually the small piece of software ends up in a highly complected monolith which will determine future design decisions to a painful degree. Any company will be highly determined by the current state trying to "keep the lights on".
 
-Der Erfinder der Programmiersprache Clojure, Rich Hickey, ist ohne Zweifel eine Koryphäe auf seinem Gebiet, der Strukturierung von komplexen Systemen. In einer vielbeachteten Keynote aus dem Jahr 2012 geht er auf etymologisch-philosophische Spurensuche nach dem Wort **simplicity ** aus Sicht eines Softwareentwicklers.[^rich] Das Adjektiv *simple* hat demnach seinen Ursprung im lateinischen Wort *simplex*, was soviel wie *einfach* oder *einzeln* bedeutet. In Gegensatz dazu stehen Eigenschaften wie *complex* oder *multiplex*. Qualitative Software ist, so Hickey, vor allem simpel -  im Prozess, im Design, in der Struktur und in der Entwicklung.
+On the other hand, any truly agile system architecture is laid out in a fine-grained manner. As Rich Hickey argues, design decisions should be made under the **impression of extending, substitution, moving, combining and repurposing**. The ability to reason about the program at any given time is crucial for future decisions and implementations. Recalling again the unidimensional nature of simplicity.
 
-[^rich]: [Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey](https://www.youtube.com/watch?v=rI8tNMsozo0&t=48s)
+The *state of the web* is certainly a different kind of complex multidimensional beast. "The web" is coined to be meant "everything that runs in the browser". While simplicity in the backend is mostly a matter of principles, any frontend developer is highly restricted on the entangled nature of the browser platform. Every call to an webpage results in a single **global DOM tree** managed by the browser engine. In the early days of the web a typical static page contained just a bunch of text nodes and some styling. Nowadays a typical webapp contains text nodes, functionality and styling from different resources and is expected to work highly dynamic and frictionless.
 
-Bezeichnend für diese Keynote ist, dass sie von Rich Hickey im Rahmen einer Webentwicklerkonferenz gehalten wurde. Software für den Browser war (und ist) seit langer Zeit maßgeblich geprägt von **Komplexität** auf mehreren Ebenen. Im Laufe dieser Bachelorarbeit werden diese Stru
+In the last four years the average transfer size of a webpage doubled to currently around 2.5 MB.[^http ]Subtracting images, fonts or other content the size of  HTML, CSS and JS sums up to a total average of 550 kb. One character weights around 1 byte which means an average webpage is delivering 550.000 character or around 125 pages of single-spaced text. Frederic Filloux calculated the ratio of real content on different newspaper websites and came to the conclusion, that only round about 5-6 % of the transferred characters made for consumption.[@Filloux2016]
 
+Having an 95 % overhead is rather undesirable for both the consumers and creators of the website. Since it's a widespread problem without a single point of failure one can argue the platform itself is the failure. In the recent years many frameworks, libraries and methodologies tried to simplify the way of building user interfaces by scoping assets and design rules into maintainable components. One of the most adopted technique was the **virtual DOM** approach essential ditching the old rule of separated HTML, CSS and JS in favor of **scoped JS components** (containing HTML and CSS). While frameworks are a valid approach to solve the problem they remain highly opinionated. 
 
+In 2013 thinkers, creators and browser vendors joined together to propose *The Extensible Web Manifesto*.[^manifest] The claim of the Manifesto is to enhance the current web with new low-level capacities. Those capacities should empower creators of the web to write more declarative code and therefore overcome known bottlenecks and artificial abstractions. Four years later, the new capabilities of JavaScript leapfrogged and many new low-level APIs brought to life. With the new APIs at hand a webdeveloper can create scoped and highly reusable microservices without additional libraries even directly in the browser console. 
 
+*Disclaimer:* Currently, many of the new standards proposed throughout this paper can only tried and tested inside Google Chrome or Opera. As the innovation cycle is pretty short it is expected to see those standards go live in all major browsers soon.In the meantime all of those functionalities can be safely **polyfilled**.
 
+[^manifest]: [The Extensible Web Manifesto](https://extensiblewebmanifesto.org/)
+[^http]: [HTTPArchive Trends](http://httparchive.org/trends.php)
+[^dict]: [Etymology Dictionary](http://www.etymonline.com/index.php?term=simple)
+[^rich]: [Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey](https://www.youtube.com/watch?v=rI8tNMsozo0&t=46s)
 
-* Das *Document Object Model* als Rückgrad jeder Webapplikation ist hierarchisch strukturiert und deren Elemente damit keinesfalls unabhängig in ihrer Darstellung und Reihenfolge.
-* JavaScript als single-threaded Skriptsprache lässt sich schlecht ihn ihrem Verhalten isolieren, ist Fehleranfällig und hatte lange Zeit nur sehr wenig idiomatische Lösungsansätze für komplexe Probleme, wie beispielsweise Asynchronität
-* CSS ist geprägt von stetigem Überschreiben vorher definierter Regeln und verletzt damit Simplizität in ihrer Struktur, Design und dem Entwicklungsprozesses auf bester Art und Weise.
+## Microservices
+
+Microserve
+
+untangle the web
+
 
 
 
@@ -114,7 +124,7 @@ After definition, the element needs to be registered in the new global build-in 
 In addition to the `constructor()`,  the spec defines so called *lifecycle callbacks* for controlling the **behaviour in the DOM**. Many popular frameworks like ReactJS or AngularJS rely on similar approaches:
 
 * `connectedCallback()`  
-  Called upon the time of *connecting or upgrading the node* which means the moment the node is inserted and rendered inside the DOM. Typically this block of code contains setup code, such as fetching resources or rendering.[@Bidelman2016] For performance issues it's highly preferable to put much code in here.
+  Called upon the time of *connecting or upgrading the node* which means the moment the node is rendered inside the DOM. Typically this method is called straight after the `constructor()` on insert. This block of code contains setup code, such as fetching resources or rendering elements according to attributes.[@Bidelman2016] For performance issues it's highly preferable to put much code in here.
 * `disconnectedCallback()`  
   Called upon the time of *node removal*. Cleanup code like removing eventListeners or disconnecting websockets can be put here.
 * `attributeChangedCallback(attrName, oldVal, newVal)`  
@@ -137,8 +147,9 @@ class HelloWorld extends HTMLElement {
   get sayhello() {
     return this._hello;
   }
-}
+});
 customElements.define('hello-world', HelloWorld);
+// Instantiation
 var el = new HelloWorld();
 el.sayhello = "earth";
 el.sayhello;//"earth"
@@ -249,7 +260,7 @@ Activation typically takes four steps:
     	document.body.appendChild(clone);
 
 
-As easy  and minimal *HTML templates* are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as **placeholders** where content should appear. Of course, with heavy use of JS things could be modeled this way. The idiomatic way tends more towards a *Shadow DOM & HTML templates* symbiosis.
+As easy  and minimal *HTML templates* are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as **placeholders** where content should appear. Of course, with heavy use of JS things could be modeled this way. The idiomatic way tends more towards a *Shadow DOM & HTML templates* symbiosis. 
 
 ````html
 > index.html
@@ -276,6 +287,8 @@ As easy  and minimal *HTML templates* are, they're missing out a crucial feature
 </template>
 
 <script>
+  // Switched to anonymous class notation
+  // for keeping associated code together.
   customElements.define('hello-world',
     class extends HTMLElement {
      constructor() {
@@ -313,23 +326,89 @@ The `async ` flag is optional but like in any other fetching event, strongly rec
 
 4. **Appending the clone/original to destination**
 
-This again is the imperative way to handle a generic *HTML Import*. In the declarative world of *web components* a component is activated, parsed and anchored solely by its' tag name `<hello-world></hello-world>`. Preliminary, the component needs proper configuration as the last `HelloWorld` example wouldn't work like it is currently. The next section will provide a better understanding about the right configuration and composition of a component to work out-of-the-box.
+This again is the imperative way to handle a generic *HTML Import*. In the declarative world of *web components* a component is activated, parsed and anchored solely by its' tag name `<hello-world></hello-world>`. Preliminary, the component needs proper configuration as the last `HelloWorld` example wouldn't work like it is currently. The next section will elaborate the right configuration and composition of a component to work out-of-the-box.
 
 Despite from being just a practical document importer *HTML imports* acts like a fully fledged dependency manager for the browser. Multiple resources, ranging from stylesheets, scripts, documents, media files and even other `imports` can be grouped together in a logical `import` statement. Internally, the browser engine keeps track for every imported resource so it won't be loaded twice. The inherent complexity is in fact a stumbling block for wider browser adoption. Currently only Googles blink web engine supports *HTML Imports* as they are the driving force behind the *web components* spec in general. Mozilla and Apple imposed distaste for *HTML Imports* as a whole. One reason for this can be found in the incompatibility of the spec with the upcoming *ES6 module loader*.[^mozilla]
 
 [^mozilla]: https://hacks.mozilla.org/2014/12/mozilla-and-web-components/
 
-Despite the discrepancies among  browser vendors *HTML Imports* should still be part of the paper and future *web components* as no other browser technology can bundle up CSS, JS and HTML that efficient. As of today, January 2017, only Googles Chrome and related Opera browser supporting the full spec and despite from *HTML Imports* all other browser vendors most likely will catch up within this year. In the meantime, the full *web components* standard can be **polyfilled** and used across all browsers.
+Despite the discrepancies among  browser vendors *HTML Imports* should still be part of the paper and future *web components* as no other native browser technology can bundle up CSS, JS and HTML that efficient. As of today, January 2017, only Googles Chrome and related Opera browser supporting the full *web components* spec and, despite from *HTML Imports*, all other browser vendors most likely will catch up with *Custom Elements* and *Shadow DOM* within this year. In the meantime, the full *web components* stack can be **polyfilled** and used across all browsers.
 
-## Appendix: Custom Events
+## Appendix A: Custom Events [(whatwg)](https://dom.spec.whatwg.org/#interface-customevent)
 
+Events are first-class citizens in the browser world and *Custom Events* are no exception. The *Custom Elements* interface is part of the DOM since years but with the rise of *Custom Elements* they will most likely become an indispensable building block of *web components*.
 
+```html
+> index.html
+<hello-world>
+  <button>Launch CustomEvent</button>
+</hello-world>
+<!-- COMPONENT STARTS HERE -->
+<script>
+  customElements.define('hello-world', 
+  class extends HTMLElement {
+    constructor() {
+   	  super();
+      // Craft a CustomEvent e
+  	  const e = new CustomEvent('hello-world', {
+        bubbles: true, //important!
+      	detail: 'Contains string or object'
+      });
+      // Launch e on child button click
+      this.addEventListener('click', click => {
+        this.dispatchEvent(e)
+        click.stopPropagation();
+      });
+      // Catch e. Typically done by some parent
+	  // node. Message in detail property
+      this.addEventListener('hello-world', e => {
+        console.log(e.detail)
+      });
+    }
+  });
+</script>
+```
 
+Naming events after the emitting tag makes the API almost self-explanatory. Fortunately the `detail` property can transmit even objects witch allows the developer to craft almost all functionality inside one event. The further sections will elaborate a feasible architecture for building a scaling microservice architecture.
 
+Chaining and aggregating events from child nodes should be practiced and exercised quiet frequently. As mentioned earlier in the *Custom Elements* section, the pattern of **extending native elements** should be somewhat dismissed as it may be implemented outside of Chrome. Nevertheless, it is possible to create own kind of quasi native buttons when chaining a *CustomEvent* directly after the native click event.
 
+Another typical *custom element* use case can be as an actor on (native) child elements. In this case, the *Custom Element*  catches events from children, buffers or rebuild them and eventuall fires an event towards the document root.
 
+Unfortunately events only work "upstream" towards parent nodes. Still the web platform offers plenty of possibilities to talk back to child nodes.
 
+## Appendix B: Web Worker [(whatwg)](https://html.spec.whatwg.org/multipage/workers.html)
 
+Like *Custom Events*, *Web Workers* had been around for a long time and therefore embrace full support among major browser vendors. They emerged at around 2009 when discussions about browser performance was in the early stages of development. Nevertheless, the addressed problem of *Web Workers* is a fundamental language problem of JS itself.
+
+JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread[@Bidelman2010]. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail to whatever reason which leads to a frozen UI on the users side. A worker can overcome the bottleneck of the single-threaded nature with spawning a new **background thread**. Most of the browsers work can be leveraged to this new thread. Todays web architectures aims to leverage an increasing amout of proccessing to the client to avoid time-consuming roundtrips especially in mobiles networks.[^latency] While many native APIs like `fetch` work seamlessly in the new thread, a worker has no access to the DOM at all.
+
+[^latency]: Latency numbers: https://gist.github.com/jboner/2841832
+
+A *Web Worker* spawns a new background thread where scripts can run concurrent to the main thread. Usually a worker is loaded from a workers dedicated file to embrace this kind of separation. 
+
+```javascript
+const worker = new Worker('worker.js');
+```
+
+After initialization a worker communicates over a simple **message based interface** with the main thread. 
+
+```javascript
+> main.js
+// Send to worker
+worker.postMessage('Hello World');
+// Receive msg from worker
+worker.addEventListener('message', e =>
+  console.log('Worker said: ', e.data));
+```
+```javascript
+> worker.js
+// Receive msg and echo back
+this.addEventListener('message', e =>
+  this.postMessage("Echo " + e.data));
+```
+
+Having no access to the DOM can be seen as hinderance,but i
 
 Macroperspektive / Composition
 
