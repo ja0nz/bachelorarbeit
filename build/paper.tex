@@ -117,12 +117,12 @@ web}\label{simplicity-and-the-state-of-the-web}
 Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 \end{quote}
 
-Computers can scale, humans can't. Ever since, a program or complex
-system made by humans has been constrained by our mental capabilities.
-Like in the analogy of juggling balls, our brain can just ``juggle'' a
-few things at a time. Rich Hickey, the inventor of the programming
-language \emph{Clojure} gave an inspirational keynote on the topic of
-\textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
+Computers can scale, humans can't. Ever since a program or complex
+system made by humans has been constrained by humans mental
+capabilities. Like in the analogy of juggling balls, our brain can just
+``juggle'' a few things at a time. Rich Hickey, the inventor of the
+programming language \emph{Clojure} gave an inspirational keynote on the
+topic of \textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
   Conf 2012 Keynote: Simplicity Matters by Rich Hickey}} In every sphere
 of a humans life, simplicity aligns perception with our mental
 capacities. Understanding the word \textbf{simple} alone will outline
@@ -159,12 +159,7 @@ The \emph{state of the web} is certainly a different kind of complex
 multidimensional beast. ``The web'' is coined to be meant ``everything
 that runs in the browser''. While simplicity in the backend is mostly a
 matter of principles, any frontend developer is highly restricted on the
-entangled nature of the browser platform. Every call to an webpage
-results in a single \textbf{global DOM tree} managed by the browser
-engine. In the early days of the web a typical static page contained
-just a bunch of text nodes and some styling. Nowadays a typical webapp
-contains text nodes, functionality and styling from different resources
-and is expected to work highly dynamic and frictionless.
+entangled nature of the browser platform.
 
 In the last four years the average transfer size of a webpage doubled to
 currently around 2.5 MB.\footnote{\href{http://httparchive.org/trends.php}{HTTPArchive
@@ -179,100 +174,125 @@ characters made for consumption.{[}1{]}
 Having an 95 \% overhead is rather undesirable for both the consumers
 and creators of the website. Since it's a widespread problem without a
 single point of failure one can argue the platform itself is the
-failure. In the recent years many frameworks, libraries and
-methodologies tried to simplify the way of building user interfaces by
-scoping assets and design rules into maintainable components. One of the
-most adopted technique was the \textbf{virtual DOM} approach essential
-ditching the old rule of separated HTML, CSS and JS in favor of
-\textbf{scoped JS components} (containing HTML and CSS). While
-frameworks are a valid approach to solve the problem they remain highly
-opinionated.
+failure. By design, every pageload results in a \textbf{global DOM tree}
+managed by the browser engine. Regardless of rendering just a bunch of
+static text nodes or an ever changing webapp the underlying global model
+remains the same. \textbf{Encapsulation and modularization} is a typical
+pattern in the computer industry to make complexity manageable and to
+accommodate future uncertainty.{[}2, p. 1{]} Today many websites tend
+towards becoming complex single-page applications (and therefore the
+average JS payload is soaring too). Consequently, the demands to the
+browser platform changed from a static page renderer to a
+\textbf{complexe UI machine}. Without additional layers of abstraction
+modularization would be impossible to archive.
+
+In the recent years many \textbf{frameworks}, libraries and
+methodologies tried to tackle the global nature of the DOM by scoping
+assets and design rules into maintainable components. While the DOM
+can't be scoped, JS can. Therefore many of those frameworks, like
+ReactJS, AngularJS or VueJS just to name a few, ditched the old rule of
+separated HTML, CSS and JS in favor of an additional layer of
+\textbf{abstracted JS components} (containing content, markup and
+styling). Quiet often those frameworks mimic a MVC pattern on top of the
+browser engine which is a reasonable simple design pattern to build
+graphical user interfaces. This paper will apply the same pattern for
+building a browsernative microservice.While frameworks are a valid
+approach to build scalable web applications they remain highly
+opinionated and can change and break over time. Furthermore, they
+inflate the code with libraries as well. A standardized way for creating
+complex UI interfaces painlessly requires new build-in browser
+capabilities.
 
 In 2013 thinkers, creators and browser vendors joined together to
 propose \emph{The Extensible Web Manifesto}.\footnote{\href{https://extensiblewebmanifesto.org/}{The
   Extensible Web Manifesto}} The claim of the Manifesto is to enhance
-the current web with new low-level capacities. Those capacities should
-empower creators of the web to write more declarative code and therefore
-overcome known bottlenecks and artificial abstractions. Four years
-later, the new capabilities of JavaScript leapfrogged and many new
-low-level APIs brought to life. With the new APIs at hand a webdeveloper
-can create scoped and highly reusable microservices without additional
-libraries even directly in the browser console.
+the current web platforms with new low-level capabilities. Those
+features should empower creators of the web to write more declarative
+code and therefore overcome known bottlenecks and artificial
+abstractions. Four years later, the enhancement of JavaScript
+leapfrogged and many new low-level APIs brought to life. With the new
+APIs at hand a webdeveloper can create scoped and highly reusable
+microservices without additional libraries even directly in the browser
+console.
 
-\emph{Disclaimer:} Currently, many of the new standards proposed
-throughout this paper can only tried and tested inside Google Chrome or
-Opera. As the innovation cycle is pretty short it is expected to see
-those standards go live in all major browsers soon.In the meantime all
-of those functionalities can be safely \textbf{polyfilled}.
+\emph{Disclaimer:} Currently, all new technologies proposed throughout
+this paper can be tried and tested in Google Chrome, Opera and the
+Safari Technology Preview. Usually the browser adoption time is short in
+time an therefore full support of all standards is expected soon.
+Meanwhile this standards can be used through \textbf{polyfills} on every
+important legacy browser.
 
-\subsection{Microservices}\label{microservices}
+\section{Microservices}\label{microservices}
 
-Microserve
-
-untangle the web
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-Betrachtet man andere populäre Webframeworks dieser Zeit, wie
-beispielsweise React oder Angular, lässt sich ziemlich schnell ein
-gemeinsames Designpattern ausmachen, wie Komponenten intern ihre
-Zuständen verwalten. Der Facebook Entwickler Dan Abramov hat dieses
-dichotome Pattern systematisch erfasst und in zwei Kategorien
-eingeteilt.
-
-Nach Abramov existieren zum einen Komponenten, die alleine für das
-\textbf{Darstellen von Information} zuständig sind. Diese Komponenten
-nehmen keinerlei Einfluss auf Informationen oder anderen Komponenten um
-sich herum. Sie sind im wahrsten Sinne passiv und fremdgesteuert über
-klar definierte Schnittstellen. Diese Komponenten sind häufig flexibel
-einsetzbar und hochgradig wiederwerwendbar. Abramov nennt diese
-Komponenten ``Presentational Components''.{[}2{]} Verortet man diese Art
-von Komponenten innerhalb des \emph{MVC Pattern}, sind die Komponenten
-reine \emph{View-Elemente}.
-
-Im Gegensatz dazu stehen Komponenten, die für die \textbf{Verarbeitung
-von Informationen} zuständig sind. Diese so genannten ``Container
-Components'' haben oft einen internen Zustand, den sie verändern können
-und an ihre Kindkomponenten weiterreichen können.{[}2{]} Im \emph{MVC
-Pattern} handelt es sich um die \emph{Controller}. In der funktionalen
-Programmiersprache Elm werden diese Elemente \emph{Updater} genannt, was
-ihre Funktion noch besser umschreibt.
-
-Ein üblicher eventgesteuerter Webservice setzt sich aus
-unterschiedlichsten Komponenten zusammen, die wiederum
-unterschiedlichste Eventlistener \& -emitter in sich subsummieren. Diese
-inhärente Komplexität verlangt geradezu nach einer klaren,
-deterministischen Struktur des Webservices, die das Zusammenspiel
-orchestriert. In der Analogie des Orchesters gesprochen, benötigt der
-Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der
-für die Steuerung verantwortlich ist.
-
-\section{Microservices}\label{microservices-1}
-
-Opening up the case for \emph{Browsernative Microservices} brings up the
-question about the concept microservices in general. In fact the concept
-of microservices has many facets, stretching beyond disciplines and
-technical boundaries. It lacks a formal standardization but there are
+Calling the need for \emph{Browsernative Microservices} brings up the
+question about the concept of microservices in general. In fact the
+concept of microservices has many facets, stretching beyond disciplines
+and technical boundaries. It lacks a formal standardization but subsumes
 certain ideas emergine from this pattern. As a primary source of truth
-this articles relies on the work of Sam Newman, who has written a
-comprehensive guide in \emph{Building Microservices}. The purpose of
-this section is to match those ideas against the manifestations of web
-components.
+this paper relies on the work of Sam Newman, who has written a
+comprehensive guide in \emph{Building Microservices} and the work of
+Fowler and Lewis. The purpose of this section is to match those ideas
+against the browser platform where different rules of development
+applies.
 
 In a nutshell a microservice is a small, autonomous service that works
 together with other services seamlessly.{[}3, p. 2{]} or with the words
-of Fowler and Lewis: ``It is an approach to developing a single
-application as a suite of small services, each running in its own
-process and communicating with lightweight mechanisms,\ldots{}''{[}4{]}
-Microservices incorporate many ideas, like \emph{domain-driven design}
-where we try to represent the real world in our code.{[}3, p. 2{]} Or
-making use of \emph{continuous delivery} for pushing software rapidly
-through \emph{automated deployment} mechanisms in production.{[}4{]}
-And, last but not least, microservices utilizes the idea of small teams
-with a lot of product knowledge working mostly autonomous on their very
-own service with their very own set of tools and techniques.
+of Fowler and Lewis: ``In short, the microservice architectural style is
+an approach to developing a single application as a suite of small
+services, each running in its own process and communicating with
+lightweight mechanisms, often an HTTP resource API''{[}4{]}
+Microservices incorporate many other ideas, like \emph{domain-driven
+design} where we try to represent the real world in our code.{[}3, p.
+2{]} Or making use of \emph{continuous delivery} for pushing software
+rapidly through \emph{automated deployment} mechanisms in
+production.{[}4{]} And, last but not least, microservices utilizes the
+idea of small teams with a lot of product knowledge working mostly
+autonomous on their very own service with their very own set of tools
+and techniques.
 
-\subsection{Technical perspective}\label{technical-perspective}
+\subsection{Componentization via
+Services}\label{componentization-via-services}
+
+``A~\textbf{component}~is a unit of software that is independently
+replaceable and upgradeable.''{[}4{]} Compared to libraries a component
+service offers multiple advantages. A library is only loosely coupled to
+the implementation and therefore hard to track in functionality.
+Changing a library often requires an unforeseen amount of time fixing
+implementations. Therefore in the field we often see multiple versions
+of libraries deployed simultaneous (like with JQuery) which adds a huge
+amount of overhead on the page load. Eventually, dead code elimination
+won't work in highly coupled libraries. Components instead incorporate a
+much better evolution mechanism in the service contracts. Changing
+functionality won't break other components. A component can
+progressively enhanced which guarantees functionality throughout
+different versions.
+
+Compared to libraries componentized services offers a more explicit
+interface.{[}4{]} While the functionality of a library needs
+documentation, a component functionality is exposed via the components'
+signature and therefore highly accessible. HTML elements are usually
+controlled via their attributes. A generic HTML service therefore might
+look like this:
+\texttt{\textless{}my-button\ isPrimary\textgreater{}\textless{}/button\textgreater{}}.
+
+\subsection{Organized around Business
+Capabilities}\label{organized-around-business-capabilities}
+
+\subsection{Products not Projects}\label{products-not-projects}
+
+\subsection{Smart endpoints and dumb
+pipes}\label{smart-endpoints-and-dumb-pipes}
+
+\subsection{Decentralized Governance}\label{decentralized-governance}
+
+\subsection{Decentralized Data
+Management}\label{decentralized-data-management}
+
+\subsection{Infrastructure Automation}\label{infrastructure-automation}
+
+\subsection{Design for failure}\label{design-for-failure}
+
+\subsection{Evolutionary Design}\label{evolutionary-design}
 
 Shift of paradigms / BFF / Platform agnostic / changes in infrastructure
 like APIs Databanks / Deployment
@@ -382,11 +402,11 @@ enriched with behavior, design and functionality. An obligatory
 \begin{Highlighting}[]
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-    \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
-    \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\StringTok{"hello"}\NormalTok{)}\OperatorTok{;}
-    \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(...)}\OperatorTok{;}
-  \OperatorTok{\}}
+ \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+  \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
+  \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\StringTok{"hello"}\NormalTok{)}\OperatorTok{;}
+  \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(...)}\OperatorTok{;}
+ \OperatorTok{\}}
 \OperatorTok{\}}
 \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}
 \end{Highlighting}
@@ -470,14 +490,14 @@ behavior of the element.
 \begin{Highlighting}[]
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}\NormalTok{...}\OperatorTok{\}}
-  \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
-    \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
-    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
-  \OperatorTok{\}}
-  \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
-    \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
-  \OperatorTok{\}}
+ \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}\NormalTok{...}\OperatorTok{\}}
+ \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
+  \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
+  \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
+ \OperatorTok{\}}
+ \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
+  \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
+ \OperatorTok{\}}
 \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
 \CommentTok{// Instantiation}
@@ -549,11 +569,11 @@ would like this:
 \begin{Highlighting}[]
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-    \NormalTok{...}
-    \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-    \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{'<p>hello</p>'}\OperatorTok{;}
-  \OperatorTok{\}}
+ \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+  \NormalTok{...}
+  \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+  \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{'<p>hello</p>'}\OperatorTok{;}
+ \OperatorTok{\}}
 \OperatorTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -727,8 +747,7 @@ Activation typically takes four steps:
   \textbf{Parsing the content and preparing the templates' content}\\
   const content = node.content;\\
   -\textgreater{} Returns a \emph{DocumentFragment} object. Handling is
-  straight forward\\
-  content.querySelector(`img').src = `logo.png';
+  straight forward content.querySelector(`img').src = `logo.png';
 \item
   \textbf{Optional: Cloning the \emph{DocumentFragment} for multiple
   use}\\
@@ -750,41 +769,41 @@ HTML templates} symbiosis.
 \begin{Highlighting}[]
 \NormalTok{> index.html}
 \KeywordTok{<hello-world>}
-  \KeywordTok{<p}\OtherTok{ id=}\StringTok{"sendto"}\OtherTok{ slot=}\StringTok{"placeholder"}\KeywordTok{>}
-    \NormalTok{Hello World Web Component    }
-  \KeywordTok{</p>}
+ \KeywordTok{<p}\OtherTok{ id=}\StringTok{"sendto"}\OtherTok{ slot=}\StringTok{"placeholder"}\KeywordTok{>}
+  \NormalTok{Hello World Web Component  }
+ \KeywordTok{</p>}
 \KeywordTok{</hello-world>}
 \CommentTok{<!-- COMPONENT STARTS HERE -->}
 \KeywordTok{<template}\OtherTok{ id=}\StringTok{"hello"}\KeywordTok{>}
-  \CommentTok{<!-- STYLES -->}
-  \KeywordTok{<style>}
-    \FloatTok{#stylewrapper} \KeywordTok{\{}
-      \KeywordTok{font-weight:} \DataTypeTok{bold}\KeywordTok{;}
-      \KeywordTok{color:} \NormalTok{orange}\KeywordTok{;}
-    \KeywordTok{\}}
-  \KeywordTok{</style>}
-  \CommentTok{<!-- CONTENT -->}
-  \KeywordTok{<div}\OtherTok{ id=}\StringTok{"stylewrapper"}\KeywordTok{>}
-    \KeywordTok{<slot}\OtherTok{ name=}\StringTok{"placeholder"}\KeywordTok{>}
-      \NormalTok{Named placeholder}
-    \KeywordTok{</slot>}
-  \KeywordTok{</div>}
+ \CommentTok{<!-- STYLES -->}
+ \KeywordTok{<style>}
+  \FloatTok{#stylewrapper} \KeywordTok{\{}
+   \KeywordTok{font-weight:} \DataTypeTok{bold}\KeywordTok{;}
+   \KeywordTok{color:} \NormalTok{orange}\KeywordTok{;}
+  \KeywordTok{\}}
+ \KeywordTok{</style>}
+ \CommentTok{<!-- CONTENT -->}
+ \KeywordTok{<div}\OtherTok{ id=}\StringTok{"stylewrapper"}\KeywordTok{>}
+  \KeywordTok{<slot}\OtherTok{ name=}\StringTok{"placeholder"}\KeywordTok{>}
+   \NormalTok{Named placeholder}
+  \KeywordTok{</slot>}
+ \KeywordTok{</div>}
 \KeywordTok{</template>}
 
 \KeywordTok{<script>}
-  \CommentTok{// Switched to anonymous class notation}
-  \CommentTok{// for keeping associated code together.}
-  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,}
-    \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-     \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-       \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
-       \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-       \KeywordTok{const} \NormalTok{template }\OperatorTok{=}
-         \VariableTok{document}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#hello'}\NormalTok{)}\OperatorTok{;}
-       \KeywordTok{this}\NormalTok{.}\AttributeTok{shadowRoot}
-         \NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{template}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
-     \OperatorTok{\}}
-   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+ \CommentTok{// Switched to anonymous class notation}
+ \CommentTok{// for keeping associated code together.}
+ \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,}
+  \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+   \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+    \KeywordTok{const} \NormalTok{template }\OperatorTok{=}
+     \VariableTok{document}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#hello'}\NormalTok{)}\OperatorTok{;}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{shadowRoot}
+     \NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{template}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
+   \OperatorTok{\}}
+  \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \OperatorTok{<}\SpecialStringTok{/script>}
 \end{Highlighting}
 \end{Shaded}
@@ -880,31 +899,31 @@ components}.
 \begin{Highlighting}[]
 \NormalTok{> index.html}
 \KeywordTok{<hello-world>}
-  \KeywordTok{<button>}\NormalTok{Launch CustomEvent}\KeywordTok{</button>}
+ \KeywordTok{<button>}\NormalTok{Launch CustomEvent}\KeywordTok{</button>}
 \KeywordTok{</hello-world>}
 \CommentTok{<!-- COMPONENT STARTS HERE -->}
 \KeywordTok{<script>}
-  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} 
-  \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
-      \CommentTok{// Craft a CustomEvent e}
-      \KeywordTok{const} \NormalTok{e }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \OperatorTok{\{}
-        \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,} \CommentTok{//important!}
-        \DataTypeTok{detail}\OperatorTok{:} \StringTok{'Contains string or object'}
-      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-      \CommentTok{// Launch e on child button click}
-      \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'click'}\OperatorTok{,} \NormalTok{click }\OperatorTok{=>} \OperatorTok{\{}
-        \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(e)}
-        \VariableTok{click}\NormalTok{.}\AttributeTok{stopPropagation}\NormalTok{()}\OperatorTok{;}
-      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-      \CommentTok{// Catch e. Typically done by some parent}
-      \CommentTok{// node. Message in detail property}
-      \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>} \OperatorTok{\{}
-        \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\VariableTok{e}\NormalTok{.}\AttributeTok{detail}\NormalTok{)}
-      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-    \OperatorTok{\}}
-  \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+ \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} 
+ \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+     \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+   \CommentTok{// Craft a CustomEvent e}
+     \KeywordTok{const} \NormalTok{e }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \OperatorTok{\{}
+    \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,} \CommentTok{//important!}
+    \DataTypeTok{detail}\OperatorTok{:} \StringTok{'Contains string or object'}
+   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+   \CommentTok{// Launch e on child button click}
+   \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'click'}\OperatorTok{,} \NormalTok{click }\OperatorTok{=>} \OperatorTok{\{}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(e)}
+    \VariableTok{click}\NormalTok{.}\AttributeTok{stopPropagation}\NormalTok{()}\OperatorTok{;}
+   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+   \CommentTok{// Catch e. Typically done by some parent}
+     \CommentTok{// node. Message in detail property}
+   \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>} \OperatorTok{\{}
+    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\VariableTok{e}\NormalTok{.}\AttributeTok{detail}\NormalTok{)}
+   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+  \OperatorTok{\}}
+ \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \OperatorTok{<}\SpecialStringTok{/script>}
 \end{Highlighting}
 \end{Shaded}
@@ -936,11 +955,10 @@ nodes.
 \href{https://html.spec.whatwg.org/multipage/workers.html}{(whatwg)}}{Appendix B: Web Worker (whatwg)}}\label{appendix-b-web-worker-whatwg}
 
 Like \emph{Custom Events}, \emph{Web Workers} had been around for a long
-time and therefore embrace full support among major browser vendors.
-They emerged at around 2009 when discussions about browser performance
-was in the early stages of development. Nevertheless, the addressed
-problem of \emph{Web Workers} is a fundamental language problem of JS
-itself.
+time and therefore embrace full support among major browsers. They
+emerged at around 2009 when discussions about browser performance was
+still in the early days. Nevertheless, the addressed problem of
+\emph{Web Workers} is a fundamental language problem of JS itself.
 
 JS runs in a single-threaded language environment. Every script in the
 browser environment, from handling UI events to query and process larget
@@ -977,7 +995,7 @@ based interface} with the main thread.
 \VariableTok{worker}\NormalTok{.}\AttributeTok{postMessage}\NormalTok{(}\StringTok{'Hello World'}\NormalTok{)}\OperatorTok{;}
 \CommentTok{// Receive msg from worker}
 \VariableTok{worker}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'message'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>}
-  \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\StringTok{'Worker said: '}\OperatorTok{,} \VariableTok{e}\NormalTok{.}\AttributeTok{data}\NormalTok{))}\OperatorTok{;}
+ \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\StringTok{'Worker said: '}\OperatorTok{,} \VariableTok{e}\NormalTok{.}\AttributeTok{data}\NormalTok{))}\OperatorTok{;}
 \end{Highlighting}
 \end{Shaded}
 
@@ -986,7 +1004,7 @@ based interface} with the main thread.
 \OperatorTok{>} \VariableTok{worker}\NormalTok{.}\AttributeTok{js}
 \CommentTok{// Receive msg and echo back}
 \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'message'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>}
-  \KeywordTok{this}\NormalTok{.}\AttributeTok{postMessage}\NormalTok{(}\StringTok{"Echo "} \OperatorTok{+} \VariableTok{e}\NormalTok{.}\AttributeTok{data}\NormalTok{))}\OperatorTok{;}
+ \KeywordTok{this}\NormalTok{.}\AttributeTok{postMessage}\NormalTok{(}\StringTok{"Echo "} \OperatorTok{+} \VariableTok{e}\NormalTok{.}\AttributeTok{data}\NormalTok{))}\OperatorTok{;}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1005,6 +1023,17 @@ design a
 
 containers
 
+dichotome Pattern
+
+Ein üblicher eventgesteuerter Webservice setzt sich aus
+unterschiedlichsten Komponenten zusammen, die wiederum
+unterschiedlichste Eventlistener \& -emitter in sich subsummieren. Diese
+inhärente Komplexität verlangt geradezu nach einer klaren,
+deterministischen Struktur des Webservices, die das Zusammenspiel
+orchestriert. In der Analogie des Orchesters gesprochen, benötigt der
+Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der
+für die Steuerung verantwortlich ist.
+
 http://alistair.cockburn.us/Hexagonal+architecture
 
 MVC Pattern
@@ -1021,11 +1050,13 @@ Chapter about progressive enhancement
 {[}Online{]}. Available:
 \url{https://mondaynote.com/bloated-html-the-best-and-the-worse-cac6eb06496d}
 
-\hypertarget{ref-Abramov2015}{}
-{[}2{]} D. Abramov, ``Presentational and Container Components --
-Medium.'' 2015 {[}Online{]}. Available:
-\url{https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0}.
-{[}Accessed: 01-Dec-2016{]}
+\hypertarget{ref-Baldwin2006}{}
+{[}2{]} C. Y. Baldwin and K. B. Clark, ``Modularity in the Design of
+Complex Engineering Systems,'' in \emph{Complex engineered systems:
+Science meets technology}, D. Braha, A. A. Minai, and Y. Bar-Yam, Eds.
+Berlin, Heidelberg: Springer Berlin Heidelberg, 2006, pp. 175--205
+{[}Online{]}. Available:
+\href{http://dx.doi.org/10.1007/3-540-32834-3\%7B/_\%7D9}{http://dx.doi.org/10.1007/3-540-32834-3\{\textbackslash{}\_\}9}
 
 \hypertarget{ref-Newman2015}{}
 {[}3{]} S. Newman, \emph{Building microservices}. O'Reilly Media, Inc.,
