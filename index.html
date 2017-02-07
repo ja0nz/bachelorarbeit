@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title></title>
+  <meta name="author" content="Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de">
+  <title>Browsernative Microservices</title>
   <style type="text/css">code{white-space: pre;}</style>
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -50,6 +51,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <link rel="stylesheet" href="assets/css/academic-pub.css">
 </head>
 <body>
+<header>
+<h1 class="title">Browsernative Microservices</h1>
+<h1 class="subtitle">Modular web architecture through new W3C specifications</h1>
+<h2 class="author">Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de</h2>
+<h3 class="date">Januar 2017</h3>
+</header>
 <nav id="TOC">
 <ul>
 <li><a href="#simplicity-and-the-state-of-the-web">Simplicity and the state of the web</a></li>
@@ -80,11 +87,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#assumptions-about-custom-elements">Assumptions about custom elements</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#progressive-enhancement">Progressive Enhancement</a><ul>
-<li><a href="#chapter-about-progressive-enhancement">Chapter about progressive enhancement</a></li>
-</ul></li>
+<li><a href="#anatomy-of-an-browsernative-microservice">Anatomy of an browsernative microservice</a></li>
 </ul>
 </nav>
+<div class="abstract">
+Abstract - Building complex web applications nowadays require additional layers of abstraction and often heavily depend on proprietary frameworks. New specifications build right into the browserengine provide a native service API to overcome tricky abstraction constraints.
+</div>
 <div id="main">
 <h1 id="simplicity-and-the-state-of-the-web">Simplicity and the state of the web</h1>
 <blockquote>
@@ -108,13 +116,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>&quot;A <strong>component</strong> is a unit of software that is independently replaceable and upgradeable.&quot; <span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> Components are the building blocks of the microservice but in fact they even share a lot of similarities just on a smaller scale. One of the similarity is the <em>loose coupling principle</em>: changing and deploying one service shouldn't result in changing other parts of the system.<span class="citation" data-cites="Newman2015">(Newman 2016, 30)</span>. Same goes for the component which should know as little as it needs about the service to fulfil it's job.</p>
 <p>Any reader of the paper coming from the ReactJS / Redux world this concept of components might look familiar. Dan Abramov, the creator of Redux, once defined a simple dichotomous pattern for creating UI components. In his believe, there are <strong>presentational components</strong> only related with the concern about <em>how things look</em>. This component literally doesn't know anything about the service in question which makes the component highly flexible and reusable. They are controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span></p>
 <p>On the other hand Dan Abramov outlines components which he calls <strong>containers</strong>. A container component is concerned with <em>how things work</em>.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Containers acts as invisible wrappers around presentational components. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. In contrast to their presentational counterparts, containers can't life on its own without children. Conceptually, they show another important principle of components and microservices in general: <em>high cohesion principle</em>.</p>
-<p>Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.<span class="citation" data-cites="Newman2015">(Newman 2016, 30)</span> Code quality can be measured just by counting the places changes in the code need to be made on changing behavior. In an arbitrary MVC system a <code>button</code> might be inserted in the VIEW, the CONTROLLER needs some adjustment and maybe the the MODEL, too. Three places for adjustment is a reasonable easy task for the brain, everything more violates the concept of simplicity.</p>
+<p>Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.<span class="citation" data-cites="Newman2015">(Newman 2016, 30)</span> High cohesion can be perceived as the <em>Single Responsibility Principle</em> defined by Robert C. Martin: &quot;Gather together those things that change for the same reason and separate those things that change for different reasons.&quot;<span class="citation" data-cites="Martin">(Martin, n.d.)</span> In a very quick and dirty code quality analysis, the quality can be measured just by counting the places changes in the code occur. In an arbitrary MVC system a <code>button</code> might be inserted in the VIEW, the CONTROLLER needs some adjustment and maybe the the MODEL, too. Three places for adjustment is a reasonable easy task for the brain, everything more violates the concept of simplicity.</p>
 <p>Using libraries in web development is common sense. But compared to libraries, a component service offers multiple advantages. A library is only loosely coupled to the implementation and therefore hard to track in functionality. Changing a library may result in an unforeseen amount of time fixing implementations. It is not unusual to see websites embodying different versions of the same library (like with JQuery). Another issue with libraries is dead code elimination which means the process of removing code that is never going to be executed. Newer build tools for the web, like Webpack 2 or Rollup offer this feature which relies heavily on the static structure on ES6 modules.<span class="citation" data-cites="Rauschmayer2015">(Rauschmayer 2015)</span> Contrary libraries for the browsers are traditionally &quot;shipped&quot; as <strong>immediately-invoked functions</strong>. Bootstrapping those closed functions is much harder to archive as even dead code is actually executed on load.</p>
 <p>Web components are necessary static ES6 modules and any capable bundler can choose which component is needed at runtime. Even more granular, a good web component is composed of static JS blocks which can be strapped away too.</p>
 <p>A web component is self-contained which means it embodys all needed functionality to get it's job done. Therefore it has a much better evolution mechanism in the service contracts. Changing functionality won't break other components. A component can progressively enhanced which guarantees functionality throughout different versions.</p>
 <p>Compared to libraries componentized services offers a more explicit interface.<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> While the functionality of a library needs documentation, a component functionality is exposed via the components' signature which comes in the fashion of an HTML element. For example, a button can consume attributes and becomes a primary buttons just by assignment.</p>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;my-botton</span><span class="ot"> isPrimary</span><span class="kw">&gt;</span>Primary<span class="kw">&lt;/my-botton&gt;</span></code></pre></div>
-<p>A microservice reinforces the <em>Single Responsibility Principle</em> defined by Robert C. Martin: &quot;Gather together those things that change for the same reason and separate those things that change for different reasons.&quot;<span class="citation" data-cites="Martin">(Martin, n.d.)</span></p>
 <h2 id="organized-around-business-capabilities">Organized around Business Capabilities</h2>
 <blockquote>
 <p>&quot;organizations which design systems ... are constrained to produce designs which are copies of the communication structures of these organizations&quot;. <span class="citation" data-cites="Conway1968">(Conway 1968)</span></p>
@@ -132,13 +139,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>This distributed nature allows teams to create their own technology stack, tools and services designed in the spirit of language- and platform independence - and share their knowledge with other parties.<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> In the recent years many big companies like Facebook, Google, Netflix and others followed that spirit and published their ideas and implementations open source. The previously mentioned ReactJS for example is a brainchild of Facebook. In fact, many tools and techniques are byproduct of vital interaction of concrete domain problems and their implementations.</p>
 <p>The spirit of freedom can't be applied to <em>browsernative microservices</em> as the browser and its underlying DOM will be the limitation factor. Still there are some decentralization aspects around creating microservices for the browser worth to mention.</p>
 <p>JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for different reasons. Transpiling languages to JS as target language isn't exotic anymore. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interfaces towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.</p>
-<p>Another more real life decentralization aspect derives from the easiness of deployment browsernative microservices which makes them perfectly for open source. They are small, leightweight and can be tested live in the browser without any additional tooling. <a href="https://webcomponents.org">Webcomponents.org</a> for example is a registry for many ready-to-use components where even Google shares a lot of their material design elements.</p>
-<p>Last bot not least, decentralized governance in a web native context will be achieved just because of the encapsulation of the service. Contrary to the HTML, CSS and JS split model, the new autonomous service exhibits some sort of decentralization in creating the service.</p>
+<p>Another more real life decentralization aspect derives from the easiness of deployment of <em>browsernative microservices</em> which makes them a good fit for open source. They are small, leightweight and can be tested live in the browser without any additional tooling. <a href="https://webcomponents.org">Webcomponents.org</a> for example is a registry for ready-to-use components of every scale where even Google shares a lot of their material design elements.</p>
+<p>Decentralization will be achieved just because of the encapsulation of the service. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.</p>
 <h2 id="infrastructure-automation">Infrastructure Automation</h2>
 <h2 id="design-for-failure">Design for failure</h2>
+<p>Chapter about progressive enhancement</p>
 <h2 id="evolutionary-design">Evolutionary Design</h2>
 <p>Shift of paradigms / BFF / Platform agnostic / changes in infrastructure like APIs Databanks / Deployment</p>
-<p>Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.</p>
+<p>Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag.</p>
 <p>Secondly, the sub-standard <em>custom elements</em> introduces so called lifecycle methods and a getter/setter interface exposing the functionality to the developer. Event handling, for example, can be registered in place which is much more declarative than assigning event listeners from the outside. Of course, this events can be pushed down to nested tags, allowing an increasingly granular system design. This approach will be explained further in the upcoming sections.</p>
 <p>Following this logic any company, whether it is web-related or not, should be devided in units grouped around a destinct business service to optimise the workflow. Fowler and Lewis outlines this approach as an &quot;alignment of business capabilities&quot;<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> While this kind of structure may be true for companies like Google or Amazon, there is a vast majority of companies developing for the web which are grouped around tasks.<span class="citation" data-cites="Issa2016">(Issa 2016)</span> A very common structure is formed by the technology stack (UX Designers, Frontend- &amp; Backend Developers) or by separating teams along the product lifecycle (development, testing, deployment).</p>
 <p>Advocators from the microservice approach propose a different model. best described by . Web components are one (but important) way to tie up those diciplines as one component can host a single independent business service. Combined with a flexible backend service these components can be huge gain over the cumbersome functional organizational approach.</p>
@@ -375,14 +383,12 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <p>Apart from the spec'd perspective there is mental model a webdeveloper might</p>
 <p>Creating and using webcomponents might require a new mental model how do design a</p>
 <p>containers</p>
+<h1 id="anatomy-of-an-browsernative-microservice">Anatomy of an browsernative microservice</h1>
 <p>dichotome Pattern</p>
 <p>Ein üblicher eventgesteuerter Webservice setzt sich aus unterschiedlichsten Komponenten zusammen, die wiederum unterschiedlichste Eventlistener &amp; -emitter in sich subsummieren. Diese inhärente Komplexität verlangt geradezu nach einer klaren, deterministischen Struktur des Webservices, die das Zusammenspiel orchestriert. In der Analogie des Orchesters gesprochen, benötigt der Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der für die Steuerung verantwortlich ist.</p>
 <p>http://alistair.cockburn.us/Hexagonal+architecture</p>
 <p>MVC Pattern</p>
 <p>Pure frontend vs heavy backend</p>
-<h1 id="progressive-enhancement">Progressive Enhancement</h1>
-<h2 id="chapter-about-progressive-enhancement">Chapter about progressive enhancement</h2>
-<p>title: Browsernative Microservices subtitle: Modular web architecture through new W3C specifications author: Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de date: Januar 2017 abstract: Building complex web applications nowadays require additional layers of abstraction and often heavily depend on proprietary frameworks. New specifications build right into the browserengine provide a native service API to overcome tricky abstraction constraints. ...</p>
 <div id="refs" class="references">
 <div id="ref-Abramov2015">
 <p>Abramov, Dan. 2015. “Presentational and Container Components – Medium.” <a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" class="uri">https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0</a>.</p>
