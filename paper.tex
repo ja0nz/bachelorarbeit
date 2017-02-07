@@ -455,22 +455,21 @@ hypothetical deteriorate and new quasi native languages for the web
 might gain traction.
 
 Another more real life decentralization aspect derives from the easiness
-of deployment of \emph{browsernative microservices} which makes them a
-good fit for open source. They are small, leightweight and can be tested
-live in the browser without any additional tooling.
-\href{https://webcomponents.org}{Webcomponents.org} for example is a
-registry for ready-to-use components of every scale where even Google
-shares a lot of their material design elements.
-
-Decentralization will be achieved just because of the encapsulation of
-the service. Grouping together HTML, JS and CSS Code in a safe,
-sandboxed environment exposes the possibility to build more cohesive and
-understandable services. In the typical global nature of web development
-those three pillars are separated. This circumstance left the developer
-switching back and forth between code bases developing a tricky (and
-sometimes biased) way to glue related parts together.
+of deployment in a safe, sandboxed environment. No hidden overheads or
+required build tools. Thats why \emph{browsernative microservices} are
+well suited for sharing and open-sourcing.
+\href{https://webcomponents.org}{Webcomponents.org} is a registry for
+ready-to-use components of every scale where for example Google shares a
+lot of their material design elements.
 
 \subsection{Infrastructure Automation}\label{infrastructure-automation}
+
+Grouping together HTML, JS and CSS Code in a unified environment exposes
+the possibility to build rapidly and fast. In the typical global nature
+of web development those three pillars are separated. This circumstance
+left the developer switching back and forth between code bases
+developing a tricky (and sometimes biased) way to glue related parts
+together.
 
 \subsection{Design for failure}\label{design-for-failure}
 
@@ -784,9 +783,7 @@ assigned after distribution. Therefore it is generally a good advice to
 minimize the global stylings to some base styling for uniformity of the
 web site while leaving the specific stylings to the component. Due to
 the cascading nature of CSS, styles will still ``bleed in'' from
-ancestors to the \emph{light DOM} nodes. Therefore it's strongly
-recommended to begin every \emph{shadow DOM} with a \textbf{\emph{CSS
-reset:} \texttt{:host\ \{all:\ initial;\}}}.
+ancestors to the \emph{light DOM} nodes.
 
 Regarding the importance style encapsulation, a couple of new CSS rules
 emerged that are exclusively targeting the \emph{shadow DOM}. The table
@@ -1127,15 +1124,15 @@ browser environment, from handling UI events to query and process larget
 amounts of API data and manipulating the DOM, runs on the same
 thread{[}15{]}. Putting a lot of work to the single main thread can slow
 down the web service significantly. From time to time scripts can block
-or fail to whatever reason which leads to a frozen UI on the users side.
-A worker can overcome the bottleneck of the single-threaded nature with
-spawning a new \textbf{background thread}. Most of the browsers work can
-be leveraged to this new thread. Todays web architectures aims to
-leverage an increasing amout of proccessing to the client to avoid
-time-consuming roundtrips especially in mobiles networks.\footnote{Latency
-  numbers: https://gist.github.com/jboner/2841832} While many native
-APIs like \texttt{fetch} work seamlessly in the new thread, a worker has
-no access to the DOM at all.
+or fail for whatever reason which leads to a frozen UI on the users
+side. A worker can overcome the bottleneck of the single-threaded nature
+with spawning new \textbf{background threads}. Todays web architectures
+aims to leverage an increasing amout of processing to the client to
+avoid time-consuming roundtrips especially in mobiles
+networks.\footnote{Latency numbers:
+  https://gist.github.com/jboner/2841832} While many native APIs like
+\texttt{fetch} work seamlessly in the new thread, a worker has no access
+to the DOM at all.
 
 A \emph{Web Worker} spawns a new background thread where scripts can run
 concurrent to the main thread. Usually a worker is loaded from a workers
@@ -1170,23 +1167,53 @@ based interface} with the main thread.
 \end{Highlighting}
 \end{Shaded}
 
-Having no access to the DOM can be seen as hinderance,but i
-
-Macroperspektive / Composition
-
-\subsubsection{Assumptions about custom
-elements}\label{assumptions-about-custom-elements}
-
-Apart from the spec'd perspective there is mental model a webdeveloper
-might
-
-Creating and using webcomponents might require a new mental model how do
-design a
-
-containers
-
 \section{Anatomy of an browsernative
 microservice}\label{anatomy-of-an-browsernative-microservice}
+
+After grasping the principles and some technical background the paper
+should illustrate a practical example to \emph{browsernative
+microservices}. Googles library Polymer is a good start to learn about
+web components. They even offer a command line tool for creating a
+polymer skeleton. One of their most famous proof of concept is the
+so-called \href{https://shop.polymer-project.org/}{Polymer Shop} which
+is a fully-fledged online shop nested within a single custom element
+\texttt{\textless{}shop-app\textgreater{}}. It has some elements for
+routing, managing view, service worker caching, theming, etc. The whole
+shop runs as a single application only fetching and sending resources
+but never reloading altogether. Let's assume we work in a sales
+engineering team of the Polymer Shop and need to rebuild checkout
+process.
+
+A usual checkout has 3 to 4 steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Sign in or Sign up
+\item
+  Shipping details
+\item
+  Payment details
+\item
+  Review and place order
+\end{enumerate}
+
+Translated into a raw custom element HTML structure, the microservice
+might light like:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{<shop-checkout>}
+  \KeywordTok{<sign-in></sign-in>}
+  \KeywordTok{<shipping-details></shipping-details>}
+  \KeywordTok{<payment-details></payment-details>}
+  \KeywordTok{<place-order></place-order>}
+\KeywordTok{</shop-checkout>}
+\end{Highlighting}
+\end{Shaded}
+
+Pretty straight forward.
 
 dichotome Pattern
 
