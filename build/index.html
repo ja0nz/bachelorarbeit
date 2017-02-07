@@ -83,9 +83,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#html-templates-w3c">HTML Templates <a href="https://www.w3.org/TR/html5/scripting-1.html#the-template-element">(w3c)</a></a></li>
 <li><a href="#html-imports-w3c">HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></a></li>
 <li><a href="#appendix-a-custom-events-whatwg">Appendix A: Custom Events <a href="https://dom.spec.whatwg.org/#interface-customevent">(whatwg)</a></a></li>
-<li><a href="#appendix-b-web-worker-whatwg">Appendix B: Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></a><ul>
-<li><a href="#assumptions-about-custom-elements">Assumptions about custom elements</a></li>
-</ul></li>
+<li><a href="#appendix-b-web-worker-whatwg">Appendix B: Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></a></li>
 </ul></li>
 <li><a href="#anatomy-of-an-browsernative-microservice">Anatomy of an browsernative microservice</a></li>
 </ul>
@@ -139,9 +137,9 @@ Abstract - Building complex web applications nowadays require additional layers 
 <p>This distributed nature allows teams to create their own technology stack, tools and services designed in the spirit of language- and platform independence - and share their knowledge with other parties.<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> In the recent years many big companies like Facebook, Google, Netflix and others followed that spirit and published their ideas and implementations open source. The previously mentioned ReactJS for example is a brainchild of Facebook. In fact, many tools and techniques are byproduct of vital interaction of concrete domain problems and their implementations.</p>
 <p>The spirit of freedom can't be applied to <em>browsernative microservices</em> as the browser and its underlying DOM will be the limitation factor. Still there are some decentralization aspects around creating microservices for the browser worth to mention.</p>
 <p>JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for different reasons. Transpiling languages to JS as target language isn't exotic anymore. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interfaces towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.</p>
-<p>Another more real life decentralization aspect derives from the easiness of deployment of <em>browsernative microservices</em> which makes them a good fit for open source. They are small, leightweight and can be tested live in the browser without any additional tooling. <a href="https://webcomponents.org">Webcomponents.org</a> for example is a registry for ready-to-use components of every scale where even Google shares a lot of their material design elements.</p>
-<p>Decentralization will be achieved just because of the encapsulation of the service. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.</p>
+<p>Another more real life decentralization aspect derives from the easiness of deployment in a safe, sandboxed environment. No hidden overheads or required build tools. Thats why <em>browsernative microservices</em> are well suited for sharing and open-sourcing. <a href="https://webcomponents.org">Webcomponents.org</a> is a registry for ready-to-use components of every scale where for example Google shares a lot of their material design elements.</p>
 <h2 id="infrastructure-automation">Infrastructure Automation</h2>
+<p>Grouping together HTML, JS and CSS Code in a unified environment exposes the possibility to build rapidly and fast. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.</p>
 <h2 id="design-for-failure">Design for failure</h2>
 <p>Chapter about progressive enhancement</p>
 <h2 id="evolutionary-design">Evolutionary Design</h2>
@@ -226,7 +224,7 @@ Called when moving the node <em>between documents</em>.</li>
 <p>Inside a so-called <em>default slot</em> which looks like <code>&lt;slot&gt;Unnamed content goes here&lt;/slot&gt;</code>, the render engine expands all direct <em>light DOM</em> children without a <code>slot</code> attribute. In case of multiple default slots, the first slot takes it all.</p>
 <h3 id="styling">Styling</h3>
 <p>As mentioned in the last section, there is a distinct difference about the nature of nodes. Nodes declared and rendered exclusively in the <em>shadow DOM</em> are not affected by any styling from outside. Nodes which are declared outside and distributed via <code>slots</code> will be styled in the <em>light DOM</em> and can be additionally painted in the <em>shadow DOM</em> through the new CSS-Selector <code>::slotted()</code>.</p>
-<p>Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. Due to the cascading nature of CSS, styles will still &quot;bleed in&quot; from ancestors to the <em>light DOM</em> nodes. Therefore it's strongly recommended to begin every <em>shadow DOM</em> with a <strong><em>CSS reset:</em> <code>:host {all: initial;}</code></strong>.</p>
+<p>Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. Due to the cascading nature of CSS, styles will still &quot;bleed in&quot; from ancestors to the <em>light DOM</em> nodes.</p>
 <p>Regarding the importance style encapsulation, a couple of new CSS rules emerged that are exclusively targeting the <em>shadow DOM</em>. The table below outlines styling possibilities for the use INSIDE the <em>shadow DOM</em>:</p>
 <ul>
 <li>::slotted(selector)<br />
@@ -363,7 +361,7 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <p>Unfortunately events only work &quot;upstream&quot; towards parent nodes. Still the web platform offers plenty of possibilities to talk back to child nodes.</p>
 <h2 id="appendix-b-web-worker-whatwg">Appendix B: Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></h2>
 <p>Like <em>Custom Events</em>, <em>Web Workers</em> had been around for a long time and therefore embrace full support among major browsers. They emerged at around 2009 when discussions about browser performance was still in the early days. Nevertheless, the addressed problem of <em>Web Workers</em> is a fundamental language problem of JS itself.</p>
-<p>JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread<span class="citation" data-cites="Bidelman2010">(Bidelman 2010)</span>. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail to whatever reason which leads to a frozen UI on the users side. A worker can overcome the bottleneck of the single-threaded nature with spawning a new <strong>background thread</strong>. Most of the browsers work can be leveraged to this new thread. Todays web architectures aims to leverage an increasing amout of proccessing to the client to avoid time-consuming roundtrips especially in mobiles networks.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> While many native APIs like <code>fetch</code> work seamlessly in the new thread, a worker has no access to the DOM at all.</p>
+<p>JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread<span class="citation" data-cites="Bidelman2010">(Bidelman 2010)</span>. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen UI on the users side. A worker can overcome the bottleneck of the single-threaded nature with spawning new <strong>background threads</strong>. Todays web architectures aims to leverage an increasing amout of processing to the client to avoid time-consuming roundtrips especially in mobiles networks.<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> While many native APIs like <code>fetch</code> work seamlessly in the new thread, a worker has no access to the DOM at all.</p>
 <p>A <em>Web Worker</em> spawns a new background thread where scripts can run concurrent to the main thread. Usually a worker is loaded from a workers dedicated file to embrace this kind of separation.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> worker <span class="op">=</span> <span class="kw">new</span> <span class="at">Worker</span>(<span class="st">&#39;worker.js&#39;</span>)<span class="op">;</span></code></pre></div>
 <p>After initialization a worker communicates over a simple <strong>message based interface</strong> with the main thread.</p>
@@ -377,13 +375,23 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <span class="co">// Receive msg and echo back</span>
 <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;message&#39;</span><span class="op">,</span> e <span class="op">=&gt;</span>
  <span class="kw">this</span>.<span class="at">postMessage</span>(<span class="st">&quot;Echo &quot;</span> <span class="op">+</span> <span class="va">e</span>.<span class="at">data</span>))<span class="op">;</span></code></pre></div>
-<p>Having no access to the DOM can be seen as hinderance,but i</p>
-<p>Macroperspektive / Composition</p>
-<h3 id="assumptions-about-custom-elements">Assumptions about custom elements</h3>
-<p>Apart from the spec'd perspective there is mental model a webdeveloper might</p>
-<p>Creating and using webcomponents might require a new mental model how do design a</p>
-<p>containers</p>
 <h1 id="anatomy-of-an-browsernative-microservice">Anatomy of an browsernative microservice</h1>
+<p>After grasping the principles and some technical background the paper should illustrate a practical example to <em>browsernative microservices</em>. Googles library Polymer is a good start to learn about web components. They even offer a command line tool for creating a polymer skeleton. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single custom element <code>&lt;shop-app&gt;</code>. It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild checkout process.</p>
+<p>A usual checkout has 3 to 4 steps:</p>
+<ol type="1">
+<li>Sign in or Sign up</li>
+<li>Shipping details</li>
+<li>Payment details</li>
+<li>Review and place order</li>
+</ol>
+<p>Translated into a raw custom element HTML structure, the microservice might light like:</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;shop-checkout&gt;</span>
+  <span class="kw">&lt;sign-in&gt;&lt;/sign-in&gt;</span>
+  <span class="kw">&lt;shipping-details&gt;&lt;/shipping-details&gt;</span>
+  <span class="kw">&lt;payment-details&gt;&lt;/payment-details&gt;</span>
+  <span class="kw">&lt;place-order&gt;&lt;/place-order&gt;</span>
+<span class="kw">&lt;/shop-checkout&gt;</span></code></pre></div>
+<p>Pretty straight forward.</p>
 <p>dichotome Pattern</p>
 <p>Ein üblicher eventgesteuerter Webservice setzt sich aus unterschiedlichsten Komponenten zusammen, die wiederum unterschiedlichste Eventlistener &amp; -emitter in sich subsummieren. Diese inhärente Komplexität verlangt geradezu nach einer klaren, deterministischen Struktur des Webservices, die das Zusammenspiel orchestriert. In der Analogie des Orchesters gesprochen, benötigt der Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der für die Steuerung verantwortlich ist.</p>
 <p>http://alistair.cockburn.us/Hexagonal+architecture</p>
