@@ -45,7 +45,7 @@ Any reader of the paper coming from the ReactJS / Redux world this concept of co
 
 On the other hand Dan Abramov outlines components which he calls **containers**. A container component is concerned with *how things work*.[@Abramov2015] Containers acts as invisible wrappers around presentational components. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. In contrast to their presentational counterparts, containers can't life on its own without children. Conceptually, they show another important principle of components and microservices in general: *high cohesion principle*. 
 
-Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] Code quality can be measured just by counting the places changes in the code need to be made on changing behavior. In an arbitrary MVC  system a `button` might be inserted in the VIEW, the CONTROLLER needs some adjustment and maybe the the MODEL, too. Three places for adjustment is a reasonable easy task for the brain, everything more violates the concept of simplicity.
+Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] High cohesion can be perceived as the *Single Responsibility Principle* defined by Robert C. Martin: "Gather together those things that change for the same reason and separate those things that change for different reasons."[@Martin] In a very quick and dirty code quality analysis, the quality can be measured just by counting the places changes in the code occur. In an arbitrary MVC  system a `button` might be inserted in the VIEW, the CONTROLLER needs some adjustment and maybe the the MODEL, too. Three places for adjustment is a reasonable easy task for the brain, everything more violates the concept of simplicity.
 
 Using libraries in web development is common sense. But compared to libraries, a component service offers multiple advantages. A library is only loosely coupled to the implementation and therefore hard to track in functionality. Changing a library may result in an unforeseen amount of time fixing implementations. It is not unusual to see websites embodying different versions of the same library (like with JQuery). Another issue with libraries is dead code elimination which means the process of removing code that is never going to be executed. Newer build tools for the web, like Webpack 2 or Rollup offer this feature which relies heavily on the static structure on ES6 modules.[@Rauschmayer2015] Contrary libraries for the browsers are traditionally "shipped" as **immediately-invoked functions**. Bootstrapping those closed functions is much harder to archive as even dead code is actually executed on load. 
 
@@ -58,10 +58,6 @@ Compared to libraries componentized services offers a more explicit interface.[@
 ```html
 <my-botton isPrimary>Primary</my-botton>
 ```
-
-
-
-A microservice reinforces the *Single Responsibility Principle* defined by Robert C. Martin: "Gather together those things that change for the same reason and separate those things that change for different reasons."[@Martin] 
 
 ## Organized around Business Capabilities
 
@@ -93,21 +89,22 @@ The spirit of freedom can't be applied to *browsernative microservices* as the b
 
 JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for different reasons. Transpiling languages to JS as target language isn't exotic anymore. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interfaces towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.
 
-Another more real life decentralization aspect derives from the easiness of deployment browsernative microservices which makes them perfectly for open source. They are small, leightweight and can be tested live in the browser without any additional tooling. [Webcomponents.org](https://webcomponents.org) for example is a registry for many ready-to-use components where even Google shares a lot of their material design elements. 
+Another more real life decentralization aspect derives from the easiness of deployment of *browsernative microservices* which makes them a good fit for open source. They are small, leightweight and can be tested live in the browser without any additional tooling. [Webcomponents.org](https://webcomponents.org) for example is a registry for ready-to-use components of every scale where even Google shares a lot of their material design elements. 
 
-Last bot not least, decentralized governance in a web native context will be achieved just because of the encapsulation of the service. Contrary to the HTML, CSS and JS split model, the new autonomous service exhibits some sort of decentralization in creating the service.
-
-
+Decentralization will be achieved just because of the encapsulation of the service. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.
 
 ## Infrastructure Automation
 ## Design for failure
+
+Chapter about progressive enhancement
+
 ## Evolutionary Design
 
 
 
 Shift of paradigms / BFF / Platform agnostic / changes in infrastructure like APIs Databanks / Deployment 
 
-Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.
+Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. 
 
 Secondly, the sub-standard *custom elements* introduces so called lifecycle methods and a getter/setter interface exposing the functionality to the developer. Event handling, for example, can be registered in place which is much more declarative than assigning event listeners from the outside. Of course, this events can be pushed down to nested tags, allowing an increasingly granular system design. This approach will be explained further in the upcoming sections.
 
@@ -466,6 +463,8 @@ containers
 
 
 
+# Anatomy of an browsernative microservice
+
 dichotome Pattern
 
 Ein üblicher eventgesteuerter Webservice setzt sich aus unterschiedlichsten Komponenten zusammen, die wiederum unterschiedlichste Eventlistener & -emitter in sich subsummieren. Diese inhärente Komplexität verlangt geradezu nach einer klaren, deterministischen Struktur des Webservices, die das Zusammenspiel orchestriert. In der Analogie des Orchesters gesprochen, benötigt der Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der für die Steuerung verantwortlich ist.
@@ -480,6 +479,3 @@ MVC Pattern
 
 Pure frontend vs heavy backend
 
-# Progressive Enhancement
-
-Chapter about progressive enhancement
