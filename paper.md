@@ -45,7 +45,7 @@ Any reader of the paper coming from the ReactJS / Redux world this concept of co
 
 On the other hand Dan Abramov outlines components which he calls **containers**. A container component is concerned with *how things work*.[@Abramov2015] Containers acts as invisible wrappers around presentational components. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. In contrast to their presentational counterparts, containers can't life on its own without children. Conceptually, they show another important principle of components and microservices in general: *high cohesion principle*. 
 
-Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2014, p. 30] Code quality can be measured just by counting the places changes in the code need to be made on changing behavior. In an arbitrary MVC  system a `button` might be inserted in the VIEW, the CONTROLLER needs some adjustment and maybe the the MODEL, too. Three places for adjustment is a reasonable easy task for the brain, everything more violates the concept of simplicity.
+Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] Code quality can be measured just by counting the places changes in the code need to be made on changing behavior. In an arbitrary MVC  system a `button` might be inserted in the VIEW, the CONTROLLER needs some adjustment and maybe the the MODEL, too. Three places for adjustment is a reasonable easy task for the brain, everything more violates the concept of simplicity.
 
 Using libraries in web development is common sense. But compared to libraries, a component service offers multiple advantages. A library is only loosely coupled to the implementation and therefore hard to track in functionality. Changing a library may result in an unforeseen amount of time fixing implementations. It is not unusual to see websites embodying different versions of the same library (like with JQuery). Another issue with libraries is dead code elimination which means the process of removing code that is never going to be executed. Newer build tools for the web, like Webpack 2 or Rollup offer this feature which relies heavily on the static structure on ES6 modules.[@Rauschmayer2015] Contrary libraries for the browsers are traditionally "shipped" as **immediately-invoked functions**. Bootstrapping those closed functions is much harder to archive as even dead code is actually executed on load. 
 
@@ -246,7 +246,7 @@ Regarding the importance style encapsulation, a couple of new CSS rules emerged 
   Applies to distributed nodes and repaints them after distribution. `Slotted` won't override outsides styles but can complement them with unset style rules.
 * :host   
   The host property will add styles or change inherited ones inside shadow DOM. Using `all: initial;` will ensure browser defaults only.
-*  :host(condition)   
+* :host(condition)   
   Like the previous one this node will style the shadow DOM but this time based on attributes/conditions assigned to the hosting node.
 * :host-context(condition)   
   Like the previous one this node will style the shadow DOM but will look after context set at the host node or even at the host ancestor.
