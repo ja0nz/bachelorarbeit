@@ -30,7 +30,6 @@ In 2013 thinkers, creators and browser vendors joined together to propose *The E
 [^rich]: [Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey](https://www.youtube.com/watch?v=rI8tNMsozo0&t=46s)
 [^jon]: [Are we componentized yet?]( http://jonrimmer.github.io/are-we-componentized-yet/)
 
-
 # Microservices
 
 Calling the case for *Browsernative Microservices* brings up the question about the concept of microservices in general. In fact the concept of microservices has many facets, stretching beyond disciplines and technical boundaries. It lacks a formal standardization but subsumes certain ideas emergine from this pattern. As a primary source of truth this paper relies on the work of Sam Newman, who has written a comprehensive guide called *Building Microservices* and the work of Fowler and Lewis. The purpose of this section is to match their ideas against the browser platform as targeted runtime.
@@ -89,11 +88,14 @@ The spirit of freedom can't be applied to *browsernative microservices* as the b
 
 JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for different reasons. Transpiling languages to JS as target language isn't exotic anymore. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interfaces towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.
 
-Another more real life decentralization aspect derives from the easiness of deployment of *browsernative microservices* which makes them a good fit for open source. They are small, leightweight and can be tested live in the browser without any additional tooling. [Webcomponents.org](https://webcomponents.org) for example is a registry for ready-to-use components of every scale where even Google shares a lot of their material design elements. 
-
-Decentralization will be achieved just because of the encapsulation of the service. Grouping together HTML, JS and CSS Code in a safe, sandboxed environment exposes the possibility to build more cohesive and understandable services. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.
+Another more real life decentralization aspect derives from the easiness of deployment in a safe, sandboxed environment. No hidden overheads or required build tools. Thats why *browsernative microservices* are well suited for sharing and open-sourcing. [Webcomponents.org](https://webcomponents.org) is a registry for ready-to-use components of every scale where for example Google shares a lot of their material design elements. 
 
 ## Infrastructure Automation
+
+Grouping together HTML, JS and CSS Code in a unified environment exposes the possibility to build rapidly and fast. In the typical global nature of web development those three pillars are separated. This circumstance left the developer switching back and forth between code bases developing a tricky (and sometimes biased) way to glue related parts together.
+
+
+
 ## Design for failure
 
 Chapter about progressive enhancement
@@ -103,6 +105,10 @@ Chapter about progressive enhancement
 
 
 Shift of paradigms / BFF / Platform agnostic / changes in infrastructure like APIs Databanks / Deployment 
+
+
+
+
 
 Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. 
 
@@ -235,7 +241,7 @@ Inside a so-called *default slot* which looks like `<slot>Unnamed content goes h
 
 As mentioned in the last section, there is a distinct difference about the nature of nodes. Nodes declared and rendered exclusively in the *shadow DOM* are not affected by any styling from outside. Nodes which are declared outside and distributed via `slots` will be styled in the *light DOM* and can be additionally painted in the *shadow DOM* through the new CSS-Selector `::slotted()`.
 
-Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. Due to the cascading nature of CSS, styles will still "bleed in" from ancestors to the *light DOM* nodes. Therefore it's strongly recommended to begin every *shadow DOM* with a ***CSS reset:* `:host {all: initial;}`**.
+Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. Due to the cascading nature of CSS, styles will still "bleed in" from ancestors to the *light DOM* nodes.
 
 Regarding the importance style encapsulation, a couple of new CSS rules emerged that are exclusively targeting the *shadow DOM*. The table below outlines styling possibilities for the use INSIDE the *shadow DOM*:
 
@@ -420,7 +426,7 @@ Unfortunately events only work "upstream" towards parent nodes. Still the web pl
 
 Like *Custom Events*, *Web Workers* had been around for a long time and therefore embrace full support among major browsers. They emerged at around 2009 when discussions about browser performance was still in the early days. Nevertheless, the addressed problem of *Web Workers* is a fundamental language problem of JS itself.
 
-JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread[@Bidelman2010]. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail to whatever reason which leads to a frozen UI on the users side. A worker can overcome the bottleneck of the single-threaded nature with spawning a new **background thread**. Most of the browsers work can be leveraged to this new thread. Todays web architectures aims to leverage an increasing amout of proccessing to the client to avoid time-consuming roundtrips especially in mobiles networks.[^latency] While many native APIs like `fetch` work seamlessly in the new thread, a worker has no access to the DOM at all.
+JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread[@Bidelman2010]. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen UI on the users side. A worker can overcome the bottleneck of the single-threaded nature with spawning new **background threads**. Todays web architectures aims to leverage an increasing amout of processing to the client to avoid time-consuming roundtrips especially in mobiles networks.[^latency] While many native APIs like `fetch` work seamlessly in the new thread, a worker has no access to the DOM at all.
 
 [^latency]: Latency numbers: https://gist.github.com/jboner/2841832
 
@@ -447,23 +453,31 @@ this.addEventListener('message', e =>
  this.postMessage("Echo " + e.data));
 ```
 
-Having no access to the DOM can be seen as hinderance,but i
-
-Macroperspektive / Composition
-
-
-
-### Assumptions about custom elements
-
-Apart from the spec'd perspective there is mental model a webdeveloper might 
-
-Creating and using webcomponents might require a new mental model how do design a
-
-containers
-
-
-
 # Anatomy of an browsernative microservice
+
+After grasping the principles and some technical background the paper should illustrate a practical example to *browsernative microservices*. Googles library Polymer is a good start to learn about web components. They even offer a command line tool for creating a polymer skeleton. One of their most famous proof of concept is the so-called [Polymer Shop](https://shop.polymer-project.org/) which is a fully-fledged online shop nested within a single custom element `<shop-app>`.  It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild checkout process.
+
+A usual checkout has 3 to 4 steps:
+
+1. Sign in or Sign up
+2. Shipping details
+3. Payment details
+4. Review and place order
+
+Translated into a raw custom element HTML structure, the microservice might light like:
+
+```html
+<shop-checkout>
+  <sign-in></sign-in>
+  <shipping-details></shipping-details>
+  <payment-details></payment-details>
+  <place-order></place-order>
+</shop-checkout>
+```
+
+Pretty straight forward.
+
+
 
 dichotome Pattern
 
