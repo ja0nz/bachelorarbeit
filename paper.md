@@ -84,11 +84,14 @@ Microservices are separate entities and decentralization therefore is a meta con
 
 This distributed nature allows teams to create their own technology stack, tools and services designed in the spirit of language- and platform independence -  and share their knowledge with other parties.[@Fowler2014] In the recent years many big companies like Facebook, Google, Netflix and others followed that spirit and published their ideas and implementations open source. The previously mentioned ReactJS for example is a brainchild of Facebook. In fact, many tools and techniques are byproduct of vital interaction of concrete domain problems and  their implementations. 
 
-The spirit of freedom can't be applied to *browsernative microservices* as the browser and its underlying DOM will be the limitation factor. Talking about the browser, a reader might be tempted to narrowly thinking about the VIEW layer only - which is not true anymore. In the recent years the browser engines grows to a kind of virtual machine: there are connectors to build-in databases, multithreading support, an ever-growing JS build-ins and even push notifications. So-called *[Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)*, a bunch of criteria for building good browserapps, can achieve a similar look and feel like native apps.
+The spirit of freedom can't be applied to *browsernative microservices* as the browser and its underlying DOM will be the limitation factor. Talking about the browser, a reader might be tempted to narrowly thinking about the VIEW layer only - which is not true anymore. In the recent years the browser engines grows to a kind of virtual machine: there are connectors to build-in databases, multithreading support, an ever-growing JS build-ins and even push notifications. So-called *Progressive Web Apps[^pwa]*, a bunch of criteria for building good browserapps, can achieve a similar look and feel like native apps.
 
 JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for various reasons. Transpiling languages to JS as target language isn't exotic anymore. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interfaces towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.
 
-Another more real life decentralization aspect derives from the easiness of deployment in a safe, sandboxed environment. No hidden overheads or required build tools. Thats why *browsernative microservices* are well suited for sharing and open-sourcing. [Webcomponents.org](https://webcomponents.org) is a registry for ready-to-use components of every scale where for example Google shares a lot of their material design elements. 
+Another more real life decentralization aspect derives from the easiness of deployment in a safe, sandboxed environment. No hidden overheads or required build tools. Thats why *browsernative microservices* are well suited for sharing and open-sourcing. Webcomponents.org[^webcomp] is a registry for ready-to-use components of every scale where for example Google shares a lot of their material design elements. 
+
+[^pwa]: [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)
+[^webcomp]: [Webcomponents.org](https://webcomponents.org)
 
 ## Decentralized Data Management
 
@@ -96,9 +99,12 @@ Data Management in Microservice follows the same modular philosophy like the con
 
 "Microservices prefer letting each service manage its own database."[Fowler2014] Ben Issa, chief architect of ING Australia emphasizes this pragmatism on APIs in a conference talk. At ING the frontend demands drive the APIs, APIs are produces automatically and not even Issa knows how many APIs exists.[@Issa2016] They are using a pattern called **backend for frontends** allowing the team working on a given UI also handle the server-side components.[@Newman2015, p. 72] The perception on backend might change therefore from embodying logic to a data-silo only.
 
-To see this pattern in the field a reader might have a look at Facebooks [GraphQL](http://graphql.org/) project. GraphQL is a query language for the frontend. The backend solely replies on the frontend needs. Another well documented ~~even more powerful~~ approach in the field is Cognitects [Datomic](http://www.datomic.com/), where parts of the database will be reflected to the client. A so-called Transactor ensures ACID compliance.
+To see this pattern in the field a reader might have a look at Facebooks GraphQL[^graphql]. GraphQL is a query language for the frontend. The backend solely replies on the frontend needs. Another well documented ~~even more powerful~~ approach in the field is Cognitects Datomic[^datomic], where parts of the database will be reflected to the client. A so-called Transactor ensures ACID compliance.
 
 The upcoming microservice example assumes a generic build-in API next to the build-in frontend components.  Instead of gluing frontend and backend together on runtime, the microservice is designed holistically containing both ends. To reduce network calls especially for mobile devices it is a good advice to cache data via a global Service Worker. Revamping offline capabilities even further data can be stored in a browser based database like PouchDB. For the sake of simplicity data management won't be conducted into depth throughout this paper.
+
+[^graphql]: [GraphQL](http://graphql.org/)
+[^datomic]: [Datomic](http://www.datomic.com/)
 
 ## Infrastructure Automation 
 
@@ -121,43 +127,27 @@ In theory a microservice is designed with a lot of emphasizes on real-time monit
 
 Regarding the evolution of the web, the "next billion" internet users most likely using Android, have decent specs mobile phones, use an evergreen browser but won't have a reliable internet connection.[@Lawson2016] While *Progressive Enhancement* was once coined on the principle to build websites both for Browsers with JS and without, the new *Progressive Enhancement* becomes more an "offline first" principle. A *browsernative microservice* therefore not only tries to cache data as much as possible, it should also bring in a lot of program logic as described in the previous chapters.
 
-Working in a JS heavy infrastructure demands for optimazation to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the **PRLP pattern**[^prlp]:
+Working in a JS heavy infrastructure demands for optimazation to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the a general-purpose **PRLP pattern**[^prlp]:
 
 * Push critical resources for the initial route
 * Render initial route
 * Pre-cache remaining routes
 * Lazy-load and create remaining routes on demand
 
-Following this pattern a critical resource can detect browser functionalities beforehand and switch to a **polyfill** instead of the latest browser optimized version. After the initial paint, critical resources like top-level microservices might be loaded asynchrony and registered. 
+Following this pattern a critical resource can detect browser functionalities beforehand and switch to a **polyfill** instead of the latest browser optimized version. After the initial paint, critical resources like top-level microservices or other app logic can be loaded and registered. 
 
 [^prlp]: [PRLP pattern](https://www.polymer-project.org/1.0/toolbox/server)
 
 
 ## Evolutionary Design
 
-microservices is a separate entity
+Using modular web architecture isn't a perceptually new approach. 
 
-deployed as an isolated service
+Angular, React
 
-monolithic horizontal scaling is not nessecarry
+Interopt
 
-Shift of paradigms / BFF / Platform agnostic / changes in infrastructure like APIs Databanks / Deployment 
-
-
-
-
-
-Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. 
-
-Secondly, the sub-standard *custom elements* introduces so called lifecycle methods and a getter/setter interface exposing the functionality to the developer. Event handling, for example, can be registered in place which is much more declarative than assigning event listeners from the outside. Of course, this events can be pushed down to nested tags, allowing an increasingly granular system design. This approach will be explained further in the upcoming sections.
-
- Following this logic any company, whether it is web-related or not, should be devided in units grouped around a destinct business service to optimise the workflow. Fowler and Lewis outlines this approach as an "alignment of business capabilities"[@Fowler2014] While this kind of structure may be true for companies like Google or Amazon, there is a vast majority of companies developing for the web which are grouped around tasks.[@Issa2016] A very common structure is formed by the technology stack (UX Designers, Frontend- & Backend Developers) or by separating teams along the product lifecycle (development, testing, deployment). 
-
-Advocators from the microservice approach propose a different model. best described by . Web components are one (but important) way to tie up those diciplines as one component can host a single independent business service. Combined with a flexible backend service these components can be huge gain over the cumbersome functional organizational approach.
-
-
-
-The ideas transcending from the microservice approach offers plenty of choices and decisions how to proceed with designing a program or to structure a process.
+Freedom of choice
 
 
 
@@ -525,6 +515,16 @@ endgeräte werden besser
 multicore
 
 query languages from handheld
+
+
+
+Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag. 
+
+Secondly, the sub-standard *custom elements* introduces so called lifecycle methods and a getter/setter interface exposing the functionality to the developer. Event handling, for example, can be registered in place which is much more declarative than assigning event listeners from the outside. Of course, this events can be pushed down to nested tags, allowing an increasingly granular system design. This approach will be explained further in the upcoming sections.
+
+ Following this logic any company, whether it is web-related or not, should be devided in units grouped around a destinct business service to optimise the workflow. Fowler and Lewis outlines this approach as an "alignment of business capabilities"[@Fowler2014] While this kind of structure may be true for companies like Google or Amazon, there is a vast majority of companies developing for the web which are grouped around tasks.[@Issa2016] A very common structure is formed by the technology stack (UX Designers, Frontend- & Backend Developers) or by separating teams along the product lifecycle (development, testing, deployment). 
+
+Advocators from the microservice approach propose a different model. best described by . Web components are one (but important) way to tie up those diciplines as one component can host a single independent business service. Combined with a flexible backend service these components can be huge gain over the cumbersome functional organizational approach.
 
 
 
