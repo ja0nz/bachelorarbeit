@@ -121,8 +121,8 @@ Computers can scale, humans can't. Ever since a program or complex
 system made by humans has been constrained by humans mental
 capabilities. Like in the analogy of juggling balls, our brain can just
 ``juggle'' a few things at a time. Rich Hickey, the inventor of the
-programming language \emph{Clojure} gave an inspirational keynote on the
-topic of \textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
+programming language Clojure gave an inspirational keynote on the topic
+of \textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
   Conf 2012 Keynote: Simplicity Matters by Rich Hickey}} In every sphere
 of a humans life, simplicity aligns perception with our mental
 capacities.
@@ -469,20 +469,23 @@ Management}\label{decentralized-data-management}
 Data Management in Microservice follows the same modular philosophy like
 the conceptual implementation. As mentioned earlier different bounded
 contexts make different assumptions of the underlying model. A
-\emph{browsernative microservices} takes this thought even further and
-expands it to the variety of devices. Decentralized decisions about
-conceptual models demand for decentralized data storage
-decisions.{[}4{]} Since network roundtrips are costly it is a good
-advice to only query as much data as needed and cache as much as
-possible.
+\emph{browsernative microservices} takes this idea even further and
+expands it to the fragmented world of electronic devices. Decentralized
+decisions about conceptual models demand for decentralized data storage
+decisions.{[}4{]} Todays web architectures aims to leverage an
+increasing amout of processing to the client to avoid time-consuming
+roundtrips especially in mobiles networks.\footnote{Latency numbers:
+  https://gist.github.com/jboner/2841832} Since network roundtrips are
+costly it is a good advice to only query as much data as needed and
+cache as much as possible.
 
 ``Microservices prefer letting each service manage its own
 database.''{[}Fowler2014{]} Ben Issa, chief architect of ING Australia
 emphasizes this pragmatism on APIs in a conference talk. At ING the
-frontend demands drive the APIs, APIs are produces automatically and not
-even Issa knows how many APIs exists.{[}9{]} They are using a pattern
-called \textbf{backend for frontends} allowing the team working on a
-given UI also handle the server-side components.{[}3, p. 72{]} The
+frontend demands drive the backend APIs, APIs are produces automatically
+and not even Issa knows how many APIs exists.{[}9{]} They are using a
+pattern called \textbf{backend for frontends} allowing the team working
+on a given UI also handle the server-side components.{[}3, p. 72{]} The
 perception on backend might change therefore from embodying logic to a
 data-silo only.
 
@@ -494,18 +497,19 @@ approach in the field is Cognitects Datomic\footnote{\href{http://www.datomic.co
 where parts of the database will be reflected to the client. A so-called
 Transactor ensures ACID compliance.
 
-The upcoming microservice example assumes a generic build-in API next to
-the build-in frontend components. Instead of gluing frontend and backend
-together on runtime, the microservice is designed holistically
-containing both ends. To reduce network calls especially for mobile
-devices it is a good advice to cache data via a global Service Worker.
-Revamping offline capabilities even further data can be stored in a
-browser based database like PouchDB. For the sake of simplicity data
-management won't be conducted into depth throughout this paper.
+The simplified microservice example later in this paper assumes a
+generic build-in API next to the build-in frontend components. Instead
+of gluing frontend and backend together on runtime, the microservice is
+designed holistically containing both front- and backends. To reduce
+network calls especially for mobile devices it is a good advice to cache
+data via a global Service Worker. Revamping offline capabilities even
+further data can be stored in a browser based database like PouchDB. For
+the sake of simplicity data management won't be explored into depth
+throughout this paper.
 
 \subsection{Infrastructure Automation}\label{infrastructure-automation}
 
-In the global nature of web development the developer stage couldn't't
+In the global nature of web development the developer stage couldn't
 completely decoupled from the production environment. This circumstance
 left developers switching back and forth between files developing tricky
 (and more often biased) ways to glue related parts together. With scoped
@@ -514,7 +518,7 @@ production without headache. Even more, in the scripted environment of
 the browser this can be implemented rapidly and continuous.
 
 Previously mentioned Ben Issa, described the ING workflow pretty simple.
-Every component deserves a own GIT repo containing
+Every component deserves a own \textbf{git repo} containing
 
 \begin{itemize}
 \tightlist
@@ -544,10 +548,10 @@ problem.
 In theory a microservice is designed with a lot of emphasizes on
 real-time monitoring for both the architectural elements and business
 relevant metrics.{[}4{]} Due to the modular structure weak points can
-occur in the orchestration or the services. Testing and automation is a
-feasible task but failures occur within browsers anyway. For example,
-legacy browsers remain a problem for enhancing websites with new
-technologies.
+occur in the orchestration of the services. Testing and automation is a
+feasible task but failures may occur in another end users setting
+undetected. Legacy browsers for example remain a problem for enhancing
+websites with new technologies.
 
 Regarding the evolution of the web, the ``next billion'' internet users
 most likely using Android, have decent specs mobile phones, use an
@@ -559,7 +563,7 @@ principle. A \emph{browsernative microservice} therefore not only tries
 to cache data as much as possible, it should also bring in a lot of
 program logic as described in the previous chapters.
 
-Working in a JS heavy infrastructure demands for optimazation to avoid
+Working in a JS heavy infrastructure demands for optimization to avoid
 unexpected side-effects like the \emph{flash of unstyled content
 (FOUC)}. Googles Polymer propagates the a general-purpose \textbf{PRLP
 pattern}\footnote{\href{https://www.polymer-project.org/1.0/toolbox/server}{PRLP
@@ -585,13 +589,36 @@ and registered.
 
 \subsection{Evolutionary Design}\label{evolutionary-design}
 
-Using modular web architecture isn't a perceptually new approach.
+Microservices tend to become smaller over time. An evolutionary design
+approach puts emphasizes on decomposition and scrapping the service.
+``The key property of a component is the notion of independent
+replacement and upgradeability.''{[}4{]} Therefore we can safely change
+and chop services. Lazy parts of the system which won't change to often
+should be separated from parts undergoing a lot of churn.{[}4{]} Parts
+that needs coupled changes could should be moved together or should be
+even merged.
 
-Angular, React
+This flexible approach fits good in the world of browser based
+development. In the last decade we have seen a lot of of changes in the
+way we develop for the web. New technologies like Angular and React are
+handy to use but add some future uncertainty.
 
-Interopt
+In the next section of this paper a lot of standardized technologies
+around the concept of \textbf{Web Components} for the browsers will be
+described. \emph{Browsernative Microservices} should be perceived as
+complementary technology. Contrary to Angular, React and other
+frameworks they have a strong interop with existing systems and can be
+used with them together.
 
-Freedom of choice
+Andrew Rota, developer at Wayfair, came up with the idea to compose
+small web components around a managing React system.{[}11{]} As web
+components are native elements there is no difference to use a native
+\texttt{button} or a native \texttt{custom-button}. With this pattern a
+web developer can make use of the encapsulated advantages of web
+components while still making use of the declarative event management
+from various frameworks. Whatever new framework will be on the rise
+within the next years, this approach allows rapid decomposition and
+reassembling.
 
 \section{W3C specifications}\label{w3c-specifications}
 
@@ -605,8 +632,8 @@ which can be combined with other frameworks/libraries.
 
 Depending on the context, some people argue for only two specs which
 essentially make it possible to create a scoped component but not caring
-too much on it's distribution{[}11{]}. Some people prefer the three
-specs {[}12{]}, but the majority advocating the four specs variant,
+too much on it's distribution{[}12{]}. Some people prefer the three
+specs {[}13{]}, but the majority advocating the four specs variant,
 which is listed on \sout{the official}
 \href{http://webcomponents.org}{webcomponents.org} website. For the
 purpose of this article, all four specs will be discussed briefly to
@@ -646,7 +673,7 @@ Most obvious, this spec relies on the new \emph{ES6 Class Syntax} in
 favor of the original prototype-based inheritance model.
 ``Extending~\texttt{HTMLElement}~ensures the custom element inherits the
 entire DOM API and means any properties/methods that you add to the
-class become part of the element's DOM interface.''{[}13{]} Like any
+class become part of the element's DOM interface.''{[}14{]} Like any
 other \emph{ES6 class}, \emph{custom element}s can be sub-classed
 further on with the typical \texttt{extends} inheritance.
 
@@ -680,7 +707,7 @@ approaches:
   means the moment the node is rendered inside the DOM. Typically this
   method is called straight after the \texttt{constructor()} on insert.
   This block of code contains setup code, such as fetching resources or
-  rendering elements according to attributes.{[}13{]} For performance
+  rendering elements according to attributes.{[}14{]} For performance
   issues it's highly preferable to put much code in here.
 \item
   \texttt{disconnectedCallback()}\\
@@ -737,30 +764,30 @@ would't work in the previous setup. A common workaround is archived by
 using the previous mentioned \texttt{attributeChangedCallback} lifecycle
 method to \textbf{reflect changing HTML attributes to JS} and/or map JS
 attributes to HTML with \texttt{this.setAttributes(...)} respectively.
-On \textbf{insertion time} html attributes might raise their hand with
+On insertion time HTML attributes might raise their hand with
 \texttt{this.hasAttributes(...)} and \texttt{this.getAttributes(...)}.
 Native DOM properties will reflect their values between HTML and JS
-automatically.{[}14, Para. 2.6.1{]}
+automatically.{[}15, Para. 2.6.1{]}
 
 Concluding this section, a reader might already discover the
 \textbf{mental model} behind \emph{web compontents}. A custom element is
-similar to a named function where attributes treated as \textbf{input
-variables}. In the hierarchical nature of DOM, input can occur either
-top-down via assignments and bottom-up via captured events. The same
-goes true when talking about output. Even though it seems obvious, it
-might be helpful to keep this point in mind.
+similar to a named function where attributes treated as input variables.
+In the hierarchical nature of DOM, input can occur either top-down via
+assignments and bottom-up via captured events. The same goes true when
+talking about output. Even though it seems obvious, it might be helpful
+to keep this point in mind.
 
 \subsubsection{Customized build-in
 elements}\label{customized-build-in-elements}
 
 One aspect didn't mentioned yet is the possibility of creating
-sub-classes of \textbf{build-in elements} by extending the native
-Interfaces like the \texttt{HTMLButtonElement} interface. While this
-functionality is perfectly spec'd it is strongly rejected by some
-browser vendors.\footnote{https://github.com/w3c/webcomponents/issues/509}
-Most likely the spec will change in future in one or other way on this
-issue and therefore \textbf{customized build-in elements} left out of
-this paper intentionally.
+sub-classes of build-in elements by extending the native Interfaces like
+the \texttt{HTMLButtonElement} interface. While this functionality is
+perfectly spec'd it is strongly rejected by some browser
+vendors.\footnote{https://github.com/w3c/webcomponents/issues/509} Most
+likely the spec will change in future in one or other way on this issue
+and therefore customized build-in elements left out of this paper
+intentionally.
 
 \subsection{\texorpdfstring{Shadow DOM
 \href{http://w3c.github.io/webcomponents/spec/shadow/}{(w3c)}}{Shadow DOM (w3c)}}\label{shadow-dom-w3c}
@@ -897,7 +924,7 @@ DOM}:
 Using the \emph{functional selector} of \texttt{:host()} or even the
 only-functional \texttt{:host-contest()} allows the creation of
 \textbf{context-aware custom elements}. A possible use case would be
-``theming'' a component (example taken from {[}15{]}):
+``theming'' a component (example taken from {[}16{]}):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -950,7 +977,7 @@ and/or no structured redistribution a \emph{shadow DOM} might be to hard
 to reason about. Eventually it all depends on the question of ``how hard
 is it to implement it without shadow DOM'' - which can't be answered
 universally. For a more in-depth guide, Google Engineer Eric Bidelman
-wroten a great primer on \emph{shadow DOM}{[}15{]}.
+wroten a great primer on \emph{shadow DOM}{[}16{]}.
 
 So far, there is still a missing link between \emph{light DOM} and
 \emph{shadow DOM}. The observant reader may have already noticed the
@@ -1204,17 +1231,18 @@ still in the early days. Nevertheless, the addressed problem of
 JS runs in a single-threaded language environment. Every script in the
 browser environment, from handling UI events to query and process larget
 amounts of API data and manipulating the DOM, runs on the same
-thread{[}16{]}. Putting a lot of work to the single main thread can slow
+thread{[}17{]}. Putting a lot of work to the single main thread can slow
 down the web service significantly. From time to time scripts can block
-or fail for whatever reason which leads to a frozen UI on the users
-side. A worker can overcome the bottleneck of the single-threaded nature
-with spawning new \textbf{background threads}. Todays web architectures
-aims to leverage an increasing amout of processing to the client to
-avoid time-consuming roundtrips especially in mobiles
-networks.\footnote{Latency numbers:
-  https://gist.github.com/jboner/2841832} While many native APIs like
-\texttt{fetch} work seamlessly in the new thread, a worker has no access
-to the DOM at all.
+or fail for whatever reason which leads to a frozen or crashed UI. A
+worker can overcome the bottleneck of the single-threaded nature with
+spawning new \textbf{background threads} which allows the UI to stay
+responsive even when computation-heavy tasks should be carried out.
+Effectively, a worker thread makes use of the multi core CPUs most
+devices have nowadays. To grasp the full potential of workers, a reader
+might dive deeper into the Angular 2 architecture, where most of the
+application layer is abstracted from the main rendering thread into
+worker threads.\footnote{\href{https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E}{Angular
+  2 Rendering Architecture}}
 
 A \emph{Web Worker} spawns a new background thread where scripts can run
 concurrent to the main thread. Usually a worker is loaded from a workers
@@ -1252,19 +1280,20 @@ based interface} with the main thread.
 \section{Anatomy of an browsernative
 microservice}\label{anatomy-of-an-browsernative-microservice}
 
-After grasping the principles and some technical background the paper
-should illustrate a practical example to \emph{browsernative
-microservices}. Googles library Polymer is a good start to learn about
-web components. They even offer a command line tool for creating a
-polymer skeleton. One of their most famous proof of concept is the
-so-called \href{https://shop.polymer-project.org/}{Polymer Shop} which
-is a fully-fledged online shop nested within a single custom element
+After getting some confidence in microservice principles and some
+technical background the paper should illustrate a practical example to
+\emph{browsernative microservices}. Googles library Polymer is a good
+place for learning about web components in depth. They even offer a
+command line tool for creating a polymer skeleton. One of their most
+famous proof of concept is the so-called
+\href{https://shop.polymer-project.org/}{Polymer Shop} which is a
+fully-fledged online shop nested within a single custom root element
 \texttt{\textless{}shop-app\textgreater{}}. It has some elements for
 routing, managing view, service worker caching, theming, etc. The whole
 shop runs as a single application only fetching and sending resources
 but never reloading altogether. Let's assume we work in a sales
-engineering team of the Polymer Shop and need to rebuild checkout
-process.
+engineering team of the Polymer Shop and need to rebuild the checkout
+microservice.
 
 A usual checkout has 3 to 4 steps:
 
@@ -1281,8 +1310,8 @@ A usual checkout has 3 to 4 steps:
   Review and place order
 \end{enumerate}
 
-Translated into a raw custom element HTML structure, the microservice
-might light like:
+Translated into a raw custom element HTML structure, the top-level
+microservice might look like:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1295,11 +1324,32 @@ might light like:
 \end{Highlighting}
 \end{Shaded}
 
-Pretty straight forward.
+\subsection{Concepts}\label{concepts}
 
-http://www.pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org
+The core concept of the newly created \texttt{shop-checkout} is a clean
+MVC pattern where the model is a worker managed by the root element. The
+role of the root element offers a bare minimum of centralized
+orchestration as a kind of message broker. Messages from child nodes
+will just forwarded to the worker and answers passed back to the child
+nodes. Therefore, the basic microservice communication looks like this
 
-bare minimum of centralized management of these services
+\begin{verbatim}
+VIEW root           |               MODEL worker
+                    |
+Event  --------Event msg--------->    Msg
+    |               |               Handler
+    |               |                   |
+Idle                |               Effekt
+    |               |                   |
+  Msg               |                   |
+Handler <-----Action msg----------  Action                                      
+                    |                   
+                    |
+\end{verbatim}
+
+Effects are yielded by the asynchronous operation of messages and create
+effects returned to sender. The VIEW side of the root element forwards
+all the messages and won't be bothered about the content.
 
 \section{Thinking further}\label{thinking-further}
 
@@ -1407,33 +1457,38 @@ Available: \url{http://www.melconway.com/Home/Committees_Paper.html}
 funny.'' 2016 {[}Online{]}. Available:
 \url{https://nolanlawson.com/2016/10/13/progressive-enhancement-isnt-dead-but-it-smells-funny/}
 
+\hypertarget{ref-Rota2015}{}
+{[}11{]} A. Rota, ``React.js conf 2015 - the complementarity of react
+and web components.'' 2015 {[}Online{]}. Available:
+\url{https://www.youtube.com/watch?t=124\&v=g0TD0efcwVg}
+
 \hypertarget{ref-Buchner2016}{}
-{[}11{]} D. Buchner, ``Demythstifying web components,'' 2016
+{[}12{]} D. Buchner, ``Demythstifying web components,'' 2016
 {[}Online{]}. Available:
 \url{http://www.backalleycoder.com/2016/08/26/demythstifying-web-components/}
 
 \hypertarget{ref-vanKesteren2014}{}
-{[}12{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
+{[}13{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
 {[}Online{]}. Available:
 \url{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
 
 \hypertarget{ref-Bidelman2016}{}
-{[}13{]} E. Bidelman, ``Custom elements v1: reusable web components.''
+{[}14{]} E. Bidelman, ``Custom elements v1: reusable web components.''
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/primers/customelements/}.
 {[}Accessed: 01-Dec-2016{]}
 
 \hypertarget{ref-HTML}{}
-{[}14{]} \emph{HTML living standard --- last updated 11 january 2017}.
+{[}15{]} \emph{HTML living standard --- last updated 11 january 2017}.
 {[}Online{]}. Available: \url{https://html.spec.whatwg.org/multipage/}
 
 \hypertarget{ref-Bidelman2016shadow}{}
-{[}15{]} E. Bidelman, ``Shadow dom v1: Self-contained web components.''
+{[}16{]} E. Bidelman, ``Shadow dom v1: Self-contained web components.''
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/getting-started/primers/shadowdom}
 
 \hypertarget{ref-Bidelman2010}{}
-{[}16{]} E. Bidelman, ``The basics of web workers.'' 2010 {[}Online{]}.
+{[}17{]} E. Bidelman, ``The basics of web workers.'' 2010 {[}Online{]}.
 Available: \url{https://www.html5rocks.com/en/tutorials/workers/basics/}
 
 \end{document}
