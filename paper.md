@@ -363,12 +363,12 @@ As easy and minimal *HTML templates* are, they're missing out a crucial feature 
  customElements.define('hello-world',
   class extends HTMLElement {
    constructor() {
-  	  super();
+    super();
     this.attachShadow({mode: 'open'});
-    const template =
+    const helloTemplate =
      document.querySelector('#hello');
     this.shadowRoot
-     .appendChild(template.content);
+     .appendChild(helloTemplate.content);
    }
   });
 </script>
@@ -481,7 +481,7 @@ this.addEventListener('message', e =>
 
 # Anatomy of an browsernative microservice
 
-After getting some confidence in microservice principles and some technical background the paper should illustrate a practical example to *browsernative microservices*. Googles library Polymer is a good place for learning about web components in depth. They even offer a command line tool for creating a polymer skeleton. One of their most famous proof of concept is the so-called [Polymer Shop](https://shop.polymer-project.org/) which is a fully-fledged online shop nested within a single custom root element `<shop-app>`.  It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.
+After getting some confidence in microservice principles and some technical background the paper should illustrate a practical example to *browsernative microservices*. Googles library Polymer is a good place for learning about web components in depth and make use of their simple command line tools. One of their most famous proof of concept is the so-called [Polymer Shop](https://shop.polymer-project.org/) which is a fully-fledged online shop nested within a single custom root element `<shop-app>`.  It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.
 
 A usual checkout has 3 to 4 steps:
 
@@ -490,7 +490,7 @@ A usual checkout has 3 to 4 steps:
 3. Payment details
 4. Review and place order
 
-Translated into a raw custom element HTML structure, the top-level microservice might look like:
+Translated into a raw custom element HTML structure, the top-level microservice might look like the following snippet:
 
 ```html
 <shop-checkout>
@@ -501,9 +501,9 @@ Translated into a raw custom element HTML structure, the top-level microservice 
 </shop-checkout>
 ```
 
-## Concepts
+## Service Root
 
-The core concept of the newly created `shop-checkout` is a clean MVC pattern where the model is a worker managed by the root element. The role of the root element offers a bare minimum of centralized orchestration as a kind of message broker. Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this
+The core concept of the newly created `shop-checkout` is a clean MVC pattern where the model is a worker managed by the root element. The role of the root element offers a bare minimum of centralized orchestration as a **kind of message broker**. Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this
 
 ```
 VIEW root			|				MODEL worker
@@ -519,7 +519,9 @@ Handler <-----Action msg----------  Action
 					|
 ```
 
-Effects are yielded by the asynchronous operation of messages and create effects returned to sender. The VIEW side of the root element forwards all the messages and won't be bothered about the content.
+Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created by fetching additional resources from the server. The VIEW side of the root element forwards all the messages and won't be bothered about the content.
+
+
 
 # Thinking further
 

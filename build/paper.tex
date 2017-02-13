@@ -1064,12 +1064,12 @@ HTML templates} symbiosis.
  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,}
   \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+    \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
     \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-    \KeywordTok{const} \NormalTok{template }\OperatorTok{=}
+    \KeywordTok{const} \NormalTok{helloTemplate }\OperatorTok{=}
      \VariableTok{document}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#hello'}\NormalTok{)}\OperatorTok{;}
     \KeywordTok{this}\NormalTok{.}\AttributeTok{shadowRoot}
-     \NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{template}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
+     \NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{helloTemplate}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
    \OperatorTok{\}}
   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \OperatorTok{<}\SpecialStringTok{/script>}
@@ -1283,17 +1283,16 @@ microservice}\label{anatomy-of-an-browsernative-microservice}
 After getting some confidence in microservice principles and some
 technical background the paper should illustrate a practical example to
 \emph{browsernative microservices}. Googles library Polymer is a good
-place for learning about web components in depth. They even offer a
-command line tool for creating a polymer skeleton. One of their most
-famous proof of concept is the so-called
-\href{https://shop.polymer-project.org/}{Polymer Shop} which is a
-fully-fledged online shop nested within a single custom root element
-\texttt{\textless{}shop-app\textgreater{}}. It has some elements for
-routing, managing view, service worker caching, theming, etc. The whole
-shop runs as a single application only fetching and sending resources
-but never reloading altogether. Let's assume we work in a sales
-engineering team of the Polymer Shop and need to rebuild the checkout
-microservice.
+place for learning about web components in depth and make use of their
+simple command line tools. One of their most famous proof of concept is
+the so-called \href{https://shop.polymer-project.org/}{Polymer Shop}
+which is a fully-fledged online shop nested within a single custom root
+element \texttt{\textless{}shop-app\textgreater{}}. It has some elements
+for routing, managing view, service worker caching, theming, etc. The
+whole shop runs as a single application only fetching and sending
+resources but never reloading altogether. Let's assume we work in a
+sales engineering team of the Polymer Shop and need to rebuild the
+checkout microservice.
 
 A usual checkout has 3 to 4 steps:
 
@@ -1311,7 +1310,7 @@ A usual checkout has 3 to 4 steps:
 \end{enumerate}
 
 Translated into a raw custom element HTML structure, the top-level
-microservice might look like:
+microservice might look like the following snippet:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1324,14 +1323,15 @@ microservice might look like:
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Concepts}\label{concepts}
+\subsection{Service Root}\label{service-root}
 
 The core concept of the newly created \texttt{shop-checkout} is a clean
 MVC pattern where the model is a worker managed by the root element. The
 role of the root element offers a bare minimum of centralized
-orchestration as a kind of message broker. Messages from child nodes
-will just forwarded to the worker and answers passed back to the child
-nodes. Therefore, the basic microservice communication looks like this
+orchestration as a \textbf{kind of message broker}. Messages from child
+nodes will just forwarded to the worker and answers passed back to the
+child nodes. Therefore, the basic microservice communication looks like
+this
 
 \begin{verbatim}
 VIEW root           |               MODEL worker
@@ -1348,8 +1348,11 @@ Handler <-----Action msg----------  Action
 \end{verbatim}
 
 Effects are yielded by the asynchronous operation of messages and create
-effects returned to sender. The VIEW side of the root element forwards
-all the messages and won't be bothered about the content.
+actions returned to sender. Effects can be created by external messages,
+like subscription to an WebSocket, too. Effects may be created by
+fetching additional resources from the server. The VIEW side of the root
+element forwards all the messages and won't be bothered about the
+content.
 
 \section{Thinking further}\label{thinking-further}
 
