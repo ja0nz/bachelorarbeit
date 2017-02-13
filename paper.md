@@ -2,7 +2,7 @@
 
 > Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 
-Computers can scale, humans can't. Ever since a program or complex system made by humans has been constrained by humans mental capabilities. Like in the analogy of juggling balls, our brain can just "juggle" a few things at a time. Rich Hickey, the inventor of the programming language *Clojure* gave an inspirational keynote on the topic of **simplicity**.[^rich] In every sphere of a humans life, simplicity aligns perception with our mental capacities.
+Computers can scale, humans can't. Ever since a program or complex system made by humans has been constrained by humans mental capabilities. Like in the analogy of juggling balls, our brain can just "juggle" a few things at a time. Rich Hickey, the inventor of the programming language Clojure gave an inspirational keynote on the topic of **simplicity**.[^rich] In every sphere of a humans life, simplicity aligns perception with our mental capacities.
 
 Derived from the ancient Latin word **simplex**, simple can be understood as "literally, uncompounded or onefold"[^dict] which points directly to the unidimensional aspect. While complexity describes the multilayered und entangled nature of conditions, simplicity empowers the human brain to reason about issues in a straightforward manner. It certainly has some overlapping's with easy, but while easy is more of a relative nature, simple can be laid out as a objective manner and therefore universally applicable. 
 
@@ -95,22 +95,23 @@ Another more real life decentralization aspect derives from the easiness of depl
 
 ## Decentralized Data Management
 
-Data Management in Microservice follows the same modular philosophy like the conceptual implementation. As mentioned earlier different bounded contexts make different assumptions of the underlying model. A *browsernative microservices* takes this thought even further and expands it to the variety of devices. Decentralized decisions about conceptual models demand for decentralized data storage decisions.[@Fowler2014] Since network roundtrips are costly it is a good advice to only query as much data as needed and cache as much as possible.
+Data Management in Microservice follows the same modular philosophy like the conceptual implementation. As mentioned earlier different bounded contexts make different assumptions of the underlying model. A *browsernative microservices* takes this idea even further and expands it to the fragmented world of electronic devices. Decentralized decisions about conceptual models demand for decentralized data storage decisions.[@Fowler2014] Todays web architectures aims to leverage an increasing amout of processing to the client to avoid time-consuming roundtrips especially in mobiles networks.[^latency] Since network roundtrips are costly it is a good advice to only query as much data as needed and cache as much as possible.
 
-"Microservices prefer letting each service manage its own database."[Fowler2014] Ben Issa, chief architect of ING Australia emphasizes this pragmatism on APIs in a conference talk. At ING the frontend demands drive the APIs, APIs are produces automatically and not even Issa knows how many APIs exists.[@Issa2016] They are using a pattern called **backend for frontends** allowing the team working on a given UI also handle the server-side components.[@Newman2015, p. 72] The perception on backend might change therefore from embodying logic to a data-silo only.
+"Microservices prefer letting each service manage its own database."[Fowler2014] Ben Issa, chief architect of ING Australia emphasizes this pragmatism on APIs in a conference talk. At ING the frontend demands drive the backend APIs, APIs are produces automatically and not even Issa knows how many APIs exists.[@Issa2016] They are using a pattern called **backend for frontends** allowing the team working on a given UI also handle the server-side components.[@Newman2015, p. 72] The perception on backend might change therefore from embodying logic to a data-silo only.
 
 To see this pattern in the field a reader might have a look at Facebooks GraphQL[^graphql]. GraphQL is a query language for the frontend. The backend solely replies on the frontend needs. Another well documented ~~even more powerful~~ approach in the field is Cognitects Datomic[^datomic], where parts of the database will be reflected to the client. A so-called Transactor ensures ACID compliance.
 
-The upcoming microservice example assumes a generic build-in API next to the build-in frontend components.  Instead of gluing frontend and backend together on runtime, the microservice is designed holistically containing both ends. To reduce network calls especially for mobile devices it is a good advice to cache data via a global Service Worker. Revamping offline capabilities even further data can be stored in a browser based database like PouchDB. For the sake of simplicity data management won't be conducted into depth throughout this paper.
+The simplified microservice example later in this paper assumes a generic build-in API next to the build-in frontend components.  Instead of gluing frontend and backend together on runtime, the microservice is designed holistically containing both front- and backends. To reduce network calls especially for mobile devices it is a good advice to cache data via a global Service Worker. Revamping offline capabilities even further data can be stored in a browser based database like PouchDB. For the sake of simplicity data management won't be explored into depth throughout this paper.
 
+[^latency]: Latency numbers: https://gist.github.com/jboner/2841832
 [^graphql]: [GraphQL](http://graphql.org/)
 [^datomic]: [Datomic](http://www.datomic.com/)
 
 ## Infrastructure Automation 
 
-In the global nature of web development the developer stage couldn't't completely decoupled from the production environment. This circumstance left developers switching back and forth between files developing tricky (and more often biased) ways to glue related parts together. With scoped components, code blocks can be developed more sane and conveyed into production without headache. Even more, in the scripted environment of the browser this can be implemented rapidly and continuous.
+In the global nature of web development the developer stage couldn't completely decoupled from the production environment. This circumstance left developers switching back and forth between files developing tricky (and more often biased) ways to glue related parts together. With scoped components, code blocks can be developed more sane and conveyed into production without headache. Even more, in the scripted environment of the browser this can be implemented rapidly and continuous.
 
-Previously mentioned Ben Issa, described the ING workflow pretty simple. Every component deserves a own GIT repo containing 
+Previously mentioned Ben Issa, described the ING workflow pretty simple. Every component deserves a own **git repo** containing 
 
 * Internationalization conformity (i18n)
 * Accessibility conformity (a11y)
@@ -123,11 +124,11 @@ Every check-in is handled as release candidate and can be independently deployed
 
 ## Design for failure
 
-In theory a microservice is designed with a lot of emphasizes on real-time monitoring for both the architectural elements and business relevant metrics.[@Fowler2014] Due to the modular structure weak points can occur in the orchestration or the services. Testing and automation is a feasible task but failures occur within browsers anyway. For example, legacy browsers remain a problem for enhancing websites with new technologies.
+In theory a microservice is designed with a lot of emphasizes on real-time monitoring for both the architectural elements and business relevant metrics.[@Fowler2014] Due to the modular structure weak points can occur in the orchestration of the services. Testing and automation is a feasible task but failures may occur in another end users setting undetected. Legacy browsers for example remain a problem for enhancing websites with new technologies.
 
 Regarding the evolution of the web, the "next billion" internet users most likely using Android, have decent specs mobile phones, use an evergreen browser but won't have a reliable internet connection.[@Lawson2016] While *Progressive Enhancement* was once coined on the principle to build websites both for Browsers with JS and without, the new *Progressive Enhancement* becomes more an "offline first" principle. A *browsernative microservice* therefore not only tries to cache data as much as possible, it should also bring in a lot of program logic as described in the previous chapters.
 
-Working in a JS heavy infrastructure demands for optimazation to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the a general-purpose **PRLP pattern**[^prlp]:
+Working in a JS heavy infrastructure demands for optimization to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the a general-purpose **PRLP pattern**[^prlp]:
 
 * Push critical resources for the initial route
 * Render initial route
@@ -141,15 +142,13 @@ Following this pattern a critical resource can detect browser functionalities be
 
 ## Evolutionary Design
 
-Using modular web architecture isn't a perceptually new approach. 
+Microservices tend to become smaller over time. An evolutionary design approach puts emphasizes  on decomposition and scrapping the service. "The key property of a component is the notion of independent replacement and upgradeability."[@Fowler2014] Therefore we can safely change and chop services. Lazy parts of the system which won't change to often should be separated from parts undergoing a lot of churn.[@Fowler2014] Parts that needs coupled changes could should be moved together or should be even merged.
 
-Angular, React
+This flexible approach fits good in the world of browser based development. In the last decade we have seen a lot of of changes in the way we develop for the web. New technologies like Angular and React are handy to use but add some future uncertainty.
 
-Interopt
+In the next section of this paper a lot of standardized technologies around the concept of **Web Components** for the browsers will be described. *Browsernative Microservices* should be perceived as complementary technology. Contrary to Angular, React and other frameworks they have a strong interop with existing systems and can be used with them together.
 
-Freedom of choice
-
-
+Andrew Rota, developer at Wayfair, came up with the idea to compose small web components around a managing React system.[@Rota2015] As web components are native elements there is no difference to use a native `button` or a native `custom-button`. With this pattern a web developer can make use of the encapsulated advantages of web components while still making use of the declarative event management from various frameworks. Whatever new framework will be on the rise within the next years, this approach allows rapid decomposition and reassembling.
 
 # W3C specifications
 
@@ -220,13 +219,13 @@ el.sayhello = "earth";
 el.sayhello;//"earth"
 ````
 
-While getters and setters work great in the JS world they fail crossing the boundaries to the corresponding HTML node. Declaring `<hello-world sayhello="mars"></hello-world>` would't work in the previous setup. A common workaround is archived by using the previous mentioned `attributeChangedCallback` lifecycle method to **reflect changing HTML attributes to JS** and/or map JS attributes to HTML with `this.setAttributes(...)` respectively. On **insertion time** html attributes might raise their hand with `this.hasAttributes(...)` and `this.getAttributes(...)`. Native DOM properties will reflect their values between HTML and JS automatically.[@HTML, para. 2.6.1]
+While getters and setters work great in the JS world they fail crossing the boundaries to the corresponding HTML node. Declaring `<hello-world sayhello="mars"></hello-world>` would't work in the previous setup. A common workaround is archived by using the previous mentioned `attributeChangedCallback` lifecycle method to **reflect changing HTML attributes to JS** and/or map JS attributes to HTML with `this.setAttributes(...)` respectively. On insertion time HTML attributes might raise their hand with `this.hasAttributes(...)` and `this.getAttributes(...)`. Native DOM properties will reflect their values between HTML and JS automatically.[@HTML, para. 2.6.1]
 
-Concluding this section, a reader might already discover the **mental model** behind *web compontents*. A custom element is similar to a named function where attributes treated as **input variables**. In the hierarchical nature of DOM, input can occur either top-down via assignments and bottom-up via captured events. The same goes true when talking about output. Even though it seems obvious, it might be helpful to keep this point in mind.
+Concluding this section, a reader might already discover the **mental model** behind *web compontents*. A custom element is similar to a named function where attributes treated as input variables. In the hierarchical nature of DOM, input can occur either top-down via assignments and bottom-up via captured events. The same goes true when talking about output. Even though it seems obvious, it might be helpful to keep this point in mind.
 
 ### Customized build-in elements
 
-One aspect didn't mentioned yet is the possibility of creating sub-classes of **build-in elements** by extending the native Interfaces like the `HTMLButtonElement` interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.[^github] Most likely the spec will change in future in one or other way on this issue and therefore **customized build-in elements** left out of this paper intentionally.
+One aspect didn't mentioned yet is the possibility of creating sub-classes of build-in elements by extending the native Interfaces like the `HTMLButtonElement` interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.[^github] Most likely the spec will change in future in one or other way on this issue and therefore customized build-in elements left out of this paper intentionally.
 
 [^github]: https://github.com/w3c/webcomponents/issues/509
 
@@ -453,9 +452,9 @@ Unfortunately events only work "upstream" towards parent nodes. Still the web pl
 
 Like *Custom Events*, *Web Workers* had been around for a long time and therefore embrace full support among major browsers. They emerged at around 2009 when discussions about browser performance was still in the early days. Nevertheless, the addressed problem of *Web Workers* is a fundamental language problem of JS itself.
 
-JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread[@Bidelman2010]. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen UI on the users side. A worker can overcome the bottleneck of the single-threaded nature with spawning new **background threads**. Todays web architectures aims to leverage an increasing amout of processing to the client to avoid time-consuming roundtrips especially in mobiles networks.[^latency] While many native APIs like `fetch` work seamlessly in the new thread, a worker has no access to the DOM at all.
+JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread[@Bidelman2010]. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen or crashed UI. A worker can overcome the bottleneck of the single-threaded nature with spawning new **background threads** which allows the UI to stay responsive even when computation-heavy tasks should be carried out. Effectively, a worker thread makes use of the multi core CPUs most devices have nowadays. To grasp the full potential of workers, a reader might dive deeper into the Angular 2 architecture, where most of the application layer is abstracted from the main rendering thread into worker threads.[^angular]
 
-[^latency]: Latency numbers: https://gist.github.com/jboner/2841832
+[^angular]: [Angular 2 Rendering Architecture](https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E)
 
 A *Web Worker* spawns a new background thread where scripts can run concurrent to the main thread. Usually a worker is loaded from a workers dedicated file to embrace this kind of separation. 
 
@@ -482,7 +481,7 @@ this.addEventListener('message', e =>
 
 # Anatomy of an browsernative microservice
 
-After grasping the principles and some technical background the paper should illustrate a practical example to *browsernative microservices*. Googles library Polymer is a good start to learn about web components. They even offer a command line tool for creating a polymer skeleton. One of their most famous proof of concept is the so-called [Polymer Shop](https://shop.polymer-project.org/) which is a fully-fledged online shop nested within a single custom element `<shop-app>`.  It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild checkout process.
+After getting some confidence in microservice principles and some technical background the paper should illustrate a practical example to *browsernative microservices*. Googles library Polymer is a good place for learning about web components in depth. They even offer a command line tool for creating a polymer skeleton. One of their most famous proof of concept is the so-called [Polymer Shop](https://shop.polymer-project.org/) which is a fully-fledged online shop nested within a single custom root element `<shop-app>`.  It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.
 
 A usual checkout has 3 to 4 steps:
 
@@ -491,7 +490,7 @@ A usual checkout has 3 to 4 steps:
 3. Payment details
 4. Review and place order
 
-Translated into a raw custom element HTML structure, the microservice might light like:
+Translated into a raw custom element HTML structure, the top-level microservice might look like:
 
 ```html
 <shop-checkout>
@@ -502,11 +501,25 @@ Translated into a raw custom element HTML structure, the microservice might ligh
 </shop-checkout>
 ```
 
-Pretty straight forward.
+## Concepts
 
-http://www.pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org
+The core concept of the newly created `shop-checkout` is a clean MVC pattern where the model is a worker managed by the root element. The role of the root element offers a bare minimum of centralized orchestration as a kind of message broker. Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this
 
-bare minimum of centralized management of these services
+```
+VIEW root			|				MODEL worker
+					|
+Event  --------Event msg--------->    Msg
+	|				|				Handler
+	|				|					|
+Idle				|				Effekt
+	|				|					|
+  Msg 				|					|
+Handler <-----Action msg----------  Action										
+					|					
+					|
+```
+
+Effects are yielded by the asynchronous operation of messages and create effects returned to sender. The VIEW side of the root element forwards all the messages and won't be bothered about the content.
 
 # Thinking further
 
