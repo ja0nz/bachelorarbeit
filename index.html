@@ -87,7 +87,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#appendix-b-web-worker-whatwg">Appendix B: Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></a></li>
 </ul></li>
 <li><a href="#anatomy-of-an-browsernative-microservice">Anatomy of an browsernative microservice</a><ul>
-<li><a href="#concepts">Concepts</a></li>
+<li><a href="#service-root">Service Root</a></li>
 </ul></li>
 <li><a href="#thinking-further">Thinking further</a></li>
 </ul>
@@ -326,12 +326,12 @@ document.body.appendChild(clone);</li>
  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span>
   <span class="kw">class</span> <span class="kw">extends</span> HTMLElement <span class="op">{</span>
    <span class="at">constructor</span>() <span class="op">{</span>
-      <span class="kw">super</span>()<span class="op">;</span>
+    <span class="kw">super</span>()<span class="op">;</span>
     <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
-    <span class="kw">const</span> template <span class="op">=</span>
+    <span class="kw">const</span> helloTemplate <span class="op">=</span>
      <span class="va">document</span>.<span class="at">querySelector</span>(<span class="st">&#39;#hello&#39;</span>)<span class="op">;</span>
     <span class="kw">this</span>.<span class="at">shadowRoot</span>
-     .<span class="at">appendChild</span>(<span class="va">template</span>.<span class="at">content</span>)<span class="op">;</span>
+     .<span class="at">appendChild</span>(<span class="va">helloTemplate</span>.<span class="at">content</span>)<span class="op">;</span>
    <span class="op">}</span>
   <span class="op">}</span>)<span class="op">;</span>
 <span class="op">&lt;</span><span class="ss">/script&gt;</span></code></pre></div>
@@ -402,7 +402,7 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;message&#39;</span><span class="op">,</span> e <span class="op">=&gt;</span>
  <span class="kw">this</span>.<span class="at">postMessage</span>(<span class="st">&quot;Echo &quot;</span> <span class="op">+</span> <span class="va">e</span>.<span class="at">data</span>))<span class="op">;</span></code></pre></div>
 <h1 id="anatomy-of-an-browsernative-microservice">Anatomy of an browsernative microservice</h1>
-<p>After getting some confidence in microservice principles and some technical background the paper should illustrate a practical example to <em>browsernative microservices</em>. Googles library Polymer is a good place for learning about web components in depth. They even offer a command line tool for creating a polymer skeleton. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single custom root element <code>&lt;shop-app&gt;</code>. It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
+<p>After getting some confidence in microservice principles and some technical background the paper should illustrate a practical example to <em>browsernative microservices</em>. Googles library Polymer is a good place for learning about web components in depth and make use of their simple command line tools. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single custom root element <code>&lt;shop-app&gt;</code>. It has some elements for routing, managing view, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources but never reloading altogether. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
 <p>A usual checkout has 3 to 4 steps:</p>
 <ol type="1">
 <li>Sign in or Sign up</li>
@@ -410,15 +410,15 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <li>Payment details</li>
 <li>Review and place order</li>
 </ol>
-<p>Translated into a raw custom element HTML structure, the top-level microservice might look like:</p>
+<p>Translated into a raw custom element HTML structure, the top-level microservice might look like the following snippet:</p>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;shop-checkout&gt;</span>
   <span class="kw">&lt;sign-in&gt;&lt;/sign-in&gt;</span>
   <span class="kw">&lt;shipping-details&gt;&lt;/shipping-details&gt;</span>
   <span class="kw">&lt;payment-details&gt;&lt;/payment-details&gt;</span>
   <span class="kw">&lt;place-order&gt;&lt;/place-order&gt;</span>
 <span class="kw">&lt;/shop-checkout&gt;</span></code></pre></div>
-<h2 id="concepts">Concepts</h2>
-<p>The core concept of the newly created <code>shop-checkout</code> is a clean MVC pattern where the model is a worker managed by the root element. The role of the root element offers a bare minimum of centralized orchestration as a kind of message broker. Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this</p>
+<h2 id="service-root">Service Root</h2>
+<p>The core concept of the newly created <code>shop-checkout</code> is a clean MVC pattern where the model is a worker managed by the root element. The role of the root element offers a bare minimum of centralized orchestration as a <strong>kind of message broker</strong>. Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this</p>
 <pre><code>VIEW root           |               MODEL worker
                     |
 Event  --------Event msg---------&gt;    Msg
@@ -430,7 +430,7 @@ Idle                |               Effekt
 Handler &lt;-----Action msg----------  Action                                      
                     |                   
                     |</code></pre>
-<p>Effects are yielded by the asynchronous operation of messages and create effects returned to sender. The VIEW side of the root element forwards all the messages and won't be bothered about the content.</p>
+<p>Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created by fetching additional resources from the server. The VIEW side of the root element forwards all the messages and won't be bothered about the content.</p>
 <h1 id="thinking-further">Thinking further</h1>
 <p>endgeräte werden besser</p>
 <p>multicore</p>
