@@ -241,92 +241,70 @@ established pattern that proofed to fulfill enterprise needs.
 Microservices are a good approach for tearing big monolithic systems
 into fine-grained simple services with explicit defined boundaries. In a
 nutshell a microservice is a small, autonomous service that works
-together with other services seamlessly.{[}3, p. 2{]} or with the words
+together with other services seamlessly.{[}3, p. 2{]} Or with the words
 of Fowler and Lewis: ``\ldots{} the microservice architectural style is
 an approach to developing a single application as a suite of small
 services, each running in its own process and communicating with
-lightweight mechanisms, often an HTTP resource API.''{[}4{]} This
-definition aligns well with the idea of \textbf{Single-Page
-applications} (SPAs) in the browser composed of own services or
-sometimes other third-party services.
+lightweight mechanisms, often an HTTP resource API.''{[}4{]} Just yet at
+this point a reader might spot some similarities with microservices and
+the browser-based development: Both wrestling the problem of monolithic
+architecture and both using lightweight communication mechanisms. In
+fact, many big companies of ``the web'' like Amazon or Netflix
+successfully transformed their monolithic system into a service based
+system which gives a glimpse of the power behind microservices.{[}4{]}
 
-Further along, microservices incorporate many other ideas, like
-\emph{domain-driven design} where it pursues the incorporation of real
-world structure in the code.{[}3, p. 2{]} Or making use of
+Microservices incorporate many ideas from developing scalable software,
+like \emph{domain-driven design} where it pursues the incorporation of
+real world structure in the code.{[}3, p. 2{]} Or making use of
 \emph{continuous delivery} for pushing software rapidly through
-\emph{automated deployment} mechanisms into production.{[}4{]} And, last
-but not least, microservices utilizes the idea of small teams with a lot
-of product knowledge working mostly autonomous on their very own service
-with their very own set of tools and techniques. As a primary source of
-truth this paper relies on the work of Sam Newman, who has written a
-comprehensive guide called \emph{Building Microservices} and the work of
-Fowler and Lewis. The purpose of this section is to gain confidence
-about the microservices architecture in the context of the browser
-platform.
+\emph{automated deployment} mechanisms into production.{[}4{]}
+Furthermore, microservices transcendent the technical perspective and
+reaches into the team organization. As a primary source of truth this
+paper relies on the work of Sam Newman, who has written a comprehensive
+guide called \emph{Building Microservices} and the work of Fowler and
+Lewis. The purpose of this section is to gain confidence about the
+microservices architecture in the context of the browser platform.
 
 \subsection{Componentization via
 Services}\label{componentization-via-services}
 
 ``A~\textbf{component}~is a unit of software that is independently
 replaceable and upgradeable.'' {[}4{]} Components are the building
-blocks of microservices. While the service is a concrete piece of
-software a component is much more raw and single-minded following the
-\emph{loose coupling principle}: changing and deploying one service
-shouldn't result in changing other parts of the system.{[}3, p. 30{]}.
-Small components and big microservices are similar on their principles.
+blocks of microservices. And microservices are the building blocks of
+applications. Essentially the difference between microservices and
+components is just the level of abstraction. Whether a concrete
+microservice or a much more generic component, both following pretty
+much the same principles. Therefore this paper referring to both parts
+when talking about \textbf{services}.
 
-Any reader of the paper familiar with ReactJS / Redux, the concept of
-components isn't anything new. Dan Abramov, the creator of Redux, once
-defined a simple dichotomous pattern for creating UI components. In his
-believe, there are \textbf{presentational components} only related with
-the concern about \emph{how things look}. This component literally
-doesn't know anything about the service in question which makes the
-component highly flexible and reusable. They are controlled solely from
-the outside, receiving data and dispatching unbiased events on user
-interaction.{[}5{]}
+The first principle of services is the \textbf{loose coupling
+principle}: changing and deploying one service shouldn't result in
+changing other parts of the system.{[}3, p. 30{]}. Mutations or shadowed
+variables, which is happening a lot in CSS, making it hard to keep
+changes ought to only affect one place in the application. A
+\emph{browsernative microservice} therefore pushing encapsulation and
+avoiding variable mutations outside its scope as much as possible.
+Practically, CSS will be scoped and JS fosters immutable JS entities and
+avoids variables leaking into the global namespace preferring the
+\texttt{let} or \texttt{const} declaration in favor of the old
+\texttt{var} declaration.
 
-On the other hand Abramov described components he named
-\textbf{containers}. A container component is concerned with \emph{how
-things work}.{[}5{]} Containers acts as invisible wrappers around
-presentational components. Their job is to fetch data from child nodes,
-aggregating events, interacting with the model and push state back to
-the presentational components. In contrast to their presentational
-counterparts, containers can't life on its own without children.
-Conceptually, they show another important principle of components and
-microservices in general: \emph{high cohesion principle}.
-
-Whether designing a microservice or it's components we want related
-behavior sit together, and unrelated behavior to sit elsewhere.{[}3, p.
-30{]} High cohesion can be expressed in a dynamic way as the
-\emph{Single Responsibility Principle}: ``Gather together those things
-that change for the same reason and separate those things that change
-for different reasons.''{[}6{]} In a very quick and dirty code quality
-analysis, the quality can be measured just by counting the places
-changes in the code occur. In an arbitrary MVC system when a
-\texttt{button} is dropped into the VIEW part, the CONTROLLER needs some
-adjustment for sure and maybe the MODEL, too. Three places for
-adjustment is a reasonable easy task for the brain. In the field of
-browser based development those principle is often violated in the
-separated entities HTML, JS and CSS.
-
-Using libraries in web development is a common sense. But compared to
-libraries, a component service offers multiple advantages. A library is
-only loosely coupled to the implementation and therefore hard to track
-in functionality. Changing a library may result in an unforeseen amount
-of time fixing implementations. It is not unusual to see websites
-embodying different versions of the same library (like with JQuery).
-Another issue with libraries is dead code elimination which means the
-process of removing code that is never going to be executed. Newer build
-tools for the web, like Webpack 2 or Rollup offer this feature which
-relies heavily on the static structure on ES6 modules.{[}7{]} Libraries
-for the browsers are traditionally ``shipped'' as non static
-\textbf{immediately-invoked functions}. Bootstrapping those is much
-harder to archive as dead code may be part of the function itself.
-
-Native web components are necessary static ES6 modules and any capable
-bundler can choose which component is needed at runtime. Even more
-granular, a good web component is composed of static JS dependencies
-which can be deflated or strapped away too.
+The second principle of services is the \textbf{high cohesion
+principle}: Whether designing a microservice or it's components we want
+related behavior sit together, and unrelated behavior to sit
+elsewhere.{[}3, p. 30{]} High cohesion can be expressed in a dynamic way
+as the \emph{Single Responsibility Principle}: ``Gather together those
+things that change for the same reason and separate those things that
+change for different reasons.''{[}5{]} In a very quick and dirty code
+quality analysis, the quality can be measured just by counting the
+places changes in the code occur in order to implement a functionality.
+In an arbitrary MVC system when a \texttt{button} is dropped into the
+VIEW part, the CONTROLLER needs some adjustment and maybe the MODEL,
+too. Three places for adjustment is a reasonable easy task for the
+brain. In the field of browser based development those principle is
+often violated in the separated entities HTML, JS and CSS. A
+\emph{browsernative microservice} aims for combining all of the
+resources cohesively in a single place and file.
 
 A \emph{component for the web}, or web component, is
 \textbf{self-contained} which means it embodys all needed functionality
@@ -335,12 +313,32 @@ in the service contracts. Changing functionality won't break other
 components. A component can progressively enhanced which guarantees
 functionality throughout different versions.
 
-Compared to libraries componentized services offers a more explicit
+Using libraries in web development is a common sense. But compared to
+libraries, a component service offers multiple advantages. A library is
+only loosely coupled to the implementation and therefore hard to track
+in functionality. Changing a library may result in an unforeseen amount
+of time fixing implementations. It is not unusual to see websites
+embodying different versions of the same library (like with JQuery).
+Another issue with libraries is dead code elimination which means the
+process of removing code that is never going to be executed. New build
+tools for the web, like Webpack 2 or Rollup offer this feature which
+relies heavily on the static structure on ES6 modules.{[}6{]} Libraries
+for the browsers are traditionally ``shipped'' as non static
+\textbf{immediately-invoked functions}. Bootstrapping those is much
+harder to archive as dead code may be part of the function itself. A
+\emph{webnative microservices} should therefore embrace the high
+cohesion principle and abandon most of the libraries in favor of static
+ES6 module to lower the amount of dead code and to increase performance
+especially at the first render.
+
+Another advantage components have over libraries is the more explicit
 interface.{[}4{]} While the functionality of a library needs
 documentation, a component functionality is exposed via the components'
-signature which comes in the fashion of an HTML element. For example, a
-button can consume attributes and becomes a primary buttons just by
-assignment.
+signature which comes in the fashion of an HTML element in
+\emph{browsernative microservices}. For example, a button component can
+consume attributes and becomes a primary buttons just by assignment
+
+.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -354,7 +352,7 @@ Capabilities}\label{organized-around-business-capabilities}
 \begin{quote}
 ``organizations which design systems \ldots{} are constrained to produce
 designs which are copies of the communication~structures~of these
-organizations''. {[}8{]}
+organizations''. {[}7{]}
 \end{quote}
 
 Emphasizing the human factor in microservices is a key feature.
@@ -502,7 +500,7 @@ cache as much as possible.
 database.''{[}Fowler2014{]} Ben Issa, chief architect of ING Australia
 emphasizes this pragmatism on APIs in a conference talk. At ING the
 frontend demands tailor the backend APIs, APIs may be produced
-automatically and not even Issa knows how many APIs exists.{[}9{]} They
+automatically and not even Issa knows how many APIs exists.{[}8{]} They
 are using a pattern called \textbf{backend for frontends} empowering the
 team working to craft their UI and backend in a one-to-one
 relationship.{[}3, p. 72{]}
@@ -556,7 +554,7 @@ Every component deserves a own \textbf{git repo} containing
 \end{itemize}
 
 Every check-in is handled as release candidate and can be independently
-deployed by a fully automated deployment machinery.{[}9{]} Even though
+deployed by a fully automated deployment machinery.{[}8{]} Even though
 this example is an opinionated perception it gives a sense of a mature
 component build for the web. Due to an exhaustive amount of testing and
 deployment tools for the browser an automated infrastructure shouldn't
@@ -574,7 +572,7 @@ websites with new technologies.
 
 Regarding the evolution of the web, the ``next billion'' internet users
 most likely using Android, have decent specs mobile phones, use an
-evergreen browser but won't have a reliable internet connection.{[}10{]}
+evergreen browser but won't have a reliable internet connection.{[}9{]}
 While \emph{Progressive Enhancement} was once coined on the principle to
 build websites both for Browsers with JS and HTML only, the new
 \emph{Progressive Enhancement} tends towards an ``\textbf{offline
@@ -628,7 +626,7 @@ technology. Contrary to Angular, React and other frameworks they have a
 strong interop with existing systems and can be used with them together.
 
 Andrew Rota, developer at Wayfair, came up with the idea to compose
-small web components around a managing React system.{[}11{]} As web
+small web components around a managing React system.{[}10{]} As web
 components are native elements there is no difference to use a native
 \texttt{button} or a native \texttt{custom-button}. With this pattern a
 web developer can make use of the encapsulated advantages of web
@@ -649,8 +647,8 @@ which can be combined with other frameworks/libraries.
 
 Depending on the context, some people argue for only two specs which
 essentially make it possible to create a scoped component but not caring
-too much on it's distribution{[}12{]}. Some people prefer the three
-specs {[}13{]}, but the majority advocating the four specs variant,
+too much on it's distribution{[}11{]}. Some people prefer the three
+specs {[}12{]}, but the majority advocating the four specs variant,
 which is listed on \sout{the official}
 \href{http://webcomponents.org}{webcomponents.org} website. For the
 purpose of this article, all four specs will be discussed briefly to
@@ -692,7 +690,7 @@ in the fashion of \emph{ES6 Classes}\footnote{\href{https://developer.mozilla.or
 inheritance model. This class must inherit the base \texttt{HTMLElement}
 interface which~``ensures the newly created element inherits the entire
 DOM API and any properties/methods that you add to the class become part
-of the element's DOM interface.''{[}14{]} Like any other \emph{ES6
+of the element's DOM interface.''{[}13{]} Like any other \emph{ES6
 class}, the new element can be specialized further on using the typical
 \texttt{extends} inheritance.
 
@@ -725,7 +723,7 @@ approaches:
   means the moment the node is rendered inside the DOM. Typically this
   method is called straight after the \texttt{constructor()} on insert.
   Typically, this method contains setup code, such as fetching resources
-  or rendering elements according to attributes.{[}14{]} For a fast
+  or rendering elements according to attributes.{[}13{]} For a fast
   initial render of the page, it is highly preferable to put many
   proceedings in favor of the constructor.
 \item
@@ -776,7 +774,7 @@ define custom attributes using the \emph{custom elements'}
 \end{Shaded}
 
 Native DOM properties, like \texttt{id} or \texttt{onclick}, reflect
-their values between HTML and JS.{[}15, Para. 2.6.1{]} For example
+their values between HTML and JS.{[}14, Para. 2.6.1{]} For example
 declaring the HTML
 \texttt{\textless{}hello-world\ id="hello"\textgreater{}} like this
 equals to assign the ID in JS like \texttt{Node.id\ =\ "hello"}. This
@@ -946,7 +944,7 @@ DOM}:
 Using the \emph{functional selector} of \texttt{:host()} or even the
 only-functional \texttt{:host-contest()} allows the creation of
 \textbf{context-aware custom elements}. A possible use case would be
-``theming'' a component (example taken from {[}16{]}):
+``theming'' a component (example taken from {[}15{]}):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -999,7 +997,7 @@ and/or no structured redistribution a \emph{shadow DOM} might be to hard
 to reason about. Eventually it all depends on the question of ``how hard
 is it to implement it without shadow DOM'' - which can't be answered
 universally. For a more in-depth guide, Google Engineer Eric Bidelman
-wroten a great primer on \emph{shadow DOM}{[}16{]}.
+wroten a great primer on \emph{shadow DOM}{[}15{]}.
 
 So far, there is still a missing link between \emph{light DOM} and
 \emph{shadow DOM}. The observant reader may have already noticed the
@@ -1244,7 +1242,7 @@ Workers} is a fundamental language problem of JS itself.
 JS runs in a single-threaded language environment. Every script in the
 browser environment, from handling UI events to query and process larget
 amounts of API data and manipulating the DOM, runs on the same
-thread{[}17{]}. Putting a lot of work to the single main thread can slow
+thread{[}16{]}. Putting a lot of work to the single main thread can slow
 down the web service significantly. From time to time scripts can block
 or fail for whatever reason which leads to a frozen or crashed UI. A
 worker can overcome the bottleneck of the single-threaded nature with
@@ -1295,19 +1293,20 @@ microservice}\label{building-an-browsernative-microservice}
 
 After getting confidence in microservice principles and technical
 background the paper should bring them both together to form a
-\emph{browsernative microservices}. Googles library Polymer is a good
-place for learning about web components in depth and make use of their
-simple command line tools. One of their most famous proof of concept is
-the so-called \href{https://shop.polymer-project.org/}{Polymer Shop}
-which is a fully-fledged online shop nested within a single root element
+\emph{browsernative microservices}. Needless to say the described
+example is overall simplified to only illustrate the connection between
+browsernative technologies and microservice patterns. Googles library
+Polymer is a good place for learning about web components in depth and
+make use of their simple command line tools. One of their most famous
+proof of concept is the so-called
+\href{https://shop.polymer-project.org/}{Polymer Shop} which is a
+fully-fledged online shop nested within a single root element
 \texttt{\textless{}shop-app\textgreater{}}. This app made of several
 main views and many more invisible custom elements for routing, service
 worker caching, theming, etc. The whole shop runs as a single
 application only fetching and sending resources and switching views.
 Let's assume we work in a sales engineering team of the Polymer Shop and
-need to rebuild the checkout microservice. Needless to say that many
-ideas mentioned here are opinions of the author and by no means
-standardized patterns.
+need to rebuild the checkout microservice.
 
 The current checkout can be found at
 https://shop.polymer-project.org/checkout. Currently the checkout is a
@@ -1321,7 +1320,7 @@ database IndexedDB.
 
 \subsection{Checkout microservice}\label{checkout-microservice}
 
-A usual checkout has 3 to 4 steps:
+Like a usual checkout this example has 3 to 4 steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1341,6 +1340,7 @@ top-level microservice might look like the following snippet:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{>shop-checkout.html}
 \KeywordTok{<shop-checkout>}
   \KeywordTok{<sign-in></sign-in>}
   \KeywordTok{<shipping-details></shipping-details>}
@@ -1349,6 +1349,51 @@ top-level microservice might look like the following snippet:
 \KeywordTok{</shop-checkout>}
 \end{Highlighting}
 \end{Shaded}
+
+Yet already we see the simplicity around web components as they persue a
+clear structure. Each of the child components should act independently
+over other child nodes utilizing the loose coupling principle. Each
+child ships all the HTML, CSS and JS code needed to fulfil its work
+following the high cohesion principle. Each component may contain
+different views to accommodate different bounded contexts resulting from
+different devices. And last but not least, all of them communicate over
+an unobstrusive message bus via the service root component
+\texttt{shop-checkout}.
+
+Before diving deeper into implementation, its worth to clarify the
+\textbf{architectural pattern} behind components. Any reader of the
+paper came across ReactJS / Redux, the concept of components may look
+familiar. Dan Abramov, the creator of Redux, once defined a simple
+dichotomous pattern for creating UI components. Firstly, he came up with
+the idea of \textbf{presentational components} only related with the
+concern about \emph{how things look}. This component literally doesn't
+know anything about the service in question which makes the component
+highly flexible and reusable. They are controlled solely from the
+outside, receiving data and dispatching unbiased events on user
+interaction.{[}17{]} Most probably every presentational component
+embodies more HTML/CSS markup and less JS code. It should encapsulate
+its styles from bleeding out and protect its styles being overwritten.
+Furthermore, it may contain several templates to change it's look on
+different demands.
+
+Secondly, Abramov described components he refers as \textbf{containers}.
+A container component is concerned with \emph{how things work}.{[}17{]}
+Containers acts as invisible wrappers around presentational components
+acting more in the sense of UNIX filters. Their job is to fetch data
+from child nodes, aggregating events, interacting with the model and
+push state back to the presentational components. Consequently, they
+might contain more JS and less, if any, HTML markup. We probably don't
+need to utilize ShadowDOM as no styles are involved.
+
+Last but not least, there are \textbf{build-in components}, which is
+every traditional HTMLElement. They are solely controlled and styled
+from the outside and must therfore wrapped in presentationals and/or
+containers.
+
+Lets start the service description top-down with the \textbf{root
+container}.
+
+\subsubsection{Root container}\label{root-container}
 
 Messages from child nodes will just forwarded to the worker and answers
 passed back to the child nodes. Therefore, the basic microservice
@@ -1400,7 +1445,7 @@ optimise the workflow. Fowler and Lewis outlines this approach as an
 ``alignment of business capabilities''{[}4{]} While this kind of
 structure may be true for companies like Google or Amazon, there is a
 vast majority of companies developing for the web which are grouped
-around tasks.{[}9{]} A very common structure is formed by the technology
+around tasks.{[}8{]} A very common structure is formed by the technology
 stack (UX Designers, Frontend- \& Backend Developers) or by separating
 teams along the product lifecycle (development, testing, deployment).
 
@@ -1451,68 +1496,68 @@ Berlin, Heidelberg: Springer Berlin Heidelberg, 2006, pp. 175--205
 new architectural term,'' Jan. 2014 {[}Online{]}. Available:
 \url{http://www.martinfowler.com/articles/microservices.html}
 
-\hypertarget{ref-Abramov2015}{}
-{[}5{]} D. Abramov, ``Presentational and Container Components --
-Medium.'' 2015 {[}Online{]}. Available:
-\url{https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0}.
-{[}Accessed: 01-Dec-2016{]}
-
 \hypertarget{ref-Martin}{}
-{[}6{]} R. C. Martin, ``The single responsibility principle.''
+{[}5{]} R. C. Martin, ``The single responsibility principle.''
 {[}Online{]}. Available:
 \url{http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle}
 
 \hypertarget{ref-Rauschmayer2015}{}
-{[}7{]} D. A. Rauschmayer, ``Tree-shaking with webpack 2 and babel 6.''
+{[}6{]} D. A. Rauschmayer, ``Tree-shaking with webpack 2 and babel 6.''
 2015 {[}Online{]}. Available:
 \url{http://www.2ality.com/2015/12/webpack-tree-shaking.html}
 
 \hypertarget{ref-Conway1968}{}
-{[}8{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
+{[}7{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
 Available: \url{http://www.melconway.com/Home/Committees_Paper.html}
 
 \hypertarget{ref-Issa2016}{}
-{[}9{]} B. Issa, ``The way of the web.'' Polymer Summit 2016, Oct-2016
+{[}8{]} B. Issa, ``The way of the web.'' Polymer Summit 2016, Oct-2016
 {[}Online{]}. Available:
 \url{https://www.youtube.com/watch?v=8ZTFEhPBJEE}
 
 \hypertarget{ref-Lawson2016}{}
-{[}10{]} N. Lawson, ``Progressive enhancement isn't dead, but it smells
+{[}9{]} N. Lawson, ``Progressive enhancement isn't dead, but it smells
 funny.'' 2016 {[}Online{]}. Available:
 \url{https://nolanlawson.com/2016/10/13/progressive-enhancement-isnt-dead-but-it-smells-funny/}
 
 \hypertarget{ref-Rota2015}{}
-{[}11{]} A. Rota, ``React.js conf 2015 - the complementarity of react
+{[}10{]} A. Rota, ``React.js conf 2015 - the complementarity of react
 and web components.'' 2015 {[}Online{]}. Available:
 \url{https://www.youtube.com/watch?t=124\&v=g0TD0efcwVg}
 
 \hypertarget{ref-Buchner2016}{}
-{[}12{]} D. Buchner, ``Demythstifying web components,'' 2016
+{[}11{]} D. Buchner, ``Demythstifying web components,'' 2016
 {[}Online{]}. Available:
 \url{http://www.backalleycoder.com/2016/08/26/demythstifying-web-components/}
 
 \hypertarget{ref-vanKesteren2014}{}
-{[}13{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
+{[}12{]} A. van Kesteren, ``Mozilla and web components: Update,'' 2014
 {[}Online{]}. Available:
 \url{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
 
 \hypertarget{ref-Bidelman2016}{}
-{[}14{]} E. Bidelman, ``Custom elements v1: reusable web components.''
+{[}13{]} E. Bidelman, ``Custom elements v1: reusable web components.''
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/primers/customelements/}.
 {[}Accessed: 01-Dec-2016{]}
 
 \hypertarget{ref-HTML}{}
-{[}15{]} \emph{HTML living standard --- last updated 11 january 2017}.
+{[}14{]} \emph{HTML living standard --- last updated 11 january 2017}.
 {[}Online{]}. Available: \url{https://html.spec.whatwg.org/multipage/}
 
 \hypertarget{ref-Bidelman2016shadow}{}
-{[}16{]} E. Bidelman, ``Shadow dom v1: Self-contained web components.''
+{[}15{]} E. Bidelman, ``Shadow dom v1: Self-contained web components.''
 2016 {[}Online{]}. Available:
 \url{https://developers.google.com/web/fundamentals/getting-started/primers/shadowdom}
 
 \hypertarget{ref-Bidelman2010}{}
-{[}17{]} E. Bidelman, ``The basics of web workers.'' 2010 {[}Online{]}.
+{[}16{]} E. Bidelman, ``The basics of web workers.'' 2010 {[}Online{]}.
 Available: \url{https://www.html5rocks.com/en/tutorials/workers/basics/}
+
+\hypertarget{ref-Abramov2015}{}
+{[}17{]} D. Abramov, ``Presentational and Container Components --
+Medium.'' 2015 {[}Online{]}. Available:
+\url{https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0}.
+{[}Accessed: 01-Dec-2016{]}
 
 \end{document}
