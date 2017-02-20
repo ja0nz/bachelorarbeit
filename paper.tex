@@ -1186,11 +1186,11 @@ components}.
  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} 
  \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
   \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-     \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+    \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
    \CommentTok{// Craft a CustomEvent e}
-     \KeywordTok{const} \NormalTok{e }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \OperatorTok{\{}
+    \KeywordTok{const} \NormalTok{e }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \OperatorTok{\{}
     \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,} \CommentTok{//important!}
-    \DataTypeTok{detail}\OperatorTok{:} \StringTok{'Contains string or object'}
+    \DataTypeTok{detail}\OperatorTok{:} \StringTok{'Contains scalar or object'}
    \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
    \CommentTok{// Launch e on child button click}
    \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'click'}\OperatorTok{,} \NormalTok{click }\OperatorTok{=>} \OperatorTok{\{}
@@ -1312,8 +1312,8 @@ The current checkout can be found at
 https://shop.polymer-project.org/checkout. Currently the checkout is a
 single, 671 lines of code long Polymer component incorporation all
 required fields for sign in, shipping, billing and summarizing the
-order. In the spirit of microservices we will split up the component to
-their smaller components. The shopping cart data is pulled out of a
+order. In the spirit of microservices we will split up the microservice
+into fine grained components. The shopping cart data is pulled out of a
 local storage JSON entity set up previously by another custom-element.
 Another in-memory opportunity is storing the data in the build-in
 database IndexedDB.
@@ -1350,15 +1350,15 @@ top-level microservice might look like the following snippet:
 \end{Highlighting}
 \end{Shaded}
 
-Yet already we see the simplicity around web components as they persue a
-clear structure. Each of the child components should act independently
-over other child nodes utilizing the loose coupling principle. Each
-child ships all the HTML, CSS and JS code needed to fulfil its work
-following the high cohesion principle. Each component may contain
-different views to accommodate different bounded contexts resulting from
-different devices. And last but not least, all of them communicate over
-an unobstrusive message bus via the service root component
-\texttt{shop-checkout}.
+Yet already we see the simplicity arouse from web components as they
+persue a clear structure. Each of the child components should act
+independently over other child nodes utilizing the loose coupling
+principle. Each child ships all the HTML, CSS and JS code needed to
+fulfil its work following the high cohesion principle. Each component
+may contain different views to accommodate different bounded contexts
+resulting from different devices. And last but not least, all of them
+communicate over an unobstrusive message bus via the service root
+component \texttt{shop-checkout}.
 
 Before diving deeper into implementation, its worth to clarify the
 \textbf{architectural pattern} behind components. Any reader of the
@@ -1386,47 +1386,141 @@ might contain more JS and less, if any, HTML markup. We probably don't
 need to utilize ShadowDOM as no styles are involved.
 
 Last but not least, there are \textbf{build-in components}, which is
-every traditional HTMLElement. They are solely controlled and styled
-from the outside and must therfore wrapped in presentationals and/or
-containers.
+every build-in HTMLElement like the HTMLButtonElement. They are solely
+controllable and styleable from the outside and must therefore wrapped
+in presentational components and/or containers.
 
-Lets start the service description top-down with the \textbf{root
-container}.
+Lets start the service description top-down beginning with the
+\textbf{root container} managing the overall service.
 
 \subsubsection{Root container}\label{root-container}
 
-Messages from child nodes will just forwarded to the worker and answers
-passed back to the child nodes. Therefore, the basic microservice
-communication looks like this
+The root container \texttt{shop-checkout} is basically just an
+encapsulation layer in terms of service functionalities. Encapsulation
+of CSS won't be necessary at this point as no styling is involved. On
+initialization the \texttt{shop-checkout} might perform following tasks:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Importing child components with \textbf{HTML Imports}
+\item
+  Initialize the service in a logical top to bottom order like in the
+  snippet above
+\item
+  Initializing a \textbf{model thread} with
+  \texttt{new\ Worker(\textquotesingle{}checkout-model.js\textquotesingle{})};
+\item
+  Setting up a \texttt{postMessage} stub to dispatch messages to the
+  model
+\item
+  Setting up an event listener for messages from the model
+\item
+  Setting up an event listener for \textbf{custom events} from the child
+  nodes
+\end{enumerate}
+
+On runtime the root container acts mostly like a \textbf{message
+dispatcher} implementing the microservice idea of smart endpoints and
+dumb pipes.
+
+Every custom child node is eligible aggregate subordinate events from
+their children, buffer them and interact with the model trough via a
+\textbf{dumb message system}. To talk to the model any child node can
+dispatch a \textbf{unified event containing a unified message object}
+like the following example illustrates:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// Within every child node class}
+\NormalTok{set }\AttributeTok{dispatch}\NormalTok{(msg) }\OperatorTok{\{}
+  \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(}
+    \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'checkout'}\OperatorTok{,} \OperatorTok{\{}
+      \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,}
+      \DataTypeTok{detail}\OperatorTok{:} \NormalTok{msg}
+    \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+  \NormalTok{)}\OperatorTok{;}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Calling \texttt{this.dispatch(msg)} within a child node will trigger an
+event bubbling upstream. The service root will implement a simple event
+listener for \texttt{checkout} events. In a second step the service root
+add information about the original target (like
+\emph{tag-name\#id.className}) to the message so the message can be
+processed in the model thread and eventually pushed back correctly to
+the sender.
+
+Summarizing the unidirectional model-view communication from the service
+root perspective looks like following sketch:
 
 \begin{verbatim}
-VIEW root           |               MODEL worker
+VIEW thread         |           MODEL thread
                     |
-Event  --------Event msg--------->    Msg
-    |               |               Handler
-    |               |                   |
-Idle                |               Effekt
-    |               |                   |
-  Msg               |                   |
-Handler <-----Action msg----------  Action                                      
+Checkout ------Event Msg--------->    Msg
+  Event             |                Handler
+                    |                   |
+                    |                Effect
+                    |                   |
+  Msg               |                Postmessage
+Handler <-----Action Msg----------    Action
                     |                   
                     |
 \end{verbatim}
 
 Effects are yielded by the asynchronous operation of messages and create
 actions returned to sender. Effects can be created by external messages,
-like subscription to an WebSocket, too. Effects may be created by
-fetching additional resources from the server. The VIEW side of the root
-element forwards all the messages and won't be bothered about the
-content.
+like subscription to an WebSocket, too. Effects may be created with
+additional resources from the server or syncing with local storage like
+in the polymer-shop.
+
+While the msg handlers are basic ``dumb'' switches the
+\textbf{smartness} solely arouse from intelligent controllers processing
+the message. Every component must implement a \textbf{unified socket} in
+it's service contracts like a property on the custom element:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{// Within every child node class}
+\NormalTok{set }\AttributeTok{receive}\NormalTok{(msg) }\OperatorTok{\{}
+  \CommentTok{// do something smart}
+\OperatorTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+This communication flow is designed to \textbf{fail graceful} as simply
+nothing happens if one or another switch is not defined. Furthermore it
+incorporates lots of possibilities for \textbf{evolutionary design} as
+child nodes can be loosely dropped in or teared apart. Middleware
+container wrappers can be pulled in between child nodes and service root
+to do some extra work and and even the message object can be enhanced
+freely as long as it won't break with the message conventions. Changing
+or enhancing any functionality requires only to touch the controllers in
+the child nodes in question and the endpoint section at the model.
+Furthermore, \textbf{infrastructure automation} might be achieved by
+dynamically evaluating the mounted child nodes and registering the
+``backend'' model switches on build time. Due to it's standardized
+message system the components are testable within standardized tests.
+
+To work in a larger scale, we might define a base component which has
+the default message and socket properties in its guts and extend every
+new element from this base class.
+
+Another yet more powerful approach can be achieved by calculating the
+new shape of the DOM in the worker directly and just patch the DOM in
+the view layer.\footnote{A good example of this approach can be found at
+  \href{http://www.pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org}{Introducing
+  Pokedex}} This approach is certainly more complicated but worth to
+evaluate further more.
+
+\subsubsection{Presentational
+components}\label{presentational-components}
 
 \section{Thinking further}\label{thinking-further}
 
-endgeräte werden besser
-
-multicore
-
-query languages from handheld
+cohesive HTML JS CSS
 
 Most obvious ist the gathering of all related code under the umbrellar
 of a single HTML tag.
