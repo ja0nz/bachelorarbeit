@@ -89,6 +89,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#building-an-browsernative-microservice">Building an browsernative microservice</a><ul>
 <li><a href="#checkout-microservice">Checkout microservice</a><ul>
 <li><a href="#root-container">Root container</a></li>
+<li><a href="#presentational-components">Presentational components</a></li>
 </ul></li>
 </ul></li>
 <li><a href="#thinking-further">Thinking further</a></li>
@@ -363,11 +364,11 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> 
  <span class="kw">class</span> <span class="kw">extends</span> HTMLElement <span class="op">{</span>
   <span class="at">constructor</span>() <span class="op">{</span>
-     <span class="kw">super</span>()<span class="op">;</span>
+    <span class="kw">super</span>()<span class="op">;</span>
    <span class="co">// Craft a CustomEvent e</span>
-     <span class="kw">const</span> e <span class="op">=</span> <span class="kw">new</span> <span class="at">CustomEvent</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> <span class="op">{</span>
+    <span class="kw">const</span> e <span class="op">=</span> <span class="kw">new</span> <span class="at">CustomEvent</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> <span class="op">{</span>
     <span class="dt">bubbles</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="co">//important!</span>
-    <span class="dt">detail</span><span class="op">:</span> <span class="st">&#39;Contains string or object&#39;</span>
+    <span class="dt">detail</span><span class="op">:</span> <span class="st">&#39;Contains scalar or object&#39;</span>
    <span class="op">}</span>)<span class="op">;</span>
    <span class="co">// Launch e on child button click</span>
    <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;click&#39;</span><span class="op">,</span> click <span class="op">=&gt;</span> <span class="op">{</span>
@@ -404,7 +405,7 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
  <span class="kw">this</span>.<span class="at">postMessage</span>(<span class="st">&quot;Echo &quot;</span> <span class="op">+</span> <span class="va">e</span>.<span class="at">data</span>))<span class="op">;</span></code></pre></div>
 <h1 id="building-an-browsernative-microservice">Building an browsernative microservice</h1>
 <p>After getting confidence in microservice principles and technical background the paper should bring them both together to form a <em>browsernative microservices</em>. Needless to say the described example is overall simplified to only illustrate the connection between browsernative technologies and microservice patterns. Googles library Polymer is a good place for learning about web components in depth and make use of their simple command line tools. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single root element <code>&lt;shop-app&gt;</code>. This app made of several main views and many more invisible custom elements for routing, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources and switching views. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
-<p>The current checkout can be found at https://shop.polymer-project.org/checkout. Currently the checkout is a single, 671 lines of code long Polymer component incorporation all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the component to their smaller components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element. Another in-memory opportunity is storing the data in the build-in database IndexedDB.</p>
+<p>The current checkout can be found at https://shop.polymer-project.org/checkout. Currently the checkout is a single, 671 lines of code long Polymer component incorporation all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the microservice into fine grained components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element. Another in-memory opportunity is storing the data in the build-in database IndexedDB.</p>
 <h2 id="checkout-microservice">Checkout microservice</h2>
 <p>Like a usual checkout this example has 3 to 4 steps:</p>
 <ol type="1">
@@ -421,29 +422,57 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
   <span class="kw">&lt;payment-details&gt;&lt;/payment-details&gt;</span>
   <span class="kw">&lt;place-order&gt;&lt;/place-order&gt;</span>
 <span class="kw">&lt;/shop-checkout&gt;</span></code></pre></div>
-<p>Yet already we see the simplicity around web components as they persue a clear structure. Each of the child components should act independently over other child nodes utilizing the loose coupling principle. Each child ships all the HTML, CSS and JS code needed to fulfil its work following the high cohesion principle. Each component may contain different views to accommodate different bounded contexts resulting from different devices. And last but not least, all of them communicate over an unobstrusive message bus via the service root component <code>shop-checkout</code>.</p>
+<p>Yet already we see the simplicity arouse from web components as they persue a clear structure. Each of the child components should act independently over other child nodes utilizing the loose coupling principle. Each child ships all the HTML, CSS and JS code needed to fulfil its work following the high cohesion principle. Each component may contain different views to accommodate different bounded contexts resulting from different devices. And last but not least, all of them communicate over an unobstrusive message bus via the service root component <code>shop-checkout</code>.</p>
 <p>Before diving deeper into implementation, its worth to clarify the <strong>architectural pattern</strong> behind components. Any reader of the paper came across ReactJS / Redux, the concept of components may look familiar. Dan Abramov, the creator of Redux, once defined a simple dichotomous pattern for creating UI components. Firstly, he came up with the idea of <strong>presentational components</strong> only related with the concern about <em>how things look</em>. This component literally doesn't know anything about the service in question which makes the component highly flexible and reusable. They are controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles being overwritten. Furthermore, it may contain several templates to change it's look on different demands.</p>
 <p>Secondly, Abramov described components he refers as <strong>containers</strong>. A container component is concerned with <em>how things work</em>.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Containers acts as invisible wrappers around presentational components acting more in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently, they might contain more JS and less, if any, HTML markup. We probably don't need to utilize ShadowDOM as no styles are involved.</p>
-<p>Last but not least, there are <strong>build-in components</strong>, which is every traditional HTMLElement. They are solely controlled and styled from the outside and must therfore wrapped in presentationals and/or containers.</p>
-<p>Lets start the service description top-down with the <strong>root container</strong>.</p>
+<p>Last but not least, there are <strong>build-in components</strong>, which is every build-in HTMLElement like the HTMLButtonElement. They are solely controllable and styleable from the outside and must therefore wrapped in presentational components and/or containers.</p>
+<p>Lets start the service description top-down beginning with the <strong>root container</strong> managing the overall service.</p>
 <h3 id="root-container">Root container</h3>
-<p>Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this</p>
-<pre><code>VIEW root           |               MODEL worker
+<p>The root container <code>shop-checkout</code> is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS won't be necessary at this point as no styling is involved. On initialization the <code>shop-checkout</code> might perform following tasks:</p>
+<ol type="1">
+<li>Importing child components with <strong>HTML Imports</strong></li>
+<li>Initialize the service in a logical top to bottom order like in the snippet above</li>
+<li>Initializing a <strong>model thread</strong> with <code>new Worker('checkout-model.js')</code>;</li>
+<li>Setting up a <code>postMessage</code> stub to dispatch messages to the model</li>
+<li>Setting up an event listener for messages from the model</li>
+<li>Setting up an event listener for <strong>custom events</strong> from the child nodes</li>
+</ol>
+<p>On runtime the root container acts mostly like a <strong>message dispatcher</strong> implementing the microservice idea of smart endpoints and dumb pipes.</p>
+<p>Every custom child node is eligible aggregate subordinate events from their children, buffer them and interact with the model trough via a <strong>dumb message system</strong>. To talk to the model any child node can dispatch a <strong>unified event containing a unified message object</strong> like the following example illustrates:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="co">// Within every child node class</span>
+set <span class="at">dispatch</span>(msg) <span class="op">{</span>
+  <span class="kw">this</span>.<span class="at">dispatchEvent</span>(
+    <span class="kw">new</span> <span class="at">CustomEvent</span>(<span class="st">&#39;checkout&#39;</span><span class="op">,</span> <span class="op">{</span>
+      <span class="dt">bubbles</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
+      <span class="dt">detail</span><span class="op">:</span> msg
+    <span class="op">}</span>)<span class="op">;</span>
+  )<span class="op">;</span>
+<span class="op">}</span></code></pre></div>
+<p>Calling <code>this.dispatch(msg)</code> within a child node will trigger an event bubbling upstream. The service root will implement a simple event listener for <code>checkout</code> events. In a second step the service root add information about the original target (like <em>tag-name#id.className</em>) to the message so the message can be processed in the model thread and eventually pushed back correctly to the sender.</p>
+<p>Summarizing the unidirectional model-view communication from the service root perspective looks like following sketch:</p>
+<pre><code>VIEW thread         |           MODEL thread
                     |
-Event  --------Event msg---------&gt;    Msg
-    |               |               Handler
-    |               |                   |
-Idle                |               Effekt
-    |               |                   |
-  Msg               |                   |
-Handler &lt;-----Action msg----------  Action                                      
+Checkout ------Event Msg---------&gt;    Msg
+  Event             |                Handler
+                    |                   |
+                    |                Effect
+                    |                   |
+  Msg               |                Postmessage
+Handler &lt;-----Action Msg----------    Action
                     |                   
                     |</code></pre>
-<p>Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created by fetching additional resources from the server. The VIEW side of the root element forwards all the messages and won't be bothered about the content.</p>
+<p>Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created with additional resources from the server or syncing with local storage like in the polymer-shop.</p>
+<p>While the msg handlers are basic &quot;dumb&quot; switches the <strong>smartness</strong> solely arouse from intelligent controllers processing the message. Every component must implement a <strong>unified socket</strong> in it's service contracts like a property on the custom element:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="co">// Within every child node class</span>
+set <span class="at">receive</span>(msg) <span class="op">{</span>
+  <span class="co">// do something smart</span>
+<span class="op">}</span></code></pre></div>
+<p>This communication flow is designed to <strong>fail graceful</strong> as simply nothing happens if one or another switch is not defined. Furthermore it incorporates lots of possibilities for <strong>evolutionary design</strong> as child nodes can be loosely dropped in or teared apart. Middleware container wrappers can be pulled in between child nodes and service root to do some extra work and and even the message object can be enhanced freely as long as it won't break with the message conventions. Changing or enhancing any functionality requires only to touch the controllers in the child nodes in question and the endpoint section at the model. Furthermore, <strong>infrastructure automation</strong> might be achieved by dynamically evaluating the mounted child nodes and registering the &quot;backend&quot; model switches on build time. Due to it's standardized message system the components are testable within standardized tests.</p>
+<p>To work in a larger scale, we might define a base component which has the default message and socket properties in its guts and extend every new element from this base class.</p>
+<p>Another yet more powerful approach can be achieved by calculating the new shape of the DOM in the worker directly and just patch the DOM in the view layer.<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a> This approach is certainly more complicated but worth to evaluate further more.</p>
+<h3 id="presentational-components">Presentational components</h3>
 <h1 id="thinking-further">Thinking further</h1>
-<p>endgeräte werden besser</p>
-<p>multicore</p>
-<p>query languages from handheld</p>
+<p>cohesive HTML JS CSS</p>
 <p>Most obvious ist the gathering of all related code under the umbrellar of a single HTML tag.</p>
 <p>Secondly, the sub-standard <em>custom elements</em> introduces so called lifecycle methods and a getter/setter interface exposing the functionality to the developer. Event handling, for example, can be registered in place which is much more declarative than assigning event listeners from the outside. Of course, this events can be pushed down to nested tags, allowing an increasingly granular system design. This approach will be explained further in the upcoming sections.</p>
 <p>Following this logic any company, whether it is web-related or not, should be devided in units grouped around a destinct business service to optimise the workflow. Fowler and Lewis outlines this approach as an &quot;alignment of business capabilities&quot;<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> While this kind of structure may be true for companies like Google or Amazon, there is a vast majority of companies developing for the web which are grouped around tasks.<span class="citation" data-cites="Issa2016">(Issa 2016)</span> A very common structure is formed by the technology stack (UX Designers, Frontend- &amp; Backend Developers) or by separating teams along the product lifecycle (development, testing, deployment).</p>
@@ -525,6 +554,7 @@ Handler &lt;-----Action msg----------  Action
 <li id="fn14"><p>https://github.com/w3c/webcomponents/issues/509<a href="#fnref14">↩</a></p></li>
 <li id="fn15"><p>https://hacks.mozilla.org/2014/12/mozilla-and-web-components/<a href="#fnref15">↩</a></p></li>
 <li id="fn16"><p><a href="https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E">Angular 2 Rendering Architecture</a><a href="#fnref16">↩</a></p></li>
+<li id="fn17"><p>A good example of this approach can be found at <a href="http://www.pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org">Introducing Pokedex</a><a href="#fnref17">↩</a></p></li>
 </ol>
 </section>
 </div>
