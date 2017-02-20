@@ -422,11 +422,11 @@ Events are first-class citizens in the browser world and *Custom Events* are no 
  customElements.define('hello-world', 
  class extends HTMLElement {
   constructor() {
-  	 super();
+ 	super();
    // Craft a CustomEvent e
- 	 const e = new CustomEvent('hello-world', {
+ 	const e = new CustomEvent('hello-world', {
     bubbles: true, //important!
-   	detail: 'Contains string or object'
+   	detail: 'Contains scalar or object'
    });
    // Launch e on child button click
    this.addEventListener('click', click => {
@@ -486,7 +486,7 @@ this.addEventListener('message', e =>
 
 After getting confidence in microservice principles and technical background the paper should bring them both together to form a *browsernative microservices*. Needless to say the described example is overall simplified to only illustrate the connection between browsernative technologies and microservice patterns. Googles library Polymer is a good place for learning about web components in depth and make use of their simple command line tools. One of their most famous proof of concept is the so-called [Polymer Shop](https://shop.polymer-project.org/) which is a fully-fledged online shop nested within a single root element `<shop-app>`. This app made of several main views and many more invisible custom elements for routing, service worker caching, theming, etc. The whole shop runs as a single application only fetching and sending resources and switching views. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.
 
-The current checkout can be found at https://shop.polymer-project.org/checkout. Currently the checkout is a single, 671 lines of code long Polymer component incorporation all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the component to their smaller components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element. Another in-memory opportunity is storing the data in the build-in database IndexedDB.
+The current checkout can be found at https://shop.polymer-project.org/checkout. Currently the checkout is a single, 671 lines of code long Polymer component incorporation all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the microservice into fine grained components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element. Another in-memory opportunity is storing the data in the build-in database IndexedDB.
 
 ## Checkout microservice
 
@@ -509,51 +509,90 @@ Translated into a raw **Custom Element** HTML structure, the top-level microserv
 </shop-checkout>
 ```
 
-Yet already we see the simplicity around web components as they persue a clear structure. Each of the child components should act independently over other child nodes utilizing the loose coupling principle. Each child ships all the HTML, CSS and JS code needed to fulfil its work following the high cohesion principle. Each component may contain different views to accommodate different bounded contexts resulting from different devices. And last but not least, all of them communicate over an unobstrusive message bus via the service root component `shop-checkout`. 
+Yet already we see the simplicity arouse from web components as they persue a clear structure. Each of the child components should act independently over other child nodes utilizing the loose coupling principle. Each child ships all the HTML, CSS and JS code needed to fulfil its work following the high cohesion principle. Each component may contain different views to accommodate different bounded contexts resulting from different devices. And last but not least, all of them communicate over an unobstrusive message bus via the service root component `shop-checkout`. 
 
 Before diving deeper into implementation, its worth to clarify the **architectural pattern** behind components. Any reader of the paper came across ReactJS / Redux, the concept of components may look familiar. Dan Abramov, the creator of Redux, once defined a simple dichotomous pattern for creating UI components. Firstly, he came up with the idea of **presentational components** only related with the concern about *how things look*. This component literally doesn't know anything about the service in question which makes the component highly flexible and reusable. They are controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.[@Abramov2015] Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles being overwritten. Furthermore, it may contain several templates to change it's look on different demands.
 
 Secondly, Abramov described components he refers as **containers**. A container component is concerned with *how things work*.[@Abramov2015] Containers acts as invisible wrappers around presentational components acting more in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently, they might contain more JS and less, if any, HTML markup. We probably don't need to utilize ShadowDOM as no styles are involved.
 
-Last but not least, there are **build-in components**, which is every traditional HTMLElement. They are solely controlled and styled from the outside and must therfore wrapped in presentationals and/or containers.
+Last but not least, there are **build-in components**, which is every build-in HTMLElement like the HTMLButtonElement. They are solely controllable and styleable from the outside and must therefore wrapped in presentational components and/or containers.
 
-Lets start the service description top-down with the **root container**.
+Lets start the service description top-down beginning with the **root container** managing the overall service.
 
 ### Root container
 
+The root container `shop-checkout` is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS won't be necessary at this point as no styling is involved. On initialization the `shop-checkout` might perform following tasks:
+
+1. Importing child components with **HTML Imports**
+2. Initialize the service in a logical top to bottom order like in the snippet above
+3. Initializing a **model thread** with `new Worker('checkout-model.js')`;
+4. Setting up a `postMessage` stub to dispatch messages to the model
+5. Setting up an event listener for messages from the model
+6. Setting up an event listener for **custom events** from the  child nodes
 
 
+On runtime the root container acts mostly like a **message dispatcher** implementing the microservice idea of smart endpoints and dumb pipes.
 
+Every custom child node is eligible aggregate subordinate events from their children, buffer them and interact with the model trough via a **dumb message system**. To talk to the model any child node can dispatch a **unified event containing a unified message object** like the following example illustrates:
 
+```javascript
+// Within every child node class
+set dispatch(msg) {
+  this.dispatchEvent(
+    new CustomEvent('checkout', {
+      bubbles: true,
+      detail: msg
+    });
+  );
+}
+```
 
+Calling `this.dispatch(msg)` within a child node will trigger an event bubbling upstream. The service root will implement a simple event listener for `checkout` events. In a second step the service root add information about the original target (like *tag-name#id.className*) to the message so the message can be processed in the model thread and eventually pushed back correctly to the sender.
 
-Messages from child nodes will just forwarded to the worker and answers passed back to the child nodes. Therefore, the basic microservice communication looks like this
+Summarizing the unidirectional model-view communication from the service root perspective looks like following sketch:
 
 ```
-VIEW root			|				MODEL worker
+VIEW thread			|			MODEL thread
 					|
-Event  --------Event msg--------->    Msg
-	|				|				Handler
-	|				|					|
-Idle				|				Effekt
-	|				|					|
-  Msg 				|					|
-Handler <-----Action msg----------  Action										
+Checkout ------Event Msg--------->    Msg
+  Event				|				 Handler
+					|					|
+					|				 Effect
+					|					|
+  Msg 				|				 Postmessage
+Handler <-----Action Msg----------    Action
 					|					
 					|
 ```
 
-Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created by fetching additional resources from the server. The VIEW side of the root element forwards all the messages and won't be bothered about the content.
+Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created with additional resources from the server or syncing with local storage like in the polymer-shop.
+
+While the msg handlers are basic "dumb" switches the **smartness** solely arouse from intelligent controllers processing the message. Every component must implement a **unified socket** in it's service contracts like a property on the custom element:
+
+```javascript
+// Within every child node class
+set receive(msg) {
+  // do something smart
+}
+```
+
+This communication flow is designed to **fail graceful** as simply nothing happens if one or another switch is not defined. Furthermore it incorporates lots of possibilities for **evolutionary design** as child nodes can be loosely dropped in or teared apart. Middleware container wrappers can be pulled in between child nodes and service root to do some extra work and and even the message object can be enhanced freely as long as it won't break with the message conventions. Changing or enhancing any functionality requires only to touch the controllers in the child nodes in question and the endpoint section at the model. Furthermore, **infrastructure automation** might be achieved by dynamically evaluating the mounted child nodes and registering the "backend" model switches on build time. Due to it's standardized message system the components are testable within standardized tests.
+
+To work in a larger scale, we might define a base component which has the default message and socket properties in its guts and extend every new element from this base class.
+
+Another yet more powerful approach can be achieved by calculating the new shape of the DOM in the worker directly and just patch the DOM in the view layer.[^nolen] This approach is certainly more complicated but worth to evaluate further more.
+
+[^nolen]: A good example of this approach can be found at [Introducing Pokedex](http://www.pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org)
+
+### Presentational components
+
+
 
 
 
 # Thinking further
 
-endgeräte werden besser
-
-multicore
-
-query languages from handheld
+cohesive HTML JS CSS
 
 
 
