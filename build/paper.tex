@@ -273,9 +273,9 @@ replaceable and upgradeable.'' {[}4{]} Components are the building
 blocks of microservices. And microservices are the building blocks of
 applications. Essentially the difference between microservices and
 components is just the level of abstraction. Whether a concrete
-microservice or a much more generic component, both following pretty
-much the same principles. Therefore this paper referring to both parts
-when talking about \textbf{services}.
+microservice or a much more generic component, both share a similar set
+of principles. Therefore this paper referring to both parts when talking
+about \textbf{services}.
 
 The first principle of services is the \textbf{loose coupling
 principle}: changing and deploying one service shouldn't result in
@@ -285,9 +285,7 @@ changes ought to only affect one place in the application. A
 \emph{browsernative microservice} therefore pushing encapsulation and
 avoiding variable mutations outside its scope as much as possible.
 Practically, CSS will be scoped and JS fosters immutable JS entities and
-avoids variables leaking into the global namespace preferring the
-\texttt{let} or \texttt{const} declaration in favor of the old
-\texttt{var} declaration.
+avoids variables leaking into the global namespace.
 
 The second principle of services is the \textbf{high cohesion
 principle}: Whether designing a microservice or it's components we want
@@ -298,53 +296,53 @@ things that change for the same reason and separate those things that
 change for different reasons.''{[}5{]} In a very quick and dirty code
 quality analysis, the quality can be measured just by counting the
 places changes in the code occur in order to implement a functionality.
-In an arbitrary MVC system when a \texttt{button} is dropped into the
-VIEW part, the CONTROLLER needs some adjustment and maybe the MODEL,
-too. Three places for adjustment is a reasonable easy task for the
-brain. In the field of browser based development those principle is
-often violated in the separated entities HTML, JS and CSS. A
-\emph{browsernative microservice} aims for combining all of the
-resources cohesively in a single place and file.
+An arbitrary threefold MVC system should require a maximum of three
+changes to implement or change functionalities. The problem in browser
+based development is not only the global paradigm which makes changes
+deliberately unpredictable. The high cohesion principle is violated by
+the traditional separation along the technological entities
+\textbf{HTML, JS and CSS}. Understanding the relation of HTML markup and
+another CSS file adds incidental complexity. Different approaches
+emerged over the recent years to join the forces. Most notable the
+dedicated frontend language \emph{elm}\footnote{\href{http://elm-lang.org/}{elm
+  lang}} where model, view and controller sit in one place. A
+browsernative service aims for a combinement of the web native trinity
+HTML, JS and CSS.
 
-A \emph{component for the web}, or web component, is
-\textbf{self-contained} which means it embodys all needed functionality
-to get it's job done. Therefore it has a much better evolution mechanism
-in the service contracts. Changing functionality won't break other
-components. A component can progressively enhanced which guarantees
-functionality throughout different versions.
+Traditional web development relies on \textbf{libraries} to enhance the
+service capabilities of the web platform. Compared to libraries, a
+component service offers multiple advantages for building, deployment
+and shipping. As expressed earlier a \emph{components for the web}, or
+web component, is \textbf{self-contained} which means it embodies all
+needed functionality to get it's job done. Therefore it has a much
+better evolution mechanism in the service contracts. Changing
+functionality won't break other services. A component can progressively
+enhanced which guarantees functionality throughout different versions. A
+library is only loosely coupled to the implementation and therefore hard
+to track in functionality. Changing a library may result in an
+unforeseen amount of time fixing implementations. It is not unusual to
+see websites embodying different versions of the same library to
+guarantee functionality but lowers page performance significantly.
 
-Using libraries in web development is a common sense. But compared to
-libraries, a component service offers multiple advantages. A library is
-only loosely coupled to the implementation and therefore hard to track
-in functionality. Changing a library may result in an unforeseen amount
-of time fixing implementations. It is not unusual to see websites
-embodying different versions of the same library (like with JQuery).
-Another issue with libraries is dead code elimination which means the
-process of removing code that is never going to be executed. New build
-tools for the web, like Webpack 2 or Rollup offer this feature which
-relies heavily on the static structure on ES6 modules.{[}6{]} Libraries
-for the browsers are traditionally ``shipped'' as non static
-\textbf{immediately-invoked functions}. Bootstrapping those is much
-harder to archive as dead code may be part of the function itself. A
-\emph{webnative microservices} should therefore embrace the high
-cohesion principle and abandon most of the libraries in favor of static
-ES6 module to lower the amount of dead code and to increase performance
-especially at the first render.
+Another issue where web components stand out is related to performance
+and especially the critical first page rendering. Libraries for the
+browsers are traditionally ``shipped'' as non static immediately-invoked
+functions run immediately on page load. Following the \emph{Google RAIL}
+model, a user-centric performance measurement, a page load ought be less
+than 1 second to catch up user's attention.{[}6{]} There are many ways
+for optimizing the critical first render but as a rule of thumb a
+build-in web component might be always superior to libraries in terms of
+first rendering. The fine-grained lifecycle methods which will be
+described in the technical section of this paper give the developer far
+reaching optimization opportunities.
 
-Another advantage components have over libraries is the more explicit
-interface.{[}4{]} While the functionality of a library needs
-documentation, a component functionality is exposed via the components'
-signature which comes in the fashion of an HTML element in
-\emph{browsernative microservices}. For example, a button component can
-consume attributes and becomes a primary buttons just by assignment
-
-.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{<my-botton}\OtherTok{ isPrimary}\KeywordTok{>}\NormalTok{Primary}\KeywordTok{</my-botton>}
-\end{Highlighting}
-\end{Shaded}
+The last argument in favor of components over libraries is the more
+explicit interface.{[}4{]} While the functionality of a library needs
+documentation to be accessible a component functionality is exposed via
+the components' signature. The markup language HTML is by design
+equipped with an expressive syntax and steering a web component using
+attributes and values should be most straightforward even to
+unexperienced web developers.
 
 \subsection{Organized around Business
 Capabilities}\label{organized-around-business-capabilities}
@@ -363,18 +361,21 @@ approach model teams around \textbf{business capabilities}.{[}4{]}
 Consequently every team is capable of planning, designing, implementing,
 testing and maintaining their very own microservice. Along the
 technology stack every member gains high competence about the
-functionality of the service.
+functionality of the service architecture which can be critical for
+evolving the service over its whole lifecycle.
 
 Real-world domains tend to be complex and multifaceted. To unfold their
-complexity, domains can subdivided into \textbf{bounded contexts}.{[}3,
-p. 31{]} For example, customer service is a business domain. Customers
-again have different contexts depending on their demands. One context
-can be sales, another context could be support. Every context makes
-different assumptions about the underlying model. Each bounded context
-draws an explicit interface where it decides what models to share with
-other contexts.{[}3, p. 30{]} Each context can derived into multiple
-microservices or, talking about \emph{Browsernative Microservices},
-interfaces to the customers.
+complexity, domains can subdivided into \textbf{bounded context}.{[}3,
+p. 31{]} For example, customer service is a business domain but with
+varying bounded context. One context can be sales, another context could
+be support. Every context makes different assumptions about the
+underlying model and draws an explicit interface where it decides what
+to share with other contexts.{[}3, p. 30{]} Evaluating each bounded
+context within each business domain will eventually shape the data
+structures and services in question. This methodology can be iterated
+over and over again. A sales service for example might be evaluated to
+different sales context resulting in differing interfaces on devices
+shaped by browsernative microservices.
 
 By assigning service responsibility to a team, the so called
 \textbf{Definition of Done} (DoD) shifts from ``accomplishing projects''
@@ -384,58 +385,52 @@ creates a kind of responsibility connection from the team to the
 service. Expectedly, those teams are more motivated within their very
 own service and exhibit a more sophisticated iteration time.{[}4{]}
 
-For many companies working in the spheres of the internet the
-client-side is highly important for their business. In fact, business
-goals and capabilities can be derived from the front-end needs. The
-state of the web is not only a story of numerous artifacts, it is also a
-story of an highly fragmented market along devices, operating systems,
-differing sizes and functionalities. Different devices again have
-different assumptions about the technology stack. Splitting teams along
-the stack results in an slow paced back and forth negotiation for every
-change to be made. As browser technologies, design guidelines and
-devices change in a fast paced manner it makes absolutely sense to shift
-responsibility towards the teams altogether. A \emph{browsernative
-microservice} embraces commitment over its whole lifecycle.
+For many companies working in the spheres of the internet the client
+side is highly important for their business. In fact, business goals and
+capabilities can be derived from the front-end needs. The state of the
+web is not only a story of numerous artifacts, it is also a story of an
+highly fragmented market along devices, operating systems, differing
+sizes and functionalities. Different devices again have different
+assumptions about the technology stack. Splitting teams along the stack
+results in an slow paced back and forth negotiation for every change to
+be made. As browser technologies, design guidelines and devices change
+frequently it makes absolutely sense to shift responsibility towards the
+teams altogether. By focusing the service into clear defined business
+boundaries, it is easier to define a smart API of the service.
 
 \subsection{Smart endpoints and dumb
 pipes}\label{smart-endpoints-and-dumb-pipes}
 
-Microservices for the browsers aim for side-effects like changing the UI
-given to input parameters or emitting browser events. An isolated
-microservice won't make too much sense after all. To ensure
-communication between services, flexible yet powerful communication
-channels must be established.
+To ensure the microservice functionality among teams and different
+services requires thoughtful decentralization. Emphasizing once more the
+real-world capabilities of microservices a message channel architecture
+can be derived from patterns known from traditional postal services. A
+physical letter has only two smart endpoints entitled to read and
+process the message while packaging likewise the connection itself is
+maximized towards unification. \emph{Smart endpoints and dumb pipes} is
+coined to the approach of designing communication mostly decoupled and
+as cohesive as possible.{[}4{]} Applying this rules to the web platform
+can result into building unified JSON message objects passed along
+``dumb'' middleware components. A typical browser event comes close to
+this definition and suits arguably well for in-memory communication
+between web components and microservices.
 
-\emph{Smart endpoints and dumb pipes} is coined to the approach of
-designing communication mostly decoupled and as cohesive as
-possible.{[}4{]} In the analogy to the real world a message channel
-should look like sending a letter: Two smart endpoints (sender and
-receiver) and a mostly unified ``dumb'' letter format and channel. Each
-endpoint owns it specific domain logic. In the browsernative context we
-already emphasized the role of presentational components and containers.
-The ``smartness'' of presentational components is altering the UI and
-reacting on users input. The logic of a container follows the idea of an
-filter in a Unix sense - receiving a request, applying logic as
-appropriate and producing a response.{[}4{]}
-
-Cited earlier in this paper microservices often rely on simple HTTP
-request-response with resource API's and lightweight messaging as
-communication protocols.{[}4{]} Those technologies highly accessible and
-widely adopted and most probably usable for a browsernative service. In
-the implementation part of this paper a reader will explore the
-combination of RESTish protocols and a lightweight browser message bus
-in action.
-
-By focusing the service into clear defined business boundaries, it is
-easier to define a smart API of the service which in our case will be a
-set of attributes for the HTML element bound to the service.
+Microservices heavily rely on simple HTTP request-response with resource
+APIs and lightweight messaging.{[}4{]} REST APIs are technology agnostic
+which aligns well with the idea of decentralization.{[}3, p. 247{]} The
+advantage of this overall simple communication model is the suitability
+for both frontend-backend likewise backend-backend communication. A
+service therefore can evolve from an heavy backend with a lot of network
+roundtrips to a leaner backend seamlessly. The browser build-in fetch
+API which is essentially a HTTP request can be heavily incorporated into
+a browsernative microservice to ensure communication between services.
 
 \subsection{Decentralized Governance}\label{decentralized-governance}
 
-Microservices are separate entities and decentralization is therefore a
-meta concept of microservices. Distributed service responsibility owned
-by the team is one aspect. Gluing independent service bricks to a whole
-distributed system talking over the network protocols another one.
+Microservices are separate entities and decentralization is important to
+ensure autonomy. Distributed service responsibility owned by the team
+promoting shared governance and technology agnostic communication
+channels work towards a mostly decoupled service architecture.
 
 This distributed nature allows teams to create their own technology
 stack, tools and services designed in the spirit of language- and
@@ -443,12 +438,12 @@ platform independence and share their knowledge with other
 parties.{[}4{]} In the recent years many big companies like Facebook,
 Google, Netflix and others followed that spirit and published their
 ideas and implementations open source. The previously mentioned ReactJS
-for example is a brainchild of Facebook. In fact, many tools and
-techniques are byproduct of vital interaction of concrete domain
-problems and their implementations.
+for example is a product of Facebooks need to ensure a consistent
+frontend experience. In fact, many tools and techniques are byproduct of
+vital interaction of concrete domain problems and their implementations.
 
 The spirit of freedom can't be applied universally to
-\emph{Browsernative Microservices} as the browser and its underlying DOM
+\emph{browsernative microservices} as the browser and its underlying DOM
 will be the limitation factor to a certain degree. Talking about the
 browser, a reader might be tempted to narrowly thinking of the obvious
 VIEW layer only - which is not true anymore. In the recent years the
@@ -476,15 +471,16 @@ new quasi native languages for the web might gain traction.
 Another more real life decentralization aspect derives from the easiness
 of deployment in a safe, sandboxed environment. Web components virtually
 ship no overhead or require obscure build tools. This makes them ideal
-candidates for sharing and open-sourcing. Webcomponents.org\footnote{\href{https://webcomponents.org}{Webcomponents.org}}
+candidates for sharing and open source publishing.
+Webcomponents.org\footnote{\href{https://webcomponents.org}{Webcomponents.org}}
 is a registry for ready-to-use components of every scale and purpose
 where for even Google shares a lot of their material design elements.
 
 \subsection{Decentralized Data
 Management}\label{decentralized-data-management}
 
-Data Management in Microservice follows the same modular philosophy like
-the service implementation. As mentioned earlier different bounded
+Data Management in a microservice follows the same modular philosophy
+like the service implementation. As mentioned earlier different bounded
 contexts make different assumptions of the underlying models. A
 \emph{browsernative microservices} takes this idea even further and
 expands it to the fragmented world of electronic devices. Decentralized
@@ -494,7 +490,10 @@ increasing amout of processing to the client to avoid time-consuming
 roundtrips especially in mobiles networks.\footnote{Latency numbers:
   https://gist.github.com/jboner/2841832} Since network roundtrips are
 costly it is a good advice to only query as much data as needed and
-cache as much as possible.
+cache as much as possible. The build-in LocalStorage or its successor
+IndexedDB are mature persistence technologies and libraries like
+PouchDB\footnote{\href{https://pouchdb.com/}{PouchDB}} even offer
+backend syncing out of the box.
 
 ``Microservices prefer letting each service manage its own
 database.''{[}Fowler2014{]} Ben Issa, chief architect of ING Australia
@@ -515,13 +514,10 @@ Transactor ensures ACID compliance.
 
 The simplified microservice example later in this paper assumes a
 generic build-in API accompanied by build-in frontend components.
-Instead of gluing frontend and backend together on runtime, the
+Instead of gluing frontend and backend together on runtime the
 microservice is designed holistically containing both front- and
-backends. To reduce network calls especially for mobile devices it is a
-good advice to cache data (f.e. in a global Service Worker). Revamping
-offline capabilities even further data can be stored in a browser based
-database like PouchDB. For the sake of simplicity data management won't
-be explored into depth throughout this paper.
+backends. For the sake of simplicity data management won't be explored
+into depth throughout this paper.
 
 \subsection{Infrastructure Automation}\label{infrastructure-automation}
 
@@ -557,8 +553,8 @@ Every check-in is handled as release candidate and can be independently
 deployed by a fully automated deployment machinery.{[}8{]} Even though
 this example is an opinionated perception it gives a sense of a mature
 component build for the web. Due to an exhaustive amount of testing and
-deployment tools for the browser an automated infrastructure shouldn't
-be a problem.
+deployment tools for JS an automated infrastructure shouldn't be a
+problem.
 
 \subsection{Design for failure}\label{design-for-failure}
 
@@ -621,7 +617,7 @@ way we develop for the web. New approaches like the virtual DOM approach
 found their way into mainstream web development followed by frameworks
 and libraries.
 
-\emph{Browsernative Microservices} should be perceived as complementary
+\emph{Browsernative microservices} should be perceived as complementary
 technology. Contrary to Angular, React and other frameworks they have a
 strong interop with existing systems and can be used with them together.
 
@@ -649,7 +645,7 @@ Depending on the context, some people argue for only two specs which
 essentially make it possible to create a scoped component but not caring
 too much on it's distribution{[}11{]}. Some people prefer the three
 specs {[}12{]}, but the majority advocating the four specs variant,
-which is listed on \sout{the official}
+which is listed on the quasi-official
 \href{http://webcomponents.org}{webcomponents.org} website. For the
 purpose of this article, all four specs will be discussed briefly to
 provide a rough understanding. It is not meant to cover all bits and
@@ -1315,8 +1311,6 @@ required fields for sign in, shipping, billing and summarizing the
 order. In the spirit of microservices we will split up the microservice
 into fine grained components. The shopping cart data is pulled out of a
 local storage JSON entity set up previously by another custom-element.
-Another in-memory opportunity is storing the data in the build-in
-database IndexedDB.
 
 \subsection{Checkout microservice}\label{checkout-microservice}
 
@@ -1595,10 +1589,10 @@ new architectural term,'' Jan. 2014 {[}Online{]}. Available:
 {[}Online{]}. Available:
 \url{http://programmer.97things.oreilly.com/wiki/index.php/The_Single_Responsibility_Principle}
 
-\hypertarget{ref-Rauschmayer2015}{}
-{[}6{]} D. A. Rauschmayer, ``Tree-shaking with webpack 2 and babel 6.''
-2015 {[}Online{]}. Available:
-\url{http://www.2ality.com/2015/12/webpack-tree-shaking.html}
+\hypertarget{ref-Kearney2016}{}
+{[}6{]} M. Kearney, ``Measure performance with the rail model.'' 2016
+{[}Online{]}. Available:
+\url{https://developers.google.com/web/fundamentals/performance/rail}
 
 \hypertarget{ref-Conway1968}{}
 {[}7{]} M. E. Conway, ``How do committees invent?'' 1968 {[}Online{]}.
