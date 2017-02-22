@@ -150,31 +150,30 @@ company/organization will be highly determined by the current state in
 the need of ``keeping the lights on''.
 
 On the other side of this dystopian scenario, the truly modular system
-architecture abandons many of those inconsistencies. The whole system is
-divided in pluggable parts, object mutation is either traceable or
-avoided altogether in favor of immutable data structures. As Rich Hickey
-argues, design decisions should be made under the \textbf{impression of
-extending, substitution, moving, combining and repurposing}. The ability
-to reason about the program at any given time is crucial for future
-decisions and implementations. Recalling again the unidimensional nature
-of simplicity.
+architecture abandons many of those potential inconsistencies. The whole
+system is divided in pluggable parts, object mutation is either
+traceable or avoided altogether in favor of immutable data structures.
+As Rich Hickey argues, design decisions should be made under the
+\textbf{impression of extending, substitution, moving, combining and
+repurposing}. The ability to reason about the program at any given time
+is crucial for future decisions and implementations. Recalling again the
+unidimensional nature of simplicity.
 
 Simplicity in ``the web'', read as a loose generalization of
 ``everything that runs in the browser'', is certainly a story full of
-misconceptions and will be explained further along. While simplicity in
-the backend is mostly a matter of principles and patterns, any
-browser-based frontend is restricted on the highly deterministic nature
-of the browser platform.
+misconceptions. While simplicity in the backend is mostly a matter of
+principles and patterns, any browser-based frontend is restricted on the
+highly deterministic nature of the browser platform.
 
 In the last four years the average transfer size of a webpage doubled to
 currently around 2.5 MB.\footnote{\href{http://httparchive.org/trends.php}{HTTPArchive
-  Trends}} Subtracting images, fonts or other content the size of HTML,
-CSS and JS sums up to a total average of 550 kb. One character weights
-around 1 byte which means an average webpage is delivering 550.000
-character or around 125 pages of single-spaced text. Frederic Filloux
-analyzed the payload on different newspaper websites and came to the
-conclusion, that only round about 5-6 \% of the transferred characters
-made for human consumption.{[}1{]}
+  Trends}} Leaving images, fonts or other content aside the size of
+HTML, CSS and JS sums up to a total average of 550 kb. One character
+weights around 1 byte which means an average webpage is delivering
+550.000 character or around 125 pages of single-spaced text. Frederic
+Filloux analyzed the payload on different newspaper websites and came to
+the conclusion, that only round about 5-6 \% of the transferred
+characters made for human consumption.{[}1{]}
 
 Having an 95 \% overhead is rather undesirable for both the consumers
 and creators of the website. Since it's a widespread problem without a
@@ -224,20 +223,10 @@ code and less additional libraries. This paper is an approach to unfold
 these \textbf{browsernative} technologies to create overall simple and
 resilient \textbf{microservices} for the browser
 
-\emph{Disclaimer:} This paper introduces many new browser build-ins with
-the focus on try and test. As the time of writing, many examples can be
-tried frictionless in the console of the latest versions of
-\textbf{Google Chrome, Opera and Apple Safari}.\footnote{\href{http://jonrimmer.github.io/are-we-componentized-yet/}{Are
-  we componentized yet?}} On Mozilla Firefox technologies work behind a
-flag and Microsoft Edge implementation is unfortunately far behind. But
-Browser implementation changes quickly and soon technology adoption
-won't be an issue. Meanwhile new standards can be used through
-\textbf{polyfills} even on legacy browsers.
-
 \section{Microservices}\label{microservices}
 
-In search of a better, simpler web architecture we might look on already
-established pattern that proofed to fulfill enterprise needs.
+In search of a better, simpler web architecture one might look on
+already established pattern that proofed to fulfill enterprise needs.
 Microservices are a good approach for tearing big monolithic systems
 into fine-grained simple services with explicit defined boundaries. In a
 nutshell a microservice is a small, autonomous service that works
@@ -245,19 +234,19 @@ together with other services seamlessly.{[}3, p. 2{]} Or with the words
 of Fowler and Lewis: ``\ldots{} the microservice architectural style is
 an approach to developing a single application as a suite of small
 services, each running in its own process and communicating with
-lightweight mechanisms, often an HTTP resource API.''{[}4{]} Just yet at
-this point a reader might spot some similarities with microservices and
-the browser-based development: Both wrestling the problem of monolithic
+lightweight mechanisms, often an HTTP resource API.''{[}4{]} Yet at this
+point a reader might spot some similarities with microservices and the
+browser-based development: Both wrestling the problem of monolithic
 architecture and both using lightweight communication mechanisms. In
 fact, many big companies of ``the web'' like Amazon or Netflix
 successfully transformed their monolithic system into a service based
-system which gives a glimpse of the power behind microservices.{[}4{]}
+system which gives a taste of the power behind microservices.{[}4{]}
 
-Microservices incorporate many ideas from developing scalable software,
-like \emph{domain-driven design} where it pursues the incorporation of
-real world structure in the code.{[}3, p. 2{]} Or making use of
-\emph{continuous delivery} for pushing software rapidly through
-\emph{automated deployment} mechanisms into production.{[}4{]}
+Microservices incorporate a wide array of ideas from developing scalable
+software, like \emph{domain-driven design} where it pursues the
+incorporation of real world structure in the code.{[}3, p. 2{]} Or
+making use of \emph{continuous delivery} for pushing software rapidly
+through \emph{automated deployment} mechanisms into production.{[}4{]}
 Furthermore, microservices transcendent the technical perspective and
 reaches into the team organization. As a primary source of truth this
 paper relies on the work of Sam Newman, who has written a comprehensive
@@ -360,9 +349,9 @@ splitting team structures along the technology stack (UI Experts
 approach model teams around \textbf{business capabilities}.{[}4{]}
 Consequently every team is capable of planning, designing, implementing,
 testing and maintaining their very own microservice. Along the
-technology stack every member gains high competence about the
-functionality of the service architecture which can be critical for
-evolving the service over its whole lifecycle.
+technology stack every member gains high competence about the the
+service architecture which can be critical for evolving the service over
+its whole lifecycle.
 
 Real-world domains tend to be complex and multifaceted. To unfold their
 complexity, domains can subdivided into \textbf{bounded context}.{[}3,
@@ -372,31 +361,35 @@ be support. Every context makes different assumptions about the
 underlying model and draws an explicit interface where it decides what
 to share with other contexts.{[}3, p. 30{]} Evaluating each bounded
 context within each business domain will eventually shape the data
-structures and services in question. This methodology can be iterated
-over and over again. A sales service for example might be evaluated to
-different sales context resulting in differing interfaces on devices
-shaped by browsernative microservices.
+persistency model likewise the interface to the service. This
+methodology can be iterated over and over again. A sales service for
+example might be evaluated to different sales context resulting in
+differing interfaces on differing devices shaped by browsernative
+microservices. By focusing the service into clear defined business
+boundaries, it is easier to define a smart API of the service.
 
-By assigning service responsibility to a team, the so called
+Assigning service responsibility to a team, the so called
 \textbf{Definition of Done} (DoD) shifts from ``accomplishing projects''
 to ``accomplishing products''. This new paradigm not only changes the
 administrative overhead like budgeting or resource allocation. It
-creates a kind of responsibility connection from the team to the
-service. Expectedly, those teams are more motivated within their very
-own service and exhibit a more sophisticated iteration time.{[}4{]}
+creates a kind of responsibility connection from the team to the service
+which can be best described as \textbf{shared governance} model. ``Each
+team collectively share responsibility for evolving the technical vision
+of the system.''{[}3, p. 247{]} Expectedly, those teams are more
+motivated within their very own service and exhibit a more sophisticated
+iteration time.{[}4{]}
 
 For many companies working in the spheres of the internet the client
 side is highly important for their business. In fact, business goals and
-capabilities can be derived from the front-end needs. The state of the
-web is not only a story of numerous artifacts, it is also a story of an
-highly fragmented market along devices, operating systems, differing
-sizes and functionalities. Different devices again have different
-assumptions about the technology stack. Splitting teams along the stack
-results in an slow paced back and forth negotiation for every change to
-be made. As browser technologies, design guidelines and devices change
-frequently it makes absolutely sense to shift responsibility towards the
-teams altogether. By focusing the service into clear defined business
-boundaries, it is easier to define a smart API of the service.
+capabilities can be derived from frontend needs. The state of the web is
+not only a story of numerous artifacts, it is also a story of an highly
+fragmented market along devices, operating systems, differing sizes and
+functionalities. Different devices again have different assumptions
+about the technology stack. Splitting teams along the stack results in
+an slow paced back and forth negotiation for every change to be made
+make iteration time expensive. As browser technologies, design
+guidelines and devices change frequently it makes absolutely sense to
+shift responsibility towards the teams altogether.
 
 \subsection{Smart endpoints and dumb
 pipes}\label{smart-endpoints-and-dumb-pipes}
@@ -416,23 +409,25 @@ this definition and suits arguably well for in-memory communication
 between web components and microservices.
 
 Microservices heavily rely on simple HTTP request-response with resource
-APIs and lightweight messaging.{[}4{]} REST APIs are technology agnostic
-which aligns well with the idea of decentralization.{[}3, p. 247{]} The
-advantage of this overall simple communication model is the suitability
-for both frontend-backend likewise backend-backend communication. A
-service therefore can evolve from an heavy backend with a lot of network
-roundtrips to a leaner backend seamlessly. The browser build-in fetch
-API which is essentially a HTTP request can be heavily incorporated into
-a browsernative microservice to ensure communication between services.
+APIs and lightweight messaging.{[}4{]} Newman puts his stand on
+technologic-agnostic REST APIs to free data persistence from
+implementation constraints.{[}3, p. 247{]} The advantage of this overall
+simple communication model is the suitability for both frontend-backend
+likewise backend-backend communication. A service therefore can evolve
+from an heavy backend with a lot of network roundtrips to a leaner
+backend seamlessly. The browser build-in \textbf{fetch API} which is
+essentially a HTTP request can be heavily incorporated into a
+browsernative microservice to ensure communication to services in the
+backend.
 
 \subsection{Decentralized Governance}\label{decentralized-governance}
 
 Microservices are separate entities and decentralization is important to
-ensure autonomy. Distributed service responsibility owned by the team
-promoting shared governance and technology agnostic communication
-channels work towards a mostly decoupled service architecture.
+ensure autonomy. This paper already described fragmented services
+bounded to singular business context choreographed by simple
+communication protocols developed and evolved by autonomous teams.
 
-This distributed nature allows teams to create their own technology
+This distributed nature empowers teams to create their own technology
 stack, tools and services designed in the spirit of language- and
 platform independence and share their knowledge with other
 parties.{[}4{]} In the recent years many big companies like Facebook,
@@ -447,32 +442,35 @@ The spirit of freedom can't be applied universally to
 will be the limitation factor to a certain degree. Talking about the
 browser, a reader might be tempted to narrowly thinking of the obvious
 VIEW layer only - which is not true anymore. In the recent years the
-browser engines grows to a kind of virtual machine: there are connectors
-to build-in databases, multithreading support, an ever-growing JS
-build-ins and even speech synthesis. So-called \emph{Progressive Web
-Apps\footnote{\href{https://developers.google.com/web/progressive-web-apps}{Progressive
-  Web Apps}}}, a bunch of criteria for building good browserapps, can
-achieve a similar look and feel like native apps. Services like
-NativeScript\footnote{\href{https://www.nativescript.org}{NativeScript}},
-effectively compiling ``the web'' to native code, lower the boundary
-between native and browser code even further.
+major browser engines grow to to a fully-fledged app deployment platform
+offering connectors to build-in databases, multithreading support and
+ever-growing JS build-ins like speech synthesis or push notifications.
+So-called \emph{Progressive Web Apps\footnote{\href{https://developers.google.com/web/progressive-web-apps}{Progressive
+  Web Apps}}}, a bunch of criteria for building good browser apps, can
+achieve a similar look and feel like native apps. And last but not least
+services like NativeScript\footnote{\href{https://www.nativescript.org}{NativeScript}}
+effectively compiling ``the web'' to native machine code lowering the
+boundary between native and browser code even further.
 
 JS is the widely accepted language of the web. Nevertheless, a
 microservice engineering team might choose another language for various
-reasons. Transpiling languages to JS as target language isn't exotic
-anymore. Languages like TypeScript, ClojureScript or PureScript compile
-to JS even exclusively. Once web components hit a critical mass there
-will be most likely some library support or foreign function interface
-towards ES6 modules (which are mandatory for the new specifications).
-With the rise of WebAssembly, a new low-level programming language for
-the browser, the determination on JS will hypothetical deteriorate and
-new quasi native languages for the web might gain traction.
+reasons. Transpiling languages to JS as target language is a stable
+solution nowadays. Languages like TypeScript, ClojureScript or
+PureScript compile to JS even exclusively. Once web components hit a
+critical mass there will be most likely some library support or foreign
+function interface towards ES6 modules (which are mandatory for the new
+specifications). With the rise of WebAssembly, a new low-level
+programming language for the browser, the determination on JS will
+hypothetical deteriorate and new quasi native languages for the web
+might gain traction.
 
 Another more real life decentralization aspect derives from the easiness
 of deployment in a safe, sandboxed environment. Web components virtually
-ship no overhead or require obscure build tools. This makes them ideal
-candidates for sharing and open source publishing.
-Webcomponents.org\footnote{\href{https://webcomponents.org}{Webcomponents.org}}
+ship no overhead or require dedicated build tools. This makes them ideal
+candidates for sharing and open source publishing similar to the largest
+JS package registry NPM. In the spirit of NPM web components can be
+perceived as frontend packages with an HTML interface instead of a JS
+signature. Webcomponents.org\footnote{\href{https://webcomponents.org}{Webcomponents.org}}
 is a registry for ready-to-use components of every scale and purpose
 where for even Google shares a lot of their material design elements.
 
@@ -493,7 +491,7 @@ costly it is a good advice to only query as much data as needed and
 cache as much as possible. The build-in LocalStorage or its successor
 IndexedDB are mature persistence technologies and libraries like
 PouchDB\footnote{\href{https://pouchdb.com/}{PouchDB}} even offer
-backend syncing out of the box.
+backend adapters for syncing out of the box.
 
 ``Microservices prefer letting each service manage its own
 database.''{[}Fowler2014{]} Ben Issa, chief architect of ING Australia
@@ -521,17 +519,32 @@ into depth throughout this paper.
 
 \subsection{Infrastructure Automation}\label{infrastructure-automation}
 
+Microservices tend to increase complexity as this model adds a sheer
+number of moving parts to the system whereas requires proper
+orchestration.{[}3, p. 246{]} Arguably every more sophisticated web
+developer already came across build tools like Webpack or infrastructure
+automation tools like Gulp. Testing and deploying web components
+shouldn't be an obstacle in development.
+
 In the global nature of web development the development couldn't
 completely decoupled from the production environment. This circumstance
 left developers switching back and forth between files developing tricky
 opinionated (and more often biased) ways to glue related parts together.
-With scoped components, code blocks can be developed more sane and
-conveyed into production without headache. Even more, in the scripted
-environment of the browser this can be implemented rapidly and
-continuous.
+Bret Victor, UI designer at Apple defined the importance of an
+\emph{immediate feedback principle} for developing user
+interfaces.\footnote{\href{https://vimeo.com/36579366}{Bret Victor -
+  Inventing on Principle}} In his talk he emphasizes the importance of
+an immediate connection between the creator of a product and product
+itself. Any change must results in an immediate visible feedback. Web
+components catch up with this principle as they allow isolated
+development within a single file containing all bits and pieces of the
+web component. Every major browsers devtools offer a direct file
+manipulation functionality so development can take place directly in
+place.
 
-Previously mentioned Ben Issa, described the ING standard workflow.
-Every component deserves a own \textbf{git repo} containing
+When it comes to standardized deployment guidelines previously mentioned
+Ben Issa, described the ING standard workflow. Every component deserves
+a own \textbf{git repo} containing
 
 \begin{itemize}
 \tightlist
@@ -549,12 +562,13 @@ Every component deserves a own \textbf{git repo} containing
   Docs
 \end{itemize}
 
-Every check-in is handled as release candidate and can be independently
-deployed by a fully automated deployment machinery.{[}8{]} Even though
-this example is an opinionated perception it gives a sense of a mature
-component build for the web. Due to an exhaustive amount of testing and
-deployment tools for JS an automated infrastructure shouldn't be a
-problem.
+This example should made clear that synthetic tests of the component are
+part of the service right from the start. Every check-in is handled as
+release candidate and can be independently tested and deployed by a
+fully automated machinery.{[}8{]} Even though this example is an
+opinionated perception it gives a sense of a mature component build for
+the web. Due to an exhaustive amount of testing and deployment tools for
+JS an automated infrastructure shouldn't be a problem.
 
 \subsection{Design for failure}\label{design-for-failure}
 
@@ -650,6 +664,16 @@ which is listed on the quasi-official
 purpose of this article, all four specs will be discussed briefly to
 provide a rough understanding. It is not meant to cover all bits and
 pieces.
+
+\emph{Disclaimer:} This paper introduces many new browser build-ins with
+the focus on try and test. As the time of writing, many examples can be
+tried frictionless in the console of the latest versions of
+\textbf{Google Chrome, Opera and Apple Safari}.\footnote{\href{http://jonrimmer.github.io/are-we-componentized-yet/}{Are
+  we componentized yet?}} On Mozilla Firefox technologies work behind a
+flag and Microsoft Edge implementation is unfortunately far behind. But
+Browser implementation changes quickly and soon technology adoption
+won't be an issue. Meanwhile new standards can be used through
+\textbf{polyfills} even on legacy browsers.
 
 \subsection{\texorpdfstring{Custom Elements
 \href{http://w3c.github.io/webcomponents/spec/custom/}{(w3c)}}{Custom Elements (w3c)}}\label{custom-elements-w3c}
@@ -1288,7 +1312,7 @@ based interface} with the main thread.
 microservice}\label{building-an-browsernative-microservice}
 
 After getting confidence in microservice principles and technical
-background the paper should bring them both together to form a
+background the paper should briefly join them to form a
 \emph{browsernative microservices}. Needless to say the described
 example is overall simplified to only illustrate the connection between
 browsernative technologies and microservice patterns. Googles library
@@ -1298,23 +1322,25 @@ proof of concept is the so-called
 \href{https://shop.polymer-project.org/}{Polymer Shop} which is a
 fully-fledged online shop nested within a single root element
 \texttt{\textless{}shop-app\textgreater{}}. This app made of several
-main views and many more invisible custom elements for routing, service
+main views and many more invisible wrapper elements for routing, service
 worker caching, theming, etc. The whole shop runs as a single
-application only fetching and sending resources and switching views.
+application fetching and updating remote resources and switching views.
 Let's assume we work in a sales engineering team of the Polymer Shop and
 need to rebuild the checkout microservice.
 
 The current checkout can be found at
 https://shop.polymer-project.org/checkout. Currently the checkout is a
-single, 671 lines of code long Polymer component incorporation all
-required fields for sign in, shipping, billing and summarizing the
-order. In the spirit of microservices we will split up the microservice
-into fine grained components. The shopping cart data is pulled out of a
-local storage JSON entity set up previously by another custom-element.
+single, 671 lines of code long Polymer component including all required
+fields for sign in, shipping, billing and summarizing the order. In the
+spirit of microservices we will split up the microservice into fine
+grained components. The shopping cart data is pulled out of a local
+storage JSON entity set up previously by another custom-element.
 
 \subsection{Checkout microservice}\label{checkout-microservice}
 
-Like a usual checkout this example has 3 to 4 steps:
+By breaking down the service the team defined the business boundaries
+within the checkout process and ended up with following granular service
+blocks:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1352,9 +1378,9 @@ fulfil its work following the high cohesion principle. Each component
 may contain different views to accommodate different bounded contexts
 resulting from different devices. And last but not least, all of them
 communicate over an unobstrusive message bus via the service root
-component \texttt{shop-checkout}.
+component \texttt{\textless{}shop-checkout\textgreater{}}.
 
-Before diving deeper into implementation, its worth to clarify the
+Before diving deeper into implementation, its worth to clarify an
 \textbf{architectural pattern} behind components. Any reader of the
 paper came across ReactJS / Redux, the concept of components may look
 familiar. Dan Abramov, the creator of Redux, once defined a simple
@@ -1373,192 +1399,196 @@ different demands.
 Secondly, Abramov described components he refers as \textbf{containers}.
 A container component is concerned with \emph{how things work}.{[}17{]}
 Containers acts as invisible wrappers around presentational components
-acting more in the sense of UNIX filters. Their job is to fetch data
-from child nodes, aggregating events, interacting with the model and
-push state back to the presentational components. Consequently, they
-might contain more JS and less, if any, HTML markup. We probably don't
-need to utilize ShadowDOM as no styles are involved.
+acting in the sense of UNIX filters. Their job is to fetch data from
+child nodes, aggregating events, interacting with the model and push
+state back to the presentational components. Consequently they might
+contain more JS and less if any HTML markup. We probably don't need to
+utilize ShadowDOM as no styles are involved.
 
-Last but not least, there are \textbf{build-in components}, which is
-every build-in HTMLElement like the HTMLButtonElement. They are solely
-controllable and styleable from the outside and must therefore wrapped
-in presentational components and/or containers.
+Last but not least, we can expand the model for illustrational purposes
+to \textbf{native components} which is every build-in HTMLElement like
+the HTMLButtonElement. They are solely controllable and styleable from
+the outside and must therefore wrapped in presentational components
+and/or containers.
 
 Lets start the service description top-down beginning with the
 \textbf{root container} managing the overall service.
 
 \subsubsection{Root container}\label{root-container}
 
-The root container \texttt{shop-checkout} is basically just an
-encapsulation layer in terms of service functionalities. Encapsulation
-of CSS won't be necessary at this point as no styling is involved. On
-initialization the \texttt{shop-checkout} might perform following tasks:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Importing child components with \textbf{HTML Imports}
-\item
-  Initialize the service in a logical top to bottom order like in the
-  snippet above
-\item
-  Initializing a \textbf{model thread} with
-  \texttt{new\ Worker(\textquotesingle{}checkout-model.js\textquotesingle{})};
-\item
-  Setting up a \texttt{postMessage} stub to dispatch messages to the
-  model
-\item
-  Setting up an event listener for messages from the model
-\item
-  Setting up an event listener for \textbf{custom events} from the child
-  nodes
-\end{enumerate}
-
-On runtime the root container acts mostly like a \textbf{message
-dispatcher} implementing the microservice idea of smart endpoints and
-dumb pipes.
-
-Every custom child node is eligible aggregate subordinate events from
-their children, buffer them and interact with the model trough via a
-\textbf{dumb message system}. To talk to the model any child node can
-dispatch a \textbf{unified event containing a unified message object}
-like the following example illustrates:
+The root container \texttt{\textless{}shop-checkout\textgreater{}} is
+basically just an encapsulation layer in terms of service
+functionalities. Encapsulation of CSS won't be necessary at this point
+as no styling is involved. The simplified root container might look like
+the following code snippet
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{// Within every child node class}
-\NormalTok{set }\AttributeTok{dispatch}\NormalTok{(msg) }\OperatorTok{\{}
-  \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(}
-    \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'checkout'}\OperatorTok{,} \OperatorTok{\{}
-      \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,}
-      \DataTypeTok{detail}\OperatorTok{:} \NormalTok{msg}
+\NormalTok{> shop-checkout.html}
+\CommentTok{<!-- IMPORTS -->}
+\KeywordTok{<link}\OtherTok{ rel=}\StringTok{"import"}\OtherTok{ href=}\StringTok{"sign-in.html"}\OtherTok{ async}\KeywordTok{>}
+\NormalTok{...}
+\CommentTok{<!-- VIEW -->}
+\KeywordTok{<shop-checkout>}
+  \KeywordTok{<sign-in></sign-in>}
+  \NormalTok{...}
+\KeywordTok{</shop-checkout>}
+
+\CommentTok{<!-- CONTROLLER -->}
+\KeywordTok{<script>}
+\KeywordTok{class} \NormalTok{ShopCheckout }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+    \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{MODEL} \OperatorTok{=} \KeywordTok{new} \AttributeTok{Worker}\NormalTok{(}\StringTok{'checkout-model.js'}\NormalTok{)}\OperatorTok{;}
+  \OperatorTok{\}}
+  
+  \AttributeTok{connectedCallback}\NormalTok{() }\OperatorTok{\{}
+    \CommentTok{// listen to msg from MODEL}
+    \KeywordTok{this}\NormalTok{.}\VariableTok{MODEL}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'message'}\OperatorTok{,} \NormalTok{[Msg Handler])}
+    \CommentTok{// listen to child nodes}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'checkout'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>} \OperatorTok{\{}
+      \CommentTok{// delegate event to handler}
+      \KeywordTok{this}\NormalTok{.}\AttributeTok{_sendToMODEL} \OperatorTok{=} \NormalTok{e}\OperatorTok{;} 
     \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-  \NormalTok{)}\OperatorTok{;}
-\OperatorTok{\}}
+  \OperatorTok{\}}
+  
+  \NormalTok{set }\AttributeTok{_sendToMODEL}\NormalTok{(e) }\OperatorTok{\{}
+    \KeywordTok{const} \NormalTok{id }\OperatorTok{=} \VariableTok{e}\NormalTok{.}\VariableTok{target}\NormalTok{.}\AttributeTok{id}\OperatorTok{,} 
+          \NormalTok{name }\OperatorTok{=} \VariableTok{e}\NormalTok{.}\VariableTok{target}\NormalTok{.}\AttributeTok{localName}\OperatorTok{,}
+          \NormalTok{load }\OperatorTok{=} \VariableTok{e}\NormalTok{.}\AttributeTok{detail}\OperatorTok{,}
+          \NormalTok{letter }\OperatorTok{=} \VariableTok{Object}\NormalTok{.}\AttributeTok{assign}\NormalTok{(}\OperatorTok{\{\},} \OperatorTok{\{} \NormalTok{id}\OperatorTok{,} \NormalTok{name}\OperatorTok{,} \NormalTok{load }\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+    \CommentTok{// send to MODEL}
+    \KeywordTok{this}\NormalTok{.}\VariableTok{MODEL}\NormalTok{.}\AttributeTok{postMessage}\NormalTok{(letter)}\OperatorTok{;} 
+  \OperatorTok{\}}
+  \NormalTok{...}
+\OperatorTok{\}}    
+\VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'shop-checkout'}\OperatorTok{,} \NormalTok{shopCheckout)}\OperatorTok{;}
+\OperatorTok{<}\SpecialStringTok{/script>}
 \end{Highlighting}
 \end{Shaded}
 
-Calling \texttt{this.dispatch(msg)} within a child node will trigger an
-event bubbling upstream. The service root will implement a simple event
-listener for \texttt{checkout} events. In a second step the service root
-add information about the original target (like
-\emph{tag-name\#id.className}) to the message so the message can be
-processed in the model thread and eventually pushed back correctly to
-the sender.
+The purpose of this simplified code snippet is to outline the MVC
+threefold in the service root. On runtime the root container acts mostly
+like a \textbf{message dispatcher} implementing the microservice
+principle of smart endpoints and dumb pipes.
 
-Summarizing the unidirectional model-view communication from the service
-root perspective looks like following sketch:
+In order to interact with the MODEL, every child node must implement the
+\textbf{dedicated \texttt{checkout}} custom event (which will be
+explained further on in the next section). Summarizing the
+unidirectional communication from the service root perspective looks
+like following plot:
 
 \begin{verbatim}
-VIEW thread         |           MODEL thread
-                    |
-Checkout ------Event Msg--------->    Msg
-  Event             |                Handler
-                    |                   |
-                    |                Effect
-                    |                   |
-  Msg               |                Postmessage
-Handler <-----Action Msg----------    Action
-                    |                   
-                    |
+VIEW thread                 |               MODEL thread
+                            |
++----------+                |               +----------+
+| Checkout | ----------Event Msg--------->  |  Msg     |
+|  Event   |                |               | Handler  |
++----------+                |               +----------+
+                            |                   |
+                            |                   |
+                            |               +----------+
+                            |               | Generate |
+                            |               |  Effect  |
+                            |               +----------+
+                            |                   |
+                            |                   |
++----------+                |               +----------+
+|  Msg     |                |               | Postmsg  |
+| Handler  | <--------Action Msg----------  |  Action  |
++----------+                |               +----------+    
+                            |
 \end{verbatim}
 
 Effects are yielded by the asynchronous operation of messages and create
-actions returned to sender. Effects can be created by external messages,
-like subscription to an WebSocket, too. Effects may be created with
-additional resources from the server or syncing with local storage like
-in the polymer-shop.
+actions returned to sender by the message handlers. Effects can be
+created by external messages, like subscription to an WebSocket, too.
+Effects may be created with additional resources from the server or
+syncing with local storage like in the polymer-shop.
 
-While the msg handlers are basic ``dumb'' switches the
+While the msg handlers are basic ``dumb'' switch statements the
 \textbf{smartness} solely arouse from intelligent controllers processing
-the message. Every component must implement a \textbf{unified socket} in
-it's service contracts like a property on the custom element:
+the message. This communication model offers lots of possibilities for
+\textbf{evolutionary design} as child nodes can be loosely dropped in
+the service root and communication might \textbf{fail graceful} as
+simply nothing happens if one or another switch is not defined.
+
+\subsubsection{Container components}\label{container-components}
+
+The second layer of the checkout microservice like
+\texttt{\textless{}sign-in\textgreater{}} or
+\texttt{\textless{}shipping-details\textgreater{}} still contain a lot
+of logic and no or less styling. Their job is to control their
+underlying presentational leaf components, aggregating events and to
+define a \textbf{set of actions towards the model} . Every container
+mounted directly under the service root may have a dedicated area inside
+the worker thread where it's fulfil his duties. For example, a typical
+\texttt{\textless{}sign-in\textgreater{}} contains merely two fields
+username and password and a submit button. The component listens for the
+submit action, aggregating the credentials and might add some semantics
+to it like \emph{action: `SIGNIN SUBMITTED'}. Fields and action message
+will be dispatched towards the model for further processing like
+initiating a authorization process.
+
+Every container component is eligible to aggregate subordinate events
+from their children, buffer them and interact with the model trough via
+a \textbf{unified message system}. A base class, from which
+\texttt{\textless{}sign-in\textgreater{}} or
+\texttt{\textless{}shipping-details\textgreater{}} can be extended can
+look like this:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{// Within every child node class}
-\NormalTok{set }\AttributeTok{receive}\NormalTok{(msg) }\OperatorTok{\{}
-  \CommentTok{// do something smart}
+\KeywordTok{class} \NormalTok{CheckoutContainerBase }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+  \KeywordTok{static} \AttributeTok{getActions}\NormalTok{() }\OperatorTok{\{}
+    \ControlFlowTok{return} \NormalTok{[...]}
+  \OperatorTok{\}}
+  \NormalTok{set }\AttributeTok{_dispatch}\NormalTok{(msg) }\OperatorTok{\{}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(}
+      \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'checkout'}\OperatorTok{,} \OperatorTok{\{}
+      \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,}
+      \DataTypeTok{detail}\OperatorTok{:} \NormalTok{msg}
+      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+    \NormalTok{)}\OperatorTok{;}
+  \OperatorTok{\}}
+  \NormalTok{set }\AttributeTok{_receive}\NormalTok{(msg) }\OperatorTok{\{}
+  \CommentTok{// switch to methods}
+    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{localName} \OperatorTok{+} \StringTok{"received msg"}\NormalTok{)}\OperatorTok{;}
+    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(msg)}\OperatorTok{;}
+  \OperatorTok{\}}
 \OperatorTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
-This communication flow is designed to \textbf{fail graceful} as simply
-nothing happens if one or another switch is not defined. Furthermore it
-incorporates lots of possibilities for \textbf{evolutionary design} as
-child nodes can be loosely dropped in or teared apart. Middleware
-container wrappers can be pulled in between child nodes and service root
-to do some extra work and and even the message object can be enhanced
-freely as long as it won't break with the message conventions. Changing
-or enhancing any functionality requires only to touch the controllers in
-the child nodes in question and the endpoint section at the model.
-Furthermore, \textbf{infrastructure automation} might be achieved by
-dynamically evaluating the mounted child nodes and registering the
-``backend'' model switches on build time. Due to it's standardized
-message system the components are testable within standardized tests.
+Extending the \texttt{CheckoutContainerBase} will equipped every
+container node with the unified message interface. Calling
+\texttt{this.\_dispatch(msg)} within a within the container will trigger
+an event bubbling upstream. The service root will implement a simple
+event listener for \texttt{checkout} events. After receiving an answer
+from the MODEL a service root can \texttt{querySelector} the container
+node in question and push forward the answer over the \texttt{\_receive}
+property.
 
-To work in a larger scale, we might define a base component which has
-the default message and socket properties in its guts and extend every
-new element from this base class.
-
-Another yet more powerful approach can be achieved by calculating the
-new shape of the DOM in the worker directly and just patch the DOM in
-the view layer.\footnote{A good example of this approach can be found at
-  \href{http://www.pocketjavascript.com/blog/2015/11/23/introducing-pokedex-org}{Introducing
-  Pokedex}} This approach is certainly more complicated but worth to
-evaluate further more.
+There might be even more middleware containers pulled in between
+presentational leafs and service root component to do some extra work
+without caring about bubbling events altogether. Changing or enhancing
+any functionality requires only to touch the controllers in the
+containers in question and the endpoint section at the model.
+\textbf{Infrastructure automation} might be achieved by dynamically
+evaluating the mounted containers beneath the service root and modeling
+the ``backend'' model accordingly. Due to it's standardized message
+system the containers are testable within standardized tests.
 
 \subsubsection{Presentational
 components}\label{presentational-components}
+
+In comparison to the former presentational component is build mostly
 
 \section{Thinking further}\label{thinking-further}
 
 cohesive HTML JS CSS
 
-Most obvious ist the gathering of all related code under the umbrellar
-of a single HTML tag.
-
-Secondly, the sub-standard \emph{custom elements} introduces so called
-lifecycle methods and a getter/setter interface exposing the
-functionality to the developer. Event handling, for example, can be
-registered in place which is much more declarative than assigning event
-listeners from the outside. Of course, this events can be pushed down to
-nested tags, allowing an increasingly granular system design. This
-approach will be explained further in the upcoming sections.
-
-Following this logic any company, whether it is web-related or not,
-should be devided in units grouped around a destinct business service to
-optimise the workflow. Fowler and Lewis outlines this approach as an
-``alignment of business capabilities''{[}4{]} While this kind of
-structure may be true for companies like Google or Amazon, there is a
-vast majority of companies developing for the web which are grouped
-around tasks.{[}8{]} A very common structure is formed by the technology
-stack (UX Designers, Frontend- \& Backend Developers) or by separating
-teams along the product lifecycle (development, testing, deployment).
-
-Advocators from the microservice approach propose a different model.
-best described by . Web components are one (but important) way to tie up
-those diciplines as one component can host a single independent business
-service. Combined with a flexible backend service these components can
-be huge gain over the cumbersome functional organizational approach.
-
-dichotome Pattern
-
-Ein üblicher eventgesteuerter Webservice setzt sich aus
-unterschiedlichsten Komponenten zusammen, die wiederum
-unterschiedlichste Eventlistener \& -emitter in sich subsummieren. Diese
-inhärente Komplexität verlangt geradezu nach einer klaren,
-deterministischen Struktur des Webservices, die das Zusammenspiel
-orchestriert. In der Analogie des Orchesters gesprochen, benötigt der
-Webservice (oder sogar die gesamte Webapplikation) einen Dirigenten, der
-für die Steuerung verantwortlich ist.
-
-http://alistair.cockburn.us/Hexagonal+architecture
-
-MVC Pattern
-
-Pure frontend vs heavy backend
+virtual DOM
 
 \hypertarget{refs}{}
 \hypertarget{ref-Filloux2016}{}
