@@ -203,25 +203,24 @@ favor of an additional layer of abstracted JS components (containing
 content, markup and styling). Quiet often those frameworks mimic a MVC
 pattern on top of the browser engine which is a reasonable simple design
 pattern to build graphical user interfaces. While frameworks are a valid
-approach to build scalable web applications they remain highly
+approach for building scalable web applications they remain highly
 opinionated, embody inherent complexity themselves and can change and
 break over time. Another downside is code inflation which is a crucial
-point for performance and third-party libraries are no exception on
-that. A standardized way for creating complex UI interfaces painlessly
-requires new build-in browser capabilities.
+point for performance. All of those bottlenecks in the web demand for a
+new standardized way for creating and evolving complex web services.
 
 In the year 2013 thinkers, creators and browser vendors joined together
 to propose \emph{The Extensible Web Manifesto}.\footnote{\href{https://extensiblewebmanifesto.org/}{The
-  Extensible Web Manifesto}} The claim of the manifesto was to enhance
-the current web platforms with new low-level capabilities. Those
-features should empower creators of the web to write more declarative
-code and therefore overcome known bottlenecks and artificial
-abstractions. Four years later, the enhancement of JavaScript
-leapfrogged and many new low-level APIs brought to life. With this new
-APIs at hand a vivid web developer can create robust websites with less
-code and less additional libraries. This paper is an approach to unfold
-these \textbf{browsernative} technologies to create overall simple and
-resilient \textbf{microservices} for the browser
+  Extensible Web Manifesto}} The manifestos claim was to enhance the
+current web platforms with new low-level capabilities. Those features
+should empower creators of the web to write more declarative code and
+abandon known problems and artificial abstractions. Four years later,
+the enhancement of JavaScript leapfrogged and many new low-level APIs
+brought to life. With this new APIs at hand a vivid web developer can
+create robust websites with less code and less additional libraries.
+This paper is an approach to unfold these \textbf{browsernative}
+technologies to create overall simple and resilient
+\textbf{microservices} for the browser
 
 \section{Microservices}\label{microservices}
 
@@ -289,14 +288,13 @@ An arbitrary threefold MVC system should require a maximum of three
 changes to implement or change functionalities. The problem in browser
 based development is not only the global paradigm which makes changes
 deliberately unpredictable. The high cohesion principle is violated by
-the traditional separation along the technological entities
-\textbf{HTML, JS and CSS}. Understanding the relation of HTML markup and
-another CSS file adds incidental complexity. Different approaches
-emerged over the recent years to join the forces. Most notable the
-dedicated frontend language \emph{elm}\footnote{\href{http://elm-lang.org/}{elm
-  lang}} where model, view and controller sit in one place. A
-browsernative service aims for a combinement of the web native trinity
-HTML, JS and CSS.
+the traditional separation along the siloed entities \textbf{HTML, JS
+and CSS}. Understanding the relation of HTML markup and another CSS file
+adds incidental complexity. Different approaches emerged over the recent
+years to join the forces. Most notable the dedicated frontend language
+\emph{elm}\footnote{\href{http://elm-lang.org/}{elm lang}} where MODEL,
+VIEW and CONTROLLER sit in one place. A browsernative service aims for a
+combinement of the web native trinity HTML, JS and CSS.
 
 Traditional web development relies on \textbf{libraries} to enhance the
 service capabilities of the web platform. Compared to libraries, a
@@ -409,7 +407,7 @@ this definition and suits arguably well for in-memory communication
 between web components and microservices.
 
 Microservices heavily rely on simple HTTP request-response with resource
-APIs and lightweight messaging.{[}4{]} Newman puts his stand on
+APIs and lightweight messaging.{[}4{]} Newman puts his recommendation on
 technologic-agnostic REST APIs to free data persistence from
 implementation constraints.{[}3, p. 247{]} The advantage of this overall
 simple communication model is the suitability for both frontend-backend
@@ -538,9 +536,8 @@ an immediate connection between the creator of a product and product
 itself. Any change must results in an immediate visible feedback. Web
 components catch up with this principle as they allow isolated
 development within a single file containing all bits and pieces of the
-web component. Every major browsers devtools offer a direct file
-manipulation functionality so development can take place directly in
-place.
+web component. Every major browser devtool offers a direct file
+manipulation functionality so development can be even in place.
 
 When it comes to standardized deployment guidelines previously mentioned
 Ben Issa, described the ING standard workflow. Every component deserves
@@ -562,38 +559,30 @@ a own \textbf{git repo} containing
   Docs
 \end{itemize}
 
-This example should made clear that synthetic tests of the component are
-part of the service right from the start. Every check-in is handled as
-release candidate and can be independently tested and deployed by a
-fully automated machinery.{[}8{]} Even though this example is an
-opinionated perception it gives a sense of a mature component build for
-the web. Due to an exhaustive amount of testing and deployment tools for
-JS an automated infrastructure shouldn't be a problem.
+Even though this example is an opinionated perception it gives a sense
+of a mature component build for the web. This example should made clear
+that all parts of the component put together in one place. Every
+check-in is handled as release candidate and can be independently tested
+and deployed by a fully automated machinery.{[}8{]} Due to an exhaustive
+amount of testing and deployment tools for JS an automated
+infrastructure shouldn't be a problem.
 
 \subsection{Design for failure}\label{design-for-failure}
 
-In theory a microservice is designed with a lot of emphasizes on
-real-time monitoring for both the architectural elements and business
-relevant metrics.{[}4{]} Due to the modular structure weak points can
-occur in the orchestration of the services. Testing and automation is a
-feasible task but failures may occur in another end users setting
-undetected. Legacy browsers for example remain a problem for enhancing
-websites with new technologies.
+In theory a microservice is designed with focus on monitoring for both
+the architectural elements and business relevant metrics.{[}4{]} Due to
+the modular structure weak points can occur in the orchestration of the
+services. A microservice should track down every communication flow and
+provide defaults and meaningful error messages where communication
+stuck. Testing every single component with predefined synthetic events
+ensures functionality. Nevertheless, browser support may vary and legacy
+browsers remain a general problem for enhancing websites with new
+technologies and therefore demand further configuration.
 
-Regarding the evolution of the web, the ``next billion'' internet users
-most likely using Android, have decent specs mobile phones, use an
-evergreen browser but won't have a reliable internet connection.{[}9{]}
-While \emph{Progressive Enhancement} was once coined on the principle to
-build websites both for Browsers with JS and HTML only, the new
-\emph{Progressive Enhancement} tends towards an ``\textbf{offline
-first}'' build principle. A \emph{Browsernative Microservice} therefore
-not only tries to cache data as much as possible, it should also bring
-in a lot of program logic as described in the previous chapters.
-
-Working in a JS heavy infrastructure demands for optimization to avoid
-unexpected side-effects like the \emph{flash of unstyled content
-(FOUC)}. Googles Polymer propagates the a general-purpose \textbf{PRLP
-pattern}\footnote{\href{https://www.polymer-project.org/1.0/toolbox/server}{PRLP
+Combinment of the resources in the browser always demanded for
+optimization to avoid unexpected side-effects like the \emph{flash of
+unstyled content (FOUC)}. Googles Polymer propagates the a
+general-purpose pattern called \textbf{PRLP}\footnote{\href{https://www.polymer-project.org/1.0/toolbox/server}{PRLP
   pattern}}:
 
 \begin{itemize}
@@ -608,11 +597,22 @@ pattern}\footnote{\href{https://www.polymer-project.org/1.0/toolbox/server}{PRLP
   Lazy-load and create remaining routes on demand
 \end{itemize}
 
-Following this pattern a critical resource can detect browser
-functionalities beforehand and switch to a \textbf{polyfill} instead of
-the latest browser optimized version. After the initial paint, critical
-resources like top-level microservices or other app logic can be loaded
-and registered.
+Following this pattern a critical resource can evaluate browser maturity
+beforehand and switch to a \textbf{polyfill} or another fallback
+solution instead of the latest browser optimized version. After the
+initial paint, critical resources like top-level microservices or other
+app logic can be loaded and registered.
+
+Regarding the evolution of the web, the ``next billion'' internet users
+most likely using Android, have decent specs mobile phones, use an
+evergreen browser but won't have a reliable internet connection.{[}9{]}
+While \emph{Progressive Enhancement} was once coined on the principle to
+build websites both for Browsers with JS and HTML only, the new
+\emph{Progressive Enhancement} tends towards an \textbf{offline first}
+principle avoiding network connectivity failures. A \emph{browsernative
+microservice} therefore not only tries to cache data as much as
+possible, it should also bring in a lot of program logic as described in
+the previous chapters.
 
 \subsection{Evolutionary Design}\label{evolutionary-design}
 
@@ -620,30 +620,29 @@ Microservices tend to become smaller over time. An evolutionary design
 approach puts emphasizes on decomposition and scrapping the service.
 ``The key property of a component is the notion of independent
 replacement and upgradeability.''{[}4{]} Therefore we can safely change
-and chop services. Lazy parts of the system which won't change often
-should be separated from parts undergoing a lot of churn.{[}4{]} Parts
-that needs coupled changes could should be moved together or should be
-even merged.
+and chop services. Lazy components of the system which won't change
+often should be separated from parts undergoing a lot of churn.{[}4{]}
+And services which change for the same reason might be moved together or
+even could be merged.
 
-This flexible approach fits good in the world of browser based
-development. In the last decade we have seen a lot of of changes in the
-way we develop for the web. New approaches like the virtual DOM approach
-found their way into mainstream web development followed by frameworks
-and libraries.
+Being flexible when developing for the web is a selling point as
+innovation cycles for browser development is fast paced and technologies
+can change quickly. Frontend related hardware, software and
+methodologies innovate rapidly over time.
 
 \emph{Browsernative microservices} should be perceived as complementary
-technology. Contrary to Angular, React and other frameworks they have a
-strong interop with existing systems and can be used with them together.
-
-Andrew Rota, developer at Wayfair, came up with the idea to compose
-small web components around a managing React system.{[}10{]} As web
-components are native elements there is no difference to use a native
-\texttt{button} or a native \texttt{custom-button}. With this pattern a
-web developer can make use of the encapsulated advantages of web
-components while still making use of the declarative event management
-from various frameworks. Whatever new framework will be on the rise
-within the next years, this approach allows rapid decomposition and
-reassembling towards a new system.
+technology in contrast to full-service frameworks like Angular. Being
+native technology pursues a strong interopt approach with existing
+systems. Andrew Rota for example came up with the pattern to use small,
+encapsulated and stateless web components as leaves in the tree of React
+components instead of native HTML elements.{[}10{]} Even React code can
+profit from the expressiveness of custom components. As web components
+are native after registration there is no difference in using a native
+\texttt{button} over a \texttt{meaningful-button}. Most likely there
+will be always some cutting edge framework promising advantages over
+native code. Whatever new framework will be on the rise within the next
+years native components can eliminate future uncertainty and allowing
+rapid reassembling towards new architectures.
 
 \section{W3C specifications}\label{w3c-specifications}
 
@@ -689,7 +688,7 @@ subsuming behavior, design and functionality. An obligatory
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-  \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory!}
+  \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory in constructor}
   \KeywordTok{this}\NormalTok{.}\AttributeTok{onclick} \OperatorTok{=} \NormalTok{e }\OperatorTok{=>} \AttributeTok{alert}\NormalTok{(}\StringTok{"hello"}\NormalTok{)}\OperatorTok{;}
  \OperatorTok{\}}
 \OperatorTok{\}}
@@ -776,7 +775,6 @@ define custom attributes using the \emph{custom elements'}
 \begin{Highlighting}[]
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
- \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}\NormalTok{...}\OperatorTok{\}}
  \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
   \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
   \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
@@ -860,9 +858,9 @@ would like this:
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-  \NormalTok{...}
-  \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-  \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{'<p>hello</p>'}\OperatorTok{;}
+   \CommentTok{// this.onclick...}
+   \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+   \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{'<p>hello</p>'}\OperatorTok{;}
  \OperatorTok{\}}
 \OperatorTok{\}}
 \end{Highlighting}
@@ -1540,9 +1538,7 @@ look like this:
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{class} \NormalTok{CheckoutContainerBase }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-  \KeywordTok{static} \AttributeTok{getActions}\NormalTok{() }\OperatorTok{\{}
-    \ControlFlowTok{return} \NormalTok{[...]}
-  \OperatorTok{\}}
+  \CommentTok{// static methods for testing...}
   \NormalTok{set }\AttributeTok{_dispatch}\NormalTok{(msg) }\OperatorTok{\{}
     \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(}
       \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'checkout'}\OperatorTok{,} \OperatorTok{\{}
@@ -1590,6 +1586,8 @@ cohesive HTML JS CSS
 
 virtual DOM
 
+declarative event management
+
 \hypertarget{refs}{}
 \hypertarget{ref-Filloux2016}{}
 {[}1{]} F. Filloux, ``Bloated html, the best and the worse,'' 2016
@@ -1606,8 +1604,7 @@ Berlin, Heidelberg: Springer Berlin Heidelberg, 2006, pp. 175--205
 
 \hypertarget{ref-Newman2015}{}
 {[}3{]} S. Newman, \emph{Building microservices}. O'Reilly Media, Inc.,
-2016 {[}Online{]}. Available:
-\url{http://www.ebook.de/de/product/22539693/sam_newmann_building_microservices.html}
+2016.
 
 \hypertarget{ref-Fowler2014}{}
 {[}4{]} M. Fowler and J. Lewis, ``Microservices: A definition of this
