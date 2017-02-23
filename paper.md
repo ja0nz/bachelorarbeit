@@ -18,9 +18,9 @@ Having an 95 % overhead is rather undesirable for both the consumers and creator
 
 In an non-deterministic runtime environment, encapsulation and modularization is a typical pattern to make complexity manageable and accommodate future uncertainty.[@Baldwin2006, p.1] Since years the average JS payload is steadily rising which can be interpreted as a trend towards more dynamic websites. The demands to the browser platform changed from a static page renderer to a **dynamic UI machine** without changing the underlying architecture significantly. Under the current situation only additional layers of abstraction can wrestle complexity.
 
-In the recent years many **frameworks**, libraries and methodologies approached the global nature of the DOM by scoping assets and design rules into maintainable components. While the DOM can't be scoped, JS can. Many frameworks, like ReactJS, AngularJS or VueJS just to name a few, ditched the old rule of separated HTML, CSS and JS in favor of an additional layer of abstracted JS components (containing content, markup and styling). Quiet often those frameworks mimic a MVC pattern on top of the browser engine which is a reasonable simple design pattern to build graphical user interfaces. While frameworks are a valid approach to build scalable web applications they remain highly opinionated, embody inherent complexity themselves and can change and break over time. Another downside is code inflation which is a crucial point for performance and third-party libraries are no exception on that. A standardized way for creating complex UI interfaces painlessly requires new build-in browser capabilities. 
+In the recent years many **frameworks**, libraries and methodologies approached the global nature of the DOM by scoping assets and design rules into maintainable components. While the DOM can't be scoped, JS can. Many frameworks, like ReactJS, AngularJS or VueJS just to name a few, ditched the old rule of separated HTML, CSS and JS in favor of an additional layer of abstracted JS components (containing content, markup and styling). Quiet often those frameworks mimic a MVC pattern on top of the browser engine which is a reasonable simple design pattern to build graphical user interfaces. While frameworks are a valid approach for building scalable web applications they remain highly opinionated, embody inherent complexity themselves and can change and break over time. Another downside is code inflation which is a crucial point for performance. All of those bottlenecks in the web demand for a new standardized way for creating and evolving complex  web services.
 
-In the year 2013 thinkers, creators and browser vendors joined together to propose *The Extensible Web Manifesto*.[^manifest] The claim of the manifesto was to enhance the current web platforms with new low-level capabilities. Those features should empower creators of the web to write more declarative code and therefore overcome known bottlenecks and artificial abstractions. Four years later, the enhancement of JavaScript leapfrogged and many new low-level APIs brought to life. With this new APIs at hand a vivid web developer can create robust websites with less code and less additional libraries. This paper is an approach to unfold these **browsernative** technologies to create overall simple and resilient **microservices** for the browser
+In the year 2013 thinkers, creators and browser vendors joined together to propose *The Extensible Web Manifesto*.[^manifest] The manifestos claim was to enhance the current web platforms with new low-level capabilities. Those features should empower creators of the web to write more declarative code and abandon known problems and artificial abstractions. Four years later, the enhancement of JavaScript leapfrogged and many new low-level APIs brought to life. With this new APIs at hand a vivid web developer can create robust websites with less code and less additional libraries. This paper is an approach to unfold these **browsernative** technologies to create overall simple and resilient **microservices** for the browser
 
 [^manifest]: [The Extensible Web Manifesto](https://extensiblewebmanifesto.org/)
 [^http]: [HTTPArchive Trends](http://httparchive.org/trends.php)
@@ -39,7 +39,7 @@ Microservices incorporate a wide array of ideas from developing scalable softwar
 
  The first principle of services is the **loose coupling principle**: changing and deploying one service shouldn't result in changing other parts of the system.[@Newman2015, p. 30]. Mutations or shadowed variables, which is happening a lot in CSS, making it hard to keep changes ought to only affect one place in the application. A *browsernative microservice* therefore pushing encapsulation and avoiding variable mutations outside its scope as much as possible. Practically, CSS will be scoped and JS fosters immutable JS entities and avoids variables leaking into the global namespace. 
 
-The second principle of services is the **high cohesion principle**: Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] High cohesion can be expressed in a dynamic way as the *Single Responsibility Principle*: "Gather together those things that change for the same reason and separate those things that change for different reasons."[@Martin] In a very quick and dirty code quality analysis, the quality can be measured just by counting the places changes in the code occur in order to implement a functionality. An arbitrary threefold MVC system should require a maximum of three changes to implement or change functionalities. The problem in browser based development is not only the global paradigm which makes changes deliberately unpredictable. The high cohesion principle is violated by the traditional separation along the technological entities **HTML, JS and CSS**. Understanding the relation of HTML markup and another CSS file adds incidental complexity. Different approaches emerged over the recent years to join the forces. Most notable the dedicated frontend language *elm*[^elm] where model, view and controller sit in one place. A browsernative service aims for a combinement of the web native trinity HTML, JS and CSS. 
+The second principle of services is the **high cohesion principle**: Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] High cohesion can be expressed in a dynamic way as the *Single Responsibility Principle*: "Gather together those things that change for the same reason and separate those things that change for different reasons."[@Martin] In a very quick and dirty code quality analysis, the quality can be measured just by counting the places changes in the code occur in order to implement a functionality. An arbitrary threefold MVC system should require a maximum of three changes to implement or change functionalities. The problem in browser based development is not only the global paradigm which makes changes deliberately unpredictable. The high cohesion principle is violated by the traditional separation along the siloed entities **HTML, JS and CSS**. Understanding the relation of HTML markup and another CSS file adds incidental complexity. Different approaches emerged over the recent years to join the forces. Most notable the dedicated frontend language *elm*[^elm] where MODEL, VIEW and CONTROLLER sit in one place. A browsernative service aims for a combinement of the web native trinity HTML, JS and CSS. 
 
 [^elm]: [elm lang](http://elm-lang.org/)
 
@@ -66,7 +66,7 @@ For many companies working in the spheres of the internet the client side is hig
 
 To ensure the microservice functionality among teams and different services requires thoughtful decentralization. Emphasizing once more the real-world capabilities of microservices a message channel architecture can be derived from patterns known from traditional postal services. A physical letter has only two smart endpoints entitled to read and process the message while packaging likewise the connection itself is maximized towards unification. *Smart endpoints and dumb pipes* is coined to the approach of designing communication mostly decoupled and as cohesive as possible.[@Fowler2014]  Applying this rules to the web platform can result into building unified JSON message objects passed along "dumb" middleware components. A typical browser event comes close to this definition and suits arguably well for in-memory communication between web components and microservices. 
 
-Microservices heavily rely on simple HTTP request-response with resource APIs and lightweight messaging.[@Fowler2014] Newman puts his stand on technologic-agnostic REST APIs to free data persistence from implementation constraints.[@Newman2015, p. 247]  The advantage of this overall simple communication model is the suitability for both frontend-backend likewise backend-backend communication. A service therefore can evolve from an heavy backend with a lot of network roundtrips to a leaner backend seamlessly. The browser build-in **fetch API** which is essentially a HTTP request can be heavily incorporated into a browsernative microservice to ensure communication to services in the backend. 
+Microservices heavily rely on simple HTTP request-response with resource APIs and lightweight messaging.[@Fowler2014] Newman puts his recommendation on technologic-agnostic REST APIs to free data persistence from implementation constraints.[@Newman2015, p. 247]  The advantage of this overall simple communication model is the suitability for both frontend-backend likewise backend-backend communication. A service therefore can evolve from an heavy backend with a lot of network roundtrips to a leaner backend seamlessly. The browser build-in **fetch API** which is essentially a HTTP request can be heavily incorporated into a browsernative microservice to ensure communication to services in the backend. 
 
 ## Decentralized Governance
 
@@ -103,7 +103,7 @@ The simplified microservice example later in this paper assumes a generic build-
 
 Microservices tend to increase complexity as this model adds a sheer number of moving parts to the system whereas requires proper orchestration.[@Newman2015, p. 246] Arguably every more sophisticated web developer already came across build tools like Webpack or infrastructure automation tools like Gulp. Testing and deploying web components shouldn't be an obstacle in development.
 
-In the global nature of web development the development couldn't completely decoupled from the production environment. This circumstance left developers switching back and forth between files developing tricky opinionated (and more often biased) ways to glue related parts together. Bret Victor, UI designer at Apple defined the importance of an *immediate feedback principle* for developing user interfaces.[^bret] In his talk he emphasizes the importance of an immediate connection between the creator of a product and product itself. Any change must results in an immediate visible feedback. Web components catch up with this principle as they allow isolated development within a single file containing all bits and pieces of the web component. Every major browsers devtools offer a direct file manipulation functionality so development can take place directly in place.
+In the global nature of web development the development couldn't completely decoupled from the production environment. This circumstance left developers switching back and forth between files developing tricky opinionated (and more often biased) ways to glue related parts together. Bret Victor, UI designer at Apple defined the importance of an *immediate feedback principle* for developing user interfaces.[^bret] In his talk he emphasizes the importance of an immediate connection between the creator of a product and product itself. Any change must results in an immediate visible feedback. Web components catch up with this principle as they allow isolated development within a single file containing all bits and pieces of the web component. Every major browser devtool offers a direct file manipulation functionality so development can be even in place.
 
 When it comes to standardized deployment guidelines previously mentioned Ben Issa, described the ING standard workflow. Every component deserves a own **git repo** containing 
 
@@ -114,37 +114,35 @@ When it comes to standardized deployment guidelines previously mentioned Ben Iss
 * Blueprints to mock the one to one APIs
 * Docs
 
-This example should made clear that synthetic tests of the component are part of the service right from the start. Every check-in is handled as release candidate and can be independently tested and deployed by a fully automated machinery.[@Issa2016] Even though this example is an opinionated perception it gives a sense of a mature component build for the web. Due to an exhaustive amount of testing and deployment tools for JS an automated infrastructure shouldn't be a problem.
+Even though this example is an opinionated perception it gives a sense of a mature component build for the web. This example should made clear that all parts of the component put together in one place. Every check-in is handled as release candidate and can be independently tested and deployed by a fully automated machinery.[@Issa2016] Due to an exhaustive amount of testing and deployment tools for JS an automated infrastructure shouldn't be a problem.
 
 [^bret]: [Bret Victor - Inventing on Principle](https://vimeo.com/36579366)
 
 ## Design for failure
 
-In theory a microservice is designed with a lot of emphasizes on real-time monitoring for both the architectural elements and business relevant metrics.[@Fowler2014] Due to the modular structure weak points can occur in the orchestration of the services. Testing and automation is a feasible task but failures may occur in another end users setting undetected. Legacy browsers for example remain a problem for enhancing websites with new technologies.
+In theory a microservice is designed with focus on monitoring for both the architectural elements and business relevant metrics.[@Fowler2014] Due to the modular structure weak points can occur in the orchestration of the services. A microservice should track down every communication flow and provide defaults and meaningful error messages where communication stuck. Testing every single component with predefined synthetic events ensures functionality. Nevertheless, browser support may vary and legacy browsers remain a general problem for enhancing websites with new technologies and therefore demand further configuration.
 
-Regarding the evolution of the web, the "next billion" internet users most likely using Android, have decent specs mobile phones, use an evergreen browser but won't have a reliable internet connection.[@Lawson2016] While *Progressive Enhancement* was once coined on the principle to build websites both for Browsers with JS and HTML only, the new *Progressive Enhancement* tends towards an "**offline first**" build principle. A *Browsernative Microservice* therefore not only tries to cache data as much as possible, it should also bring in a lot of program logic as described in the previous chapters.
-
-Working in a JS heavy infrastructure demands for optimization to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the a general-purpose **PRLP pattern**[^prlp]:
+Combinment of the resources in the browser always demanded for optimization to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the a general-purpose pattern called **PRLP**[^prlp]:
 
 * Push critical resources for the initial route
 * Render initial route
 * Pre-cache remaining routes
 * Lazy-load and create remaining routes on demand
 
-Following this pattern a critical resource can detect browser functionalities beforehand and switch to a **polyfill** instead of the latest browser optimized version. After the initial paint, critical resources like top-level microservices or other app logic can be loaded and registered. 
+Following this pattern a critical resource can evaluate browser maturity beforehand and switch to a **polyfill** or another fallback solution instead of the latest browser optimized version. After the initial paint, critical resources like top-level microservices or other app logic can be loaded and registered.
+
+Regarding the evolution of the web, the "next billion" internet users most likely using Android, have decent specs mobile phones, use an evergreen browser but won't have a reliable internet connection.[@Lawson2016] While *Progressive Enhancement* was once coined on the principle to build websites both for Browsers with JS and HTML only, the new *Progressive Enhancement* tends towards an **offline first** principle avoiding network connectivity failures. A *browsernative microservice* therefore not only tries to cache data as much as possible, it should also bring in a lot of program logic as described in the previous chapters.
 
 [^prlp]: [PRLP pattern](https://www.polymer-project.org/1.0/toolbox/server)
 
 
 ## Evolutionary Design
 
-Microservices tend to become smaller over time. An evolutionary design approach puts emphasizes  on decomposition and scrapping the service. "The key property of a component is the notion of independent replacement and upgradeability."[@Fowler2014] Therefore we can safely change and chop services. Lazy parts of the system which won't change often should be separated from parts undergoing a lot of churn.[@Fowler2014] Parts that needs coupled changes could should be moved together or should be even merged.
+Microservices tend to become smaller over time. An evolutionary design approach puts emphasizes  on decomposition and scrapping the service. "The key property of a component is the notion of independent replacement and upgradeability."[@Fowler2014] Therefore we can safely change and chop services. Lazy components of the system which won't change often should be separated from parts undergoing a lot of churn.[@Fowler2014] And services which change for the same reason might be moved together or even could be merged.
 
-This flexible approach fits good in the world of browser based development. In the last decade we have seen a lot of of changes in the way we develop for the web. New approaches like the virtual DOM approach found their way into mainstream web development followed by frameworks and libraries.
+Being flexible when developing for the web is a selling point as innovation cycles for browser development is fast paced and technologies can change quickly. Frontend related hardware, software and methodologies innovate rapidly over time.
 
-*Browsernative microservices* should be perceived as complementary technology. Contrary to Angular, React and other frameworks they have a strong interop with existing systems and can be used with them together.
-
-Andrew Rota, developer at Wayfair, came up with the idea to compose small web components around a managing React system.[@Rota2015] As web components are native elements there is no difference to use a native `button` or a native `custom-button`. With this pattern a web developer can make use of the encapsulated advantages of web components while still making use of the declarative event management from various frameworks. Whatever new framework will be on the rise within the next years, this approach allows rapid decomposition and reassembling towards a new system.
+*Browsernative microservices* should be perceived as complementary technology in contrast to full-service frameworks like Angular. Being native technology pursues a strong interopt approach with existing systems. Andrew Rota for example came up with the pattern to use small, encapsulated and stateless web components as leaves in the tree of React components instead of native HTML elements.[@Rota2015] Even React code can profit from the expressiveness of custom components. As web components are native after registration there is no difference in using a native `button` over a `meaningful-button`. Most likely there will be always some cutting edge framework promising advantages over native code. Whatever new framework will be on the rise within the next years native components can eliminate future uncertainty and allowing rapid reassembling towards new architectures.
 
 # W3C specifications
 
@@ -164,7 +162,7 @@ Custom elements are the fundamental building blocks for web components introduci
 > main.js
 class HelloWorld extends HTMLElement {
  constructor() {
-  super(); // mandatory!
+  super(); // mandatory in constructor
   this.onclick = e => alert("hello");
  }
 }
@@ -204,7 +202,6 @@ As previously mentioned, the custom elements must `extend` the `HTMLElement` int
 ````javascript
 > main.js
 class HelloWorld extends HTMLElement {
- constructor() {...}
  set sayhello(val) {
   this._hello = val;
   console.log(this._hello);
@@ -244,9 +241,9 @@ Enhancing the previous example the new encapsulated `HelloWorld` would like this
 > main.js
 class HelloWorld extends HTMLElement {
  constructor() {
-  ...
-  this.attachShadow({mode: 'open'});
-  shadowRoot.innerHTML = '<p>hello</p>';
+   // this.onclick...
+   this.attachShadow({mode: 'open'});
+   shadowRoot.innerHTML = '<p>hello</p>';
  }
 }
 ````
@@ -603,9 +600,7 @@ Every container component is eligible  to aggregate subordinate events from thei
 
 ```javascript
 class CheckoutContainerBase extends HTMLElement {
-  static getActions() {
-    return [...]
-  }
+  // static methods for testing...
   set _dispatch(msg) {
     this.dispatchEvent(
       new CustomEvent('checkout', {
@@ -637,6 +632,8 @@ In comparison to the former presentational component is build mostly
 cohesive HTML JS CSS
 
 virtual DOM
+
+declarative event management
 
 
 
