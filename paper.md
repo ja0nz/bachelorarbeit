@@ -1,10 +1,10 @@
-# Simplicity and the web
+# 1. Simplicity and the web
 
 > Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 
 Computers can scale, humans can't. Ever since a program or complex system made by humans has been constrained by humans mental capabilities. Like in the analogy of juggling balls, our brain can just "juggle" a few things at a time. Rich Hickey, the inventor of the programming language Clojure gave an inspirational keynote on the topic of **simplicity**.[^rich] In every sphere of a humans life, simplicity aligns perception with our mental capacities.
 
-Derived from the ancient Latin word **simplex**, simple can be understood as "literally, uncompounded or onefold"[^dict] which points directly to the unidimensional aspect. While complexity describes the multilayered und entangled nature of conditions, simplicity empowers the human brain to reason about issues in a straightforward manner. It certainly has some overlapping's with easy, but while easy is more of a relative nature, simple can be laid out as a objective manner and therefore universally applicable. 
+Derived from the Latin word **simplex**, simple can be understood as "literally, uncompounded or onefold"[^dict] which points directly to the unidimensional aspect. While complexity describes the multilayered und entangled nature of conditions, simplicity empowers the human brain to reason about issues in a straightforward manner. It certainly has some overlapping's with easy, but while easy is more of a relative nature, simple can be laid out as a objective manner and therefore universally applicable. 
 
 Software development is undoubtedly rich in complexity and full of subtle pitfalls. In a typical scenario, a piece of software evolves over time in one or another opinionated direction. Layers of new abstractions wrestling with old legacy abstractions and mutation becomes untraceable. Subtle bugs start to creep in. Eventually the small piece of software may end up in a highly complected monolith which will determine future design decisions to a painful degree. Future strategies of the company/organization will be highly determined by the current state in the need of "keeping the lights on".
 
@@ -27,19 +27,19 @@ In the year 2013 thinkers, creators and browser vendors joined together to propo
 [^dict]: [Etymology Dictionary](http://www.etymonline.com/index.php?term=simple)
 [^rich]: [Rails Conf 2012 Keynote: Simplicity Matters by Rich Hickey](https://www.youtube.com/watch?v=rI8tNMsozo0&t=46s)
 
-# Microservices
+# 2. Microservices
 
 In search of a better, simpler web architecture one might look on already established pattern that proofed to fulfill enterprise needs. Microservices are a good approach for tearing big monolithic systems into fine-grained simple services with explicit defined boundaries. In a nutshell a microservice is a small, autonomous service that works together with other services seamlessly.[@Newman2015, p. 2] Or with the words of Fowler and Lewis: "... the microservice architectural style is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API."[@Fowler2014] Yet at this point a reader might spot some similarities with microservices and the browser-based development: Both wrestling the problem of monolithic architecture and both using lightweight communication mechanisms. In fact, many big companies of "the web" like Amazon or Netflix successfully transformed their monolithic system into a service based system which gives a taste of the power behind microservices.[@Fowler2014]
 
-Microservices incorporate a wide array of ideas from developing scalable software, like *domain-driven design* where it pursues the incorporation of real world structure in the code.[@Newman2015, p. 2] Or making use of *continuous delivery* for pushing software rapidly through *automated deployment* mechanisms into production.[@Fowler2014] Furthermore, microservices transcendent the technical perspective and reaches into the team organization. As a primary source of truth this paper relies on the work of Sam Newman, who has written a comprehensive guide called *Building Microservices* and the work of Fowler and Lewis. The purpose of this section is to gain confidence about the microservices architecture in the context of the browser platform.
+Microservices incorporate a wide array of ideas from developing scalable software, like **domain-driven design** where it pursues the incorporation of real world structure in the code.[@Newman2015, p. 2] Or making use of **continuous delivery** for pushing software rapidly through **automated deployment** mechanisms into production.[@Fowler2014] Furthermore, microservices transcendent the technical perspective and reaches into the team organization. As a primary source of truth this paper relies on the work of Sam Newman, who has written a comprehensive guide towards microservices[@Newman2015] and the work of Fowler and Lewis[@Fowler2014]. The purpose of this section is to gain confidence about the microservices architecture in the context of the browser platform.
 
-## Componentization via Services
+## 2.1. Componentization via Services
 
 "A **component** is a unit of software that is independently replaceable and upgradeable." [@Fowler2014] Components are the building blocks of microservices. And microservices are the building blocks of applications. Essentially the difference between microservices and components is just the level of abstraction. Whether a concrete microservice or a much more generic component, both share a similar set of principles. Therefore this paper referring to both parts when talking about **services**.
 
  The first principle of services is the **loose coupling principle**: changing and deploying one service shouldn't result in changing other parts of the system.[@Newman2015, p. 30]. Mutations or shadowed variables, which is happening a lot in CSS, making it hard to keep changes ought to only affect one place in the application. A *browsernative microservice* therefore pushing encapsulation and avoiding variable mutations outside its scope as much as possible. Practically, CSS will be scoped and JS fosters immutable JS entities and avoids variables leaking into the global namespace. 
 
-The second principle of services is the **high cohesion principle**: Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] High cohesion can be expressed in a dynamic way as the *Single Responsibility Principle*: "Gather together those things that change for the same reason and separate those things that change for different reasons."[@Martin] In a very quick and dirty code quality analysis, the quality can be measured just by counting the places changes in the code occur in order to implement a functionality. An arbitrary threefold MVC system should require a maximum of three changes to implement or change functionalities. The problem in browser based development is not only the global paradigm which makes changes deliberately unpredictable. The high cohesion principle is violated by the traditional separation along the siloed entities **HTML, JS and CSS**. Understanding the relation of HTML markup and another CSS file adds incidental complexity. Different approaches emerged over the recent years to join the forces. Most notable the dedicated frontend language *elm*[^elm] where MODEL, VIEW and CONTROLLER sit in one place. A browsernative service aims for a combinement of the web native trinity HTML, JS and CSS. 
+The second principle of services is the **high cohesion principle**: Whether designing a microservice or it's components we want related behavior sit together, and unrelated behavior to sit elsewhere.[@Newman2015, p. 30] High cohesion can be enhanced towards the more dynamic **Single Responsibility Principle**: "Gather together those things that change for the same reason and separate those things that change for different reasons."[@Martin] In a very quick and dirty code quality analysis, the quality can be measured just by counting the places changes in the code occur in order to implement a functionality. An arbitrary threefold MVC system should require a maximum of three changes to implement or change functionalities. The problem in browser based development is not only the global paradigm which makes changes deliberately unpredictable. The high cohesion principle is violated by the traditional separation along the siloed entities **HTML, JS and CSS**. Understanding the relation of HTML markup and another CSS file adds incidental complexity. Different approaches emerged over the recent years to join the forces. Most notable the dedicated frontend language *elm*[^elm] where MODEL, VIEW and CONTROLLER sit in one place. A browsernative service aims for a combinement of the web native trinity HTML, JS and CSS. 
 
 [^elm]: [elm lang](http://elm-lang.org/)
 
@@ -50,7 +50,7 @@ Another issue where web components stand out is related to performance and espec
 The last argument in favor of components over libraries is the more explicit interface.[@Fowler2014] While the functionality of a library needs documentation to be accessible a component functionality is exposed via the components' signature. The markup language HTML is by design equipped with an expressive syntax and steering a web component using attributes and values should be most straightforward even to unexperienced web developers.
 
 
-## Organized around Business Capabilities
+## 2.2. Organized around Business Capabilities
 
 > "organizations which design systems ... are constrained to produce designs which are copies of the communication structures of these organizations". [@Conway1968]
 
@@ -62,19 +62,19 @@ Assigning service responsibility to a team, the so called **Definition of Done**
 
 For many companies working in the spheres of the internet the client side is highly important for their business. In fact, business goals and capabilities can be derived from frontend needs. The state of the web is not only a story of numerous artifacts, it is also a story of an highly fragmented market along devices, operating systems, differing sizes and functionalities. Different devices again have different assumptions about the technology stack. Splitting teams along the stack results in an slow paced back and forth negotiation for every change to be made make iteration time expensive. As browser technologies, design guidelines and devices change frequently it makes absolutely sense to shift responsibility towards the teams altogether.
 
-## Smart endpoints and dumb pipes
+## 2.3. Smart endpoints and dumb pipes
 
 To ensure the microservice functionality among teams and different services requires thoughtful decentralization. Emphasizing once more the real-world capabilities of microservices a message channel architecture can be derived from patterns known from traditional postal services. A physical letter has only two smart endpoints entitled to read and process the message while packaging likewise the connection itself is maximized towards unification. *Smart endpoints and dumb pipes* is coined to the approach of designing communication mostly decoupled and as cohesive as possible.[@Fowler2014]  Applying this rules to the web platform can result into building unified JSON message objects passed along "dumb" middleware components. A typical browser event comes close to this definition and suits arguably well for in-memory communication between web components and microservices. 
 
 Microservices heavily rely on simple HTTP request-response with resource APIs and lightweight messaging.[@Fowler2014] Newman puts his recommendation on technologic-agnostic REST APIs to free data persistence from implementation constraints.[@Newman2015, p. 247]  The advantage of this overall simple communication model is the suitability for both frontend-backend likewise backend-backend communication. A service therefore can evolve from an heavy backend with a lot of network roundtrips to a leaner backend seamlessly. The browser build-in **fetch API** which is essentially a HTTP request can be heavily incorporated into a browsernative microservice to ensure communication to services in the backend. 
 
-## Decentralized Governance
+## 2.4. Decentralized Governance
 
 Microservices are separate entities and decentralization is important to ensure autonomy. This paper already described fragmented services bounded to singular business context choreographed by simple communication protocols developed and evolved by autonomous teams.
 
 This distributed nature empowers teams to create their own technology stack, tools and services designed in the spirit of language- and platform independence and share their knowledge with other parties.[@Fowler2014] In the recent years many big companies like Facebook, Google, Netflix and others followed that spirit and published their ideas and implementations open source. The previously mentioned ReactJS for example is a product of Facebooks need to ensure a consistent frontend experience. In fact, many tools and techniques are byproduct of vital interaction of concrete domain problems and their implementations. 
 
-The spirit of freedom can't be applied universally to *browsernative microservices* as the browser and its underlying DOM will be the limitation factor to a certain degree. Talking about the browser, a reader might be tempted to narrowly thinking of the obvious VIEW layer only - which is not true anymore. In the recent years the major browser engines grow to to a fully-fledged app deployment platform offering connectors to build-in databases, multithreading support and ever-growing JS build-ins like speech synthesis or push notifications. So-called *Progressive Web Apps[^pwa]*, a bunch of criteria for building good browser apps, can achieve a similar look and feel like native apps. And last but not least services like NativeScript[^nscript] effectively compiling "the web" to native machine code lowering the boundary between native and browser code even further. 
+The spirit of freedom can't be applied universally to *browsernative microservices* as the browser and its underlying DOM will be the limitation factor to a certain degree. Talking about the browser, a reader might be tempted to narrowly thinking of the obvious VIEW layer only - which is not true anymore. In the recent years the major browser engines grow to to a fully-fledged app deployment platform offering connectors to build-in databases, multithreading support and ever-growing JS build-ins like speech synthesis or push notifications. So-called **Progressive Web Apps**[^pwa], a bunch of criteria for building good browser apps, can achieve a similar look and feel like native apps. And last but not least services like NativeScript[^nscript] effectively compiling "the web" to native machine code lowering the boundary between native and browser code even further. 
 
 JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for various reasons. Transpiling languages to JS as target language is a stable solution nowadays. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interface towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.
 
@@ -84,7 +84,7 @@ Another more real life decentralization aspect derives from the easiness of depl
 [^nscript]: [NativeScript](https://www.nativescript.org)
 [^webcomp]: [Webcomponents.org](https://webcomponents.org)
 
-## Decentralized Data Management
+## 2.5. Decentralized Data Management
 
 Data Management in a microservice follows the same modular philosophy like the service implementation. As mentioned earlier different bounded contexts make different assumptions of the underlying models. A *browsernative microservices* takes this idea even further and expands it to the fragmented world of electronic devices. Decentralized decisions about conceptual models demand for decentralized data storage decisions.[@Fowler2014] Todays web architectures aims to leverage an increasing amout of processing to the client to avoid time-consuming roundtrips especially in mobiles networks.[^latency] Since network roundtrips are costly it is a good advice to only query as much data as needed and cache as much as possible. The build-in LocalStorage or its successor IndexedDB are mature persistence technologies and libraries like PouchDB[^pouch] even offer backend adapters for syncing out of the box. 
 
@@ -99,13 +99,13 @@ The simplified microservice example later in this paper assumes a generic build-
 [^datomic]: [Datomic](http://www.datomic.com/)
 [^pouch]: [PouchDB](https://pouchdb.com/)
 
-## Infrastructure Automation 
+## 2.6. Infrastructure Automation 
 
 Microservices tend to increase complexity as this model adds a sheer number of moving parts to the system whereas requires proper orchestration.[@Newman2015, p. 246] Arguably every more sophisticated web developer already came across build tools like Webpack or infrastructure automation tools like Gulp. Testing and deploying web components shouldn't be an obstacle in development.
 
-In the global nature of web development the development couldn't completely decoupled from the production environment. This circumstance left developers switching back and forth between files developing tricky opinionated (and more often biased) ways to glue related parts together. Bret Victor, UI designer at Apple defined the importance of an *immediate feedback principle* for developing user interfaces.[^bret] In his talk he emphasizes the importance of an immediate connection between the creator of a product and product itself. Any change must results in an immediate visible feedback. Web components catch up with this principle as they allow isolated development within a single file containing all bits and pieces of the web component. Every major browser devtool offers a direct file manipulation functionality so development can be even in place.
+In the global nature of web development the development couldn't completely decoupled from the production environment. This circumstance left developers switching back and forth between files developing tricky opinionated (and more often biased) ways to glue related parts together. Bret Victor, UI designer at Apple defined the importance of an **immediate feedback principle** for developing user interfaces.[^bret] In his talk he emphasizes the importance of an immediate connection between the creator of a product and product itself. Any change must results in an immediate visible feedback. Web components catch up with this principle as they allow isolated development within a single file containing all bits and pieces of the web component. Every major browser devtool offers a direct file manipulation functionality so development can be even in place.
 
-When it comes to standardized deployment guidelines previously mentioned Ben Issa, described the ING standard workflow. Every component deserves a own **git repo** containing 
+When it comes to standardized deployment guidelines previously mentioned Ben Issa, described the ING standard workflow. Every component comes in its own **git repo** containing:
 
 * Internationalization conformity (i18n)
 * Accessibility conformity (a11y)
@@ -118,11 +118,11 @@ Even though this example is an opinionated perception it gives a sense of a matu
 
 [^bret]: [Bret Victor - Inventing on Principle](https://vimeo.com/36579366)
 
-## Design for failure
+## 2.7. Design for failure
 
 In theory a microservice is designed with focus on monitoring for both the architectural elements and business relevant metrics.[@Fowler2014] Due to the modular structure weak points can occur in the orchestration of the services. A microservice should track down every communication flow and provide defaults and meaningful error messages where communication stuck. Testing every single component with predefined synthetic events ensures functionality. Nevertheless, browser support may vary and legacy browsers remain a general problem for enhancing websites with new technologies and therefore demand further configuration.
 
-Combinment of the resources in the browser always demanded for optimization to avoid unexpected side-effects like the *flash of unstyled content (FOUC)*. Googles Polymer propagates the a general-purpose pattern called **PRLP**[^prlp]:
+Combinment of the resources in the browser always demanded for optimization to avoid unexpected side-effects like *flash of unstyled content*. Googles Polymer propagates the a general-purpose pattern called **PRLP**[^prlp]:
 
 * Push critical resources for the initial route
 * Render initial route
@@ -131,32 +131,32 @@ Combinment of the resources in the browser always demanded for optimization to a
 
 Following this pattern a critical resource can evaluate browser maturity beforehand and switch to a **polyfill** or another fallback solution instead of the latest browser optimized version. After the initial paint, critical resources like top-level microservices or other app logic can be loaded and registered.
 
-Regarding the evolution of the web, the "next billion" internet users most likely using Android, have decent specs mobile phones, use an evergreen browser but won't have a reliable internet connection.[@Lawson2016] While *Progressive Enhancement* was once coined on the principle to build websites both for Browsers with JS and HTML only, the new *Progressive Enhancement* tends towards an **offline first** principle avoiding network connectivity failures. A *browsernative microservice* therefore not only tries to cache data as much as possible, it should also bring in a lot of program logic as described in the previous chapters.
+Regarding the evolution of the web, the "next billion" internet users most likely using Android, have decent specs mobile phones, use an evergreen browser but won't have a reliable internet connection.[@Lawson2016] While **Progressive Enhancement** was once related to build websites both for browsers with and without JS support the demands changed tends towards an **offline first** principle avoiding network connectivity failures.[@Lawson2016]  A *browsernative microservice* therefore not only tries to cache data as much as possible, it should also bring in a lot of program logic as described in the previous chapters.
 
 [^prlp]: [PRLP pattern](https://www.polymer-project.org/1.0/toolbox/server)
 
 
-## Evolutionary Design
+## 2.8. Evolutionary Design
 
 Microservices tend to become smaller over time. An evolutionary design approach puts emphasizes  on decomposition and scrapping the service. "The key property of a component is the notion of independent replacement and upgradeability."[@Fowler2014] Therefore we can safely change and chop services. Lazy components of the system which won't change often should be separated from parts undergoing a lot of churn.[@Fowler2014] And services which change for the same reason might be moved together or even could be merged.
 
-Being flexible when developing for the web is a selling point as innovation cycles for browser development is fast paced and technologies can change quickly. Frontend related hardware, software and methodologies innovate rapidly over time.
+Pursuing flexibility for web development is a selling point as innovation cycles for browser development is fast paced and technologies can change quickly. Frontend related hardware, software and methodologies innovate rapidly over time.
 
-*Browsernative microservices* should be perceived as complementary technology in contrast to full-service frameworks like Angular. Being native technology pursues a strong interopt approach with existing systems. Andrew Rota for example came up with the pattern to use small, encapsulated and stateless web components as leaves in the tree of React components instead of native HTML elements.[@Rota2015] Even React code can profit from the expressiveness of custom components. As web components are native after registration there is no difference in using a native `button` over a `meaningful-button`. Most likely there will be always some cutting edge framework promising advantages over native code. Whatever new framework will be on the rise within the next years native components can eliminate future uncertainty and allowing rapid reassembling towards new architectures.
+*Browsernative microservices* should be perceived as complementary technology in contrast to full-service frameworks like Angular. Being native technology pursues a strong interopt approach with existing systems. Andrew Rota for example came up with a pattern using small, encapsulated and stateless web components as leaves in the tree of React components instead of native HTML elements.[@Rota2015] Even React can eventually profit from the expressiveness of custom components using a custom `<meaningful-button>` over a native `<button>`. Most likely there will be always some cutting edge framework promising advantages over native code. Whatever new framework will be on the rise within the next years native components can eliminate future uncertainty and allowing rapid reassembling towards new architectures.
 
-# W3C specifications
+# 3. W3C specifications
 
-For building a native microservice running on the "bare-metal" browser engine requires a bunch of new specifications and assumptions. Most importantly the quasi specification **Web Components** is needed. *Web Components* is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently, too. A webdeveloper may choose one spec and embrace the freedom in architecture which can be combined with other frameworks/libraries.
+For building a native microservice running on the "bare-metal" browser engine requires a bunch of new specifications and assumptions. Most importantly the quasi specification **Web Components** is needed. Web Components is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently. A web developer may choose one spec and embrace the freedom in architecture which can be combined with other frameworks/libraries.
 
 Depending on the context, some people argue for only two specs which essentially make it possible to create a scoped component but not caring too much on it's distribution[@Buchner2016]. Some people prefer the three specs [@vanKesteren2014], but the majority advocating the four specs variant, which is listed on the quasi-official [webcomponents.org](http://webcomponents.org) website. For the purpose of this article, all four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.
 
-*Disclaimer:* This paper introduces many new browser build-ins with the focus on try and test. As the time of writing, many examples can be tried frictionless in the console of the latest versions of **Google Chrome, Opera and Apple Safari**.[^jon] On Mozilla Firefox technologies work behind a flag and Microsoft Edge implementation is unfortunately far behind. But Browser implementation changes quickly and soon technology adoption won't be an issue. Meanwhile new standards can be used through **polyfills** even on legacy browsers.
+*Disclaimer:* This paper introduces many new browser build-ins with the focus on testability. As the time of writing, many examples can be tried frictionless in the console of the latest versions of **Google Chrome, Opera and Apple Safari**.[^jon] On Mozilla Firefox technologies work behind a flag and Microsoft Edge implementation is unfortunately far behind. But Browser implementation changes quickly and soon technology adoption won't be an issue. Meanwhile new standards can be used through **polyfills** even on legacy browsers.
 
 [^jon]: [Are we componentized yet?]( http://jonrimmer.github.io/are-we-componentized-yet/)
 
-## Custom Elements [(w3c)](http://w3c.github.io/webcomponents/spec/custom/)
+## 3.1. Custom Elements [(w3c)](http://w3c.github.io/webcomponents/spec/custom/)
 
-Custom elements are the fundamental building blocks for web components introducing the *Single Responsibility Principle* to the browser. In essence, they provide a way to create **custom HTML tags** subsuming behavior, design and functionality. An obligatory **HelloWorld** will give a flavor about the spec:
+*Custom elements* are the fundamental building blocks for web components introducing the **Single Responsibility Principle** to the browser. In short, they provide a way to create custom HTML tags subsuming behavior, design and functionality. An obligatory **HelloWorld** will give a flavor about the spec:
 
 ````javascript
 > main.js
@@ -174,66 +174,66 @@ customElements.define('hello-world', HelloWorld)
 <hello-world>say hello</hello-world>
 ````
 
-This example should be self-explanatory. Notably, custom elements come in the fashion of *ES6 Classes*[^es6] in favor of the normal JavaScript prototype-based inheritance model. This class must inherit the base `HTMLElement` interface which "ensures the newly created element inherits the entire DOM API and any properties/methods that you add to the class become part of the element's DOM interface."[@Bidelman2016] Like any other *ES6 class*, the new element can be specialized further on using the typical `extends` inheritance. 
+This example should be almost self-explanatory in functionality. *Custom elements* come in the fashion of **ES6 Classes**[^es6] in favor of the normal JavaScript prototype-based inheritance model which was part of an older specification. Every valid element must extend the base `HTMLElement` interface which "ensures the newly created element inherits the entire DOM API and any properties/methods that you add to the class become part of the element's DOM interface."[@Bidelman2016] Like any other ES6 class any *custom element* can be specialized further using the typical inheritance model allowing higher levels of abstraction. 
 
-The beauty of *custom elements* comes with the keyword `this` which points to the element itself. Instead of querying and assigning behavior AFTER creation of the node, custom elements ship their functionality PRIOR initialization of the element. The so called *fat-arrow* (`=>`) is just a new ES6 syntax feature for an anonymous function declaration.
+The beauty of *custom elements* comes with the **bounded `this` keyword** which points to the element itself. Instead of querying and assigning behavior after creation of the node, custom elements ship their functionality on initialization of the element. The so called *fat-arrow* (`=>`) is just a new ES6 syntax feature for an anonymous function declaration.
 
-After declaration, the new HTML element needs to be registered in the global build-in `customElements` object with an tag name like `<hello-world>` acting as key to the element. Mind the dash inside the tag name to conform the spec. Finally, the new element can go live inside the HTML Document `index.html`.
+After declaration the new HTML element needs to be registered in the global build-in `customElements` object with an dedicated tag name acting as key to the element. Mind the dash inside the tag name to conform the spec. Finally, the new element can be mounted inside the HTML document.
 
 [^es6]: [JavaScript Classes](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes)
 
-### Lifecycle methods
+### 3.1.1. Lifecycle methods
 
-In addition to the `constructor()`, the spec defines so called *lifecycle callbacks* for controlling the **behaviour in the DOM**. Many popular frameworks like ReactJS or AngularJS rely on similar approaches:
+In addition to the constructor which runs procedures on initialization, the spec defines **lifecycle callbacks** for controlling elements behavior towards DOM interaction. Many popular frameworks like React or Angular rely on similar approaches:
 
-* `connectedCallback()`   
-  Called upon the time of *connecting or upgrading the node* which means the moment the node is rendered inside the DOM. Typically this method is called straight after the `constructor()` on insert. Typically, this method contains setup code, such as fetching resources or rendering elements according to attributes.[@Bidelman2016] For a fast initial render of the page, it is highly preferable to put many proceedings in favor of the constructor.
-* `disconnectedCallback()`   
-  Called upon the time of *node removal*. Cleanup code like removing eventListeners or disconnecting websockets can be put here.
-* `attributeChangedCallback(attrName, oldVal, newVal)`   
-  This method provides an *Onchange handler* that runs for certain attributes called with three values as defined in the signature. It is meant to control an elements' transition from on `oldVal` to a `newVal`. Due to performance issues, this callback is only triggered for attributes registered in an *observedAttributes* array.
-* `adoptedCallback()`   
-  Called when moving the node *between documents*.
+* connectedCallback()   
+  Called upon the time of **connecting or upgrading the node** which means the moment the node is rendered inside the DOM. Typically this method is called straight after the constructor if the node is inserted directly. For a faster initial render of the page it is highly preferable to put many proceedings in this method. Usually this method contains setup code such as fetching resources or rendering elements according to attributes.[@Bidelman2016] 
+* disconnectedCallback()   
+  Called upon the time of **node removal**. Cleanup code like removing event listeners or disconnecting web sockets can be put here.
+* attributeChangedCallback(attrName, oldVal, newVal)   
+  This method provides an **onchange handler** for certain elements attributes. This method is used to guide elements' transition from an old value to a new state. Due to performance issues this callback is only triggered for attributes registered in a dedicated array shipped with the element.
+* adoptedCallback()   
+  Called when moving the node **between documents**. This method comes handy when using HTML imports described later.
 
-### Custom attributes 
+### 3.1.2. Custom attributes 
 
-As previously mentioned, the custom elements must `extend` the `HTMLElement` interface. Therefore, the new element inherits base properties and methods commonly used in all HTML elements like `id, class, addEventListner` . Additionally, it is possible to define custom attributes using the *custom elements'* **getter / setter interface** to steer the behavior of the element.
+As mentioned earlier any custom elements must extend the `HTMLElement` interface ensuring base properties and methods used in throughout all HTML elements like **id, class, addEventListner ...**. Additionally, it is possible to define custom attributes using the *custom elements'* **getter / setter interface** to steer the behavior of the element.
 
 ````javascript
 > main.js
 class HelloWorld extends HTMLElement {
- set sayhello(val) {
-  this._hello = val;
-  console.log(this._hello);
- }
- get sayhello() {
-  return this._hello;
- }
-});
+  set sayhello(val) {
+    this._hello = val;
+    console.log(this._hello);
+  }
+  get sayhello() {
+    return this._hello;
+  }
+}
 customElements.define('hello-world', HelloWorld);
-// Instantiation
+// Instantiation via JS instead of HTML
 var el = new HelloWorld();
 el.sayhello = "earth";
 el.sayhello;//"earth"
 ````
 
-Native DOM properties, like `id` or `onclick`, reflect their values between HTML and JS.[@HTML, para. 2.6.1] For example declaring the HTML `<hello-world id="hello">` like this equals to assign the ID in JS like `Node.id = "hello"`. This behavior won't work out-of-the-box with methods or properties defined setters. For example declaring `<hello-world sayhello="mars"></hello-world>` would't  call the `sayhello` function in the previous setup.
+Native DOM properties always reflect their values between HTML and JS.[@HTML, para. 2.6.1] Declaring `<hello-world id="hello">` equals to the JS declaration `new HelloWorld().id = "hello"`.
 
-A common workaround to bind HTML and JS behavior together is archived by using the aforementioned lifecycle method `attributeChangedCallback` to **bind changing HTML attributes to JS properties** and to map JS attributes to HTML with `this.setAttributes(...)` respectively. On insertion time HTML attributes might trigger custom JS methods retrieving HTML attributes using `this.getAttributes(...)` method. 
+This behavior won't work out-of-the-box with methods defined with setters as they are strictly JS only . Mounting `<hello-world sayhello="mars">` would't  call the `sayhello` method in the previous setup. Value reflection can be implemented  inside the *custom elements* using the native methods `getAttributes` and `setAttributes`. Using them exhaustively throughout lifecycles methods the new components can configured to read and listen to HTML attributes accordingly. 
 
-Concluding this section, a reader might already discover the **mental model** behind *web compontents*. A custom element is similar to a named function where attributes treated as input variables. In the hierarchical nature of DOM, input can occur either top-down via assignments and bottom-up via captured events. The same goes true when talking about output. Even though it seems obvious, it might be helpful to keep this point in mind.
+Designing a *custom element* this way creates HTML elements with named attribute interfaces reaching deep into JS functionality. With this mental model in mind a web developer can create highly dynamic web components.
 
-### Customized build-in elements
+### 3.1.3. Customized build-in elements
 
-One aspect didn't mentioned yet is the possibility of creating sub-classes of build-in elements by extending the native Interfaces like the `HTMLButtonElement` interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.[^github] Most likely the spec will change in future in one or other way on this issue and therefore customized build-in elements left out of this paper intentionally.
+One aspect didn't mentioned yet is the possibility of extending other build-in elements by extending  other interfaces instead of the `HTMLElement` interface. While this functionality is perfectly spec'd it is strongly rejected by some browser vendors.[^github] Most likely the spec will change in future in one or other way on this issue and therefore customized build-in elements left out of this paper intentionally.
 
 [^github]: https://github.com/w3c/webcomponents/issues/509
 
-## Shadow DOM [(w3c)](http://w3c.github.io/webcomponents/spec/shadow/)
+## 3.2. Shadow DOM [(w3c)](http://w3c.github.io/webcomponents/spec/shadow/)
 
-A *shadow DOM* is basically an isolated DOM tree living inside an another (hosting) DOM tree. The spec refers the hosting tree as *light DOM tree* and the attached DOM as *shadow DOM tree*. Conceptually, the *shadow DOM* issues a single important topic in software development: **Encapsulation**. While the first spec *custom elements* provides a sufficient way to encapsulate JS behavior, *shadow DOM* coined strongly to in the direction of style encapsulation.
+A *shadow DOM* is just an isolated DOM tree living inside an another DOM tree. The spec refers the hosting tree as **light DOM tree** and the attached DOM as **shadow DOM tree**. Conceptually *shadow DOM* issues a single important issue for building scalable software which is namely **encapsulation**. While custom elements provide a good way to encapsulate JS behavior *shadow DOM* tends strongly to the direction of style and event encapsulation.
 
-With an ever increasing complexity of an single-page application, the global nature of the DOM creates a daunting situation for code organization and leads over times to highly fragmented bits of CSS and obscure CSS selectors or html wrappers. Of course, this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm effectively is to allow separate pieces of encapsulated code sit on top of the global DOM - introducing the shadowed DOM approach!
+With an ever increasing complexity of single-page applications the global nature of the DOM creates a daunting situation for code organization and leads over times to highly fragmented bits of CSS and obscured CSS selectors. Of course this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm of the DOM effectively is to allow separate pieces of encapsulated code sit on top of the global DOM - introducing the shadowed DOM approach.
 
 Enhancing the previous example the new encapsulated `HelloWorld` would like this:
 
@@ -241,77 +241,74 @@ Enhancing the previous example the new encapsulated `HelloWorld` would like this
 > main.js
 class HelloWorld extends HTMLElement {
  constructor() {
-   // this.onclick...
    this.attachShadow({mode: 'open'});
    shadowRoot.innerHTML = '<p>hello</p>';
  }
 }
 ````
-The new global method `attachShadow` adds a new document root to the `HelloWorld` which has the same properties as a normal DOM. Therefore, invoking `innerHTML` method would fill the new document (fragment) with some arbitrary content. Note that `shadowRoot` is marked as **open** which ensures that some events can bubble out and outside JS can reach in the new root. Nested children nodes and other content in the light DOM are "shadowed" by the new root and must be invited in by so called `slots`.
+The new global method `attachShadow` adds a new document root to the `HelloWorld` which has the same properties as a normal, light document object. Note that `shadowRoot` is marked as **open** which ensures that some events can bubble out and outside JS can reach in the new root.
 
-### Slots
+Filling the *shadow DOM* with an `innerHTML`  string is rather impractical. To fill a *shadow DOM* with life usually it invites light DOM child nodes nested under the hosting node using a technique called  `slots`.
 
-Contradicting to the simplified `HelloWorld` example, a *shadow DOM* shouldn't contain any ~~valuable~~ content. While technical possible any change of an element would require deeply nested calls from the *light DOM* to the *shadow DOM* to update the element in place. That's why *shadow DOM* should be perceived more as **static HTML template** and provide therefore a kind of internal frame for the render engine. `Slots` are placeholders for *light DOM* nodes used to mark the endpoints in question. 
+### 3.2.1. Slots
 
-Technically, the *light DOM* nodes are not moved inside the *shadow DOM*. Their just rendered in place. It's an subtle but important difference towards handling a node. JS behaviour and CSS styles applied in the *light DOM* will still be valid in the *shadow DOM*. The render engine literally taking the nodes and putting them inside the `slot`. This procedure is commonly referred as **flattening** of the DOM trees.
+Contradicting to the simplified `HelloWorld` example, a *shadow DOM* shouldn't contain dynamic content. Changing or interacting with the paragraph node from the example would require nested JS calls querying the hosting node, entering the *shadow DOM* and applying a function. Imported JS behavior from third-party libraries in the *light DOM* can't be used inside the *shadow DOM*, too.
 
-#### Named slots
-
- A named slot is the preferable way for clear code organization. Taking for example `<slot name="hello">Drop me a "hello" node</slot>` targets all direct *light DOM* child nodes of the hosting node matching the slot name like `<div slot="hello"></div>`. Writing a little documentation inside the `<slot>` tag is considered as a good practice as it will be rendered only if no matching *light DOM* node is available. This functionality makes a *custom element* pretty much self-explanatory. 
-
-#### Unnamed slots
-
-Inside a so-called *default slot* which looks like `<slot>Unnamed content goes here</slot>`, the render engine expands all direct *light DOM* children without a `slot` attribute. In case of multiple default slots, the first slot takes it all.
-
-### Styling
-
-As mentioned in the last section, there is a distinct difference about the nature of nodes. Nodes declared and rendered exclusively in the *shadow DOM* are not affected by any styling from outside. Nodes which are declared outside and distributed via `slots` will be styled in the *light DOM* and can be additionally painted in the *shadow DOM* through the new CSS-Selector `::slotted()`.
-
-Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. Due to the cascading nature of CSS, styles will still "bleed in" from ancestors to the *light DOM* nodes.
-
-Regarding the importance style encapsulation, a couple of new CSS rules emerged that are exclusively targeting the *shadow DOM*. The table below outlines styling possibilities for the use INSIDE the *shadow DOM*:
-
-* ::slotted(selector)  
-  Applies to distributed nodes and repaints them after distribution. `Slotted` won't override outsides styles but can complement them with unset style rules.
-* :host   
-  The host property will add styles or change inherited ones inside shadow DOM. Using `all: initial;` will ensure browser defaults only.
-* :host(condition)   
-  Like the previous one this node will style the shadow DOM but this time based on attributes/conditions assigned to the hosting node.
-* :host-context(condition)   
-  Like the previous one this node will style the shadow DOM but will look after context set at the host node or even at the host ancestor.
-
-Using the *functional selector* of `:host()` or even the only-functional `:host-contest()` allows the creation of **context-aware custom elements**. A possible use case would be "theming" a component (example taken from [@Bidelman2016shadow]):
+That's why the shadowed documents should be more perceived as **static documents** filled and managed solely by the render engine. `Slots` are target areas for *light DOM* nodes used to mark the endpoints in question. 
 
 ```html
 > index.html
-<body class="darktheme">
-  <fancy-tabs>
-    ...
-  </fancy-tabs>
-</body>
+<HelloWorld-with-ShadowDOM>
+  <!--
+	All child nodes will be moved inside the
+	shadowRoot if shadowRoot.innerHTML = '<slot></slot>'
+	-->
+  <p>hello I will be scoped</p>
+</HelloWorld-with-ShadowDOM>
 ```
 
-```CSS
-> fancy-tabs shadowRoot
-<style>
-:host-context(.darktheme) {
-  color: white;
-  background: black;
-}
-</style>
-```
+Technically, the *light DOM* nodes are not moved inside the *shadow DOM*. Their just rendered in place. It's an subtle but important difference towards handling a node. All JS behavior and CSS styles applied in the *light DOM* will be valid in the *shadow DOM*. The render engine literally taking the nodes and drop them inside the `slot` tag. This procedure is commonly referred as **flattening** of the DOM trees.
 
-### JS Behavior
+It's possible to add semantics to the *shadow DOM* in naming the slots which frees the *light DOM* from the responsiblity to deliver nodes in a correct top-to-bottom order. Combining *shadow DOM* with HTML templates provides the web developer with a flexible **HTML template engine**.
 
-As mentioned earlier any logic applied to *light DOM* nodes stays with the node even after redistribution. For the sake of separation of concerns the business logic should be part of the *custom element* (the *light DOM*) and not the part of the *shadow DOM*. On the other hand there are numerous scenarios where JS is just concerned with **styling or animation of an element**.In this case it might be more straightforward to apply JS inside the *shadow DOM* to avoid mixing with business logic handlers.
+| FROM: light DOM             | TO: shadow DOM                         |
+| --------------------------- | -------------------------------------- |
+| `<p slot="hello">Named</p>` | `<slot name="hello">hello only</slot>` |
+| `<p>Unnamed</p>`            | `<slot>Unnamed nodes</slot>`           |
 
-Drilling down to a *light DOM* node from an *shadow DOM* context is not possible with querying the node directly with `.querySelector()` or `.getElementById()` as the node is not part of the context. To get a distributed node in question it needs the way over the slot node and call `slot.assinedNodes()` to receive an array of distributed node(s) which can be accessed and manipulated like any other node. Calling `.assignedNodes()` on an empty `slot` returns an empty array.
 
-Wrapping up this section, *shadow DOM* provides a non-hacky way to create uniform looking *custom elements* and even enhance styling possibilities without adding much overhead. Still, for smaller components with only one or two child nodes, just a little styling and/or no structured redistribution a *shadow DOM* might be to hard to reason about. Eventually it all depends on the question of "how hard is it to implement it without shadow DOM" - which can't be answered universally. For a more in-depth guide, Google Engineer Eric Bidelman wroten a great primer on *shadow DOM*[@Bidelman2016shadow].
+Writing a little documentation inside the `<slot>` tag is considered as a good practice as it provides the developer with visual clues what nodes must be delivered. This functionality makes a *shadow DOM* pretty much self-explanatory. Inside a default slot tag the render engine expands all *light DOM* children without a named `slot` attribution.
 
-So far, there is still a missing link between *light DOM* and *shadow DOM*. The observant reader may have already noticed the weak point in the `HelloWorld` example: how to "vitalize" the *shadow DOM*. Recapturing the last `HelloWorld` example a string of markup was assigned to the `shadowRoot.innerHTML` property. While it works perfectly fine in this simple case, a string of markup is rather cumbersome and error-prone and doesn't scale well. When putting quotes inside another quotes things break quickly. It makes the life hard for developers to work with it because it requires manual indentation and is out of syntax highlighting. That's the time templates come into play.
+### 3.2.2. Styling
 
-## HTML Templates [(w3c)](https://www.w3.org/TR/html5/scripting-1.html#the-template-element)
+As mentioned in the last section, there is a distinct difference about the nature of nodes. Nodes declared and rendered exclusively in the *shadow DOM* are not affected by any styling from outside. Nodes which are distributed will be styled in the *light DOM* and can be additionally painted in the *shadow DOM*.
+
+Note that styles from the outside have an higher specify than styles assigned after distribution. Therefore it is generally a good advice to minimize the global stylings to some base styling for uniformity of the web site while leaving the specific stylings to the component. It is possible to **reset all styles** inside the *light DOM* before distributing nodes using the **`all: initial`** reset. To ensure a consistent look between different shadow roots this technique should be used carefully.
+
+Regarding the importance style encapsulation, a couple of **new CSS rules** emerged that are exclusively targeting the *shadow DOM*. The table below outlines styling possibilities for the use INSIDE the *shadow DOM*:
+
+* ::slotted(selector)  
+  Applies to distributed nodes and repaints them after distribution. Slotted won't override outsides styles but can complement them previously unset style rules.
+* :host   
+  The host property will add styles or change inherited ones inside shadow DOM. Aforementioned style resets can be placed here.
+* :host(condition)   
+  Like the previous rule this selector will style the shadow DOM but this time based on attributes/conditions assigned to the hosting node.
+* :host-context(condition)   
+  Like the previous rule this selector will style the shadow DOM but will look after context set at the host node or even at the host ancestor.
+
+Using the **functional selectors** `host()` or `host-context()` allows the creation of context-aware custom elements. A possible usecase would be "theming" a component.
+
+### 3.2.3. Behavior
+
+As mentioned earlier any logic applied to *light DOM* nodes stays with the node even after redistribution. For the sake of separation of concerns the business logic should be part of the *custom element* (the *light DOM*) and not the part of the *shadow DOM*. On the other hand there are numerous scenarios where JS is used for styling or animation of an element. In this case it might be more straightforward to **apply JS inside the *shadow DOM*** to avoid mixing with logic handlers with styling.
+
+It seems that a *light DOM* node is in the *shadow DOM* context after distribution. Visually this may be true but logically the node stays in the normal document. To reach a distributed node from the *shadow DOM* to apply some JS behavior for styling it needs the extra way over the slot node. Calling `assinedNodes()` on the hosting slot element returns a linkage to the distributed node which can be accessed and manipulated like in the *light DOM* context.
+
+Wrapping up this section *shadow DOM* provides a non-hacky way to create uniform looking custom elements and even enhance styling possibilities without adding overhead. For small components with just a little styling a *shadow DOM* might be over engineered. Eventually it all depends on the question of "how hard is it to implement it without shadow DOM" - which can't be answered universally. For a more in-depth guide, Google Engineer Eric Bidelman wroten a great primer on *shadow DOM*[@Bidelman2016shadow].
+
+There is still a missing link between *light DOM* and *shadow DOM*. The observant reader may have already noticed the weak point in the HelloWorld example: how to "vitalize" the *shadow DOM* with slot or other element structuring instead of `innerHTML` strings. While strings works perfectly fine in this simple case a string of markup is rather cumbersome and error-prone and doesn't scale well. When putting quotes inside another quotes things break quickly. It makes the life hard for developers to work with it because it requires manual indentation of code blocks and is typically out of syntax highlighting. That's the time HTML templates come into play.
+
+## 3.3. HTML Templates [(w3c)](https://www.w3.org/TR/html5/scripting-1.html#the-template-element)
 
 Among all other new standards *HTML templates* are the most mature and adopted standard in the browser environment. All major browsers, except from Internet Explorer, support this standard. 
 

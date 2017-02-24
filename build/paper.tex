@@ -66,6 +66,9 @@
 \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
 \newcommand{\NormalTok}[1]{{#1}}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
 \usepackage[normalem]{ulem}
 % avoid problems with \sout in headers with hyperref:
 \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
@@ -114,7 +117,7 @@ service API to overcome tricky abstraction constraints.
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
-\section{Simplicity and the web}\label{simplicity-and-the-web}
+\section{1. Simplicity and the web}\label{simplicity-and-the-web}
 
 \begin{quote}
 Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
@@ -130,8 +133,8 @@ of \textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsoz
 of a humans life, simplicity aligns perception with our mental
 capacities.
 
-Derived from the ancient Latin word \textbf{simplex}, simple can be
-understood as ``literally, uncompounded or onefold''\footnote{\href{http://www.etymonline.com/index.php?term=simple}{Etymology
+Derived from the Latin word \textbf{simplex}, simple can be understood
+as ``literally, uncompounded or onefold''\footnote{\href{http://www.etymonline.com/index.php?term=simple}{Etymology
   Dictionary}} which points directly to the unidimensional aspect. While
 complexity describes the multilayered und entangled nature of
 conditions, simplicity empowers the human brain to reason about issues
@@ -222,7 +225,7 @@ This paper is an approach to unfold these \textbf{browsernative}
 technologies to create overall simple and resilient
 \textbf{microservices} for the browser
 
-\section{Microservices}\label{microservices}
+\section{2. Microservices}\label{microservices}
 
 In search of a better, simpler web architecture one might look on
 already established pattern that proofed to fulfill enterprise needs.
@@ -242,18 +245,18 @@ successfully transformed their monolithic system into a service based
 system which gives a taste of the power behind microservices.{[}4{]}
 
 Microservices incorporate a wide array of ideas from developing scalable
-software, like \emph{domain-driven design} where it pursues the
+software, like \textbf{domain-driven design} where it pursues the
 incorporation of real world structure in the code.{[}3, p. 2{]} Or
-making use of \emph{continuous delivery} for pushing software rapidly
-through \emph{automated deployment} mechanisms into production.{[}4{]}
+making use of \textbf{continuous delivery} for pushing software rapidly
+through \textbf{automated deployment} mechanisms into production.{[}4{]}
 Furthermore, microservices transcendent the technical perspective and
 reaches into the team organization. As a primary source of truth this
 paper relies on the work of Sam Newman, who has written a comprehensive
-guide called \emph{Building Microservices} and the work of Fowler and
-Lewis. The purpose of this section is to gain confidence about the
-microservices architecture in the context of the browser platform.
+guide towards microservices{[}3{]} and the work of Fowler and
+Lewis{[}4{]}. The purpose of this section is to gain confidence about
+the microservices architecture in the context of the browser platform.
 
-\subsection{Componentization via
+\subsection{2.1. Componentization via
 Services}\label{componentization-via-services}
 
 ``A~\textbf{component}~is a unit of software that is independently
@@ -278,11 +281,11 @@ avoids variables leaking into the global namespace.
 The second principle of services is the \textbf{high cohesion
 principle}: Whether designing a microservice or it's components we want
 related behavior sit together, and unrelated behavior to sit
-elsewhere.{[}3, p. 30{]} High cohesion can be expressed in a dynamic way
-as the \emph{Single Responsibility Principle}: ``Gather together those
-things that change for the same reason and separate those things that
-change for different reasons.''{[}5{]} In a very quick and dirty code
-quality analysis, the quality can be measured just by counting the
+elsewhere.{[}3, p. 30{]} High cohesion can be enhanced towards the more
+dynamic \textbf{Single Responsibility Principle}: ``Gather together
+those things that change for the same reason and separate those things
+that change for different reasons.''{[}5{]} In a very quick and dirty
+code quality analysis, the quality can be measured just by counting the
 places changes in the code occur in order to implement a functionality.
 An arbitrary threefold MVC system should require a maximum of three
 changes to implement or change functionalities. The problem in browser
@@ -331,7 +334,7 @@ equipped with an expressive syntax and steering a web component using
 attributes and values should be most straightforward even to
 unexperienced web developers.
 
-\subsection{Organized around Business
+\subsection{2.2. Organized around Business
 Capabilities}\label{organized-around-business-capabilities}
 
 \begin{quote}
@@ -389,7 +392,7 @@ make iteration time expensive. As browser technologies, design
 guidelines and devices change frequently it makes absolutely sense to
 shift responsibility towards the teams altogether.
 
-\subsection{Smart endpoints and dumb
+\subsection{2.3. Smart endpoints and dumb
 pipes}\label{smart-endpoints-and-dumb-pipes}
 
 To ensure the microservice functionality among teams and different
@@ -418,7 +421,8 @@ essentially a HTTP request can be heavily incorporated into a
 browsernative microservice to ensure communication to services in the
 backend.
 
-\subsection{Decentralized Governance}\label{decentralized-governance}
+\subsection{2.4. Decentralized
+Governance}\label{decentralized-governance}
 
 Microservices are separate entities and decentralization is important to
 ensure autonomy. This paper already described fragmented services
@@ -443,8 +447,8 @@ VIEW layer only - which is not true anymore. In the recent years the
 major browser engines grow to to a fully-fledged app deployment platform
 offering connectors to build-in databases, multithreading support and
 ever-growing JS build-ins like speech synthesis or push notifications.
-So-called \emph{Progressive Web Apps\footnote{\href{https://developers.google.com/web/progressive-web-apps}{Progressive
-  Web Apps}}}, a bunch of criteria for building good browser apps, can
+So-called \textbf{Progressive Web Apps}\footnote{\href{https://developers.google.com/web/progressive-web-apps}{Progressive
+  Web Apps}}, a bunch of criteria for building good browser apps, can
 achieve a similar look and feel like native apps. And last but not least
 services like NativeScript\footnote{\href{https://www.nativescript.org}{NativeScript}}
 effectively compiling ``the web'' to native machine code lowering the
@@ -472,7 +476,7 @@ signature. Webcomponents.org\footnote{\href{https://webcomponents.org}{Webcompon
 is a registry for ready-to-use components of every scale and purpose
 where for even Google shares a lot of their material design elements.
 
-\subsection{Decentralized Data
+\subsection{2.5. Decentralized Data
 Management}\label{decentralized-data-management}
 
 Data Management in a microservice follows the same modular philosophy
@@ -515,7 +519,8 @@ microservice is designed holistically containing both front- and
 backends. For the sake of simplicity data management won't be explored
 into depth throughout this paper.
 
-\subsection{Infrastructure Automation}\label{infrastructure-automation}
+\subsection{2.6. Infrastructure
+Automation}\label{infrastructure-automation}
 
 Microservices tend to increase complexity as this model adds a sheer
 number of moving parts to the system whereas requires proper
@@ -529,7 +534,7 @@ completely decoupled from the production environment. This circumstance
 left developers switching back and forth between files developing tricky
 opinionated (and more often biased) ways to glue related parts together.
 Bret Victor, UI designer at Apple defined the importance of an
-\emph{immediate feedback principle} for developing user
+\textbf{immediate feedback principle} for developing user
 interfaces.\footnote{\href{https://vimeo.com/36579366}{Bret Victor -
   Inventing on Principle}} In his talk he emphasizes the importance of
 an immediate connection between the creator of a product and product
@@ -540,8 +545,8 @@ web component. Every major browser devtool offers a direct file
 manipulation functionality so development can be even in place.
 
 When it comes to standardized deployment guidelines previously mentioned
-Ben Issa, described the ING standard workflow. Every component deserves
-a own \textbf{git repo} containing
+Ben Issa, described the ING standard workflow. Every component comes in
+its own \textbf{git repo} containing:
 
 \begin{itemize}
 \tightlist
@@ -567,7 +572,7 @@ and deployed by a fully automated machinery.{[}8{]} Due to an exhaustive
 amount of testing and deployment tools for JS an automated
 infrastructure shouldn't be a problem.
 
-\subsection{Design for failure}\label{design-for-failure}
+\subsection{2.7. Design for failure}\label{design-for-failure}
 
 In theory a microservice is designed with focus on monitoring for both
 the architectural elements and business relevant metrics.{[}4{]} Due to
@@ -580,9 +585,9 @@ browsers remain a general problem for enhancing websites with new
 technologies and therefore demand further configuration.
 
 Combinment of the resources in the browser always demanded for
-optimization to avoid unexpected side-effects like the \emph{flash of
-unstyled content (FOUC)}. Googles Polymer propagates the a
-general-purpose pattern called \textbf{PRLP}\footnote{\href{https://www.polymer-project.org/1.0/toolbox/server}{PRLP
+optimization to avoid unexpected side-effects like \emph{flash of
+unstyled content}. Googles Polymer propagates the a general-purpose
+pattern called \textbf{PRLP}\footnote{\href{https://www.polymer-project.org/1.0/toolbox/server}{PRLP
   pattern}}:
 
 \begin{itemize}
@@ -606,15 +611,15 @@ app logic can be loaded and registered.
 Regarding the evolution of the web, the ``next billion'' internet users
 most likely using Android, have decent specs mobile phones, use an
 evergreen browser but won't have a reliable internet connection.{[}9{]}
-While \emph{Progressive Enhancement} was once coined on the principle to
-build websites both for Browsers with JS and HTML only, the new
-\emph{Progressive Enhancement} tends towards an \textbf{offline first}
-principle avoiding network connectivity failures. A \emph{browsernative
+While \textbf{Progressive Enhancement} was once related to build
+websites both for browsers with and without JS support the demands
+changed tends towards an \textbf{offline first} principle avoiding
+network connectivity failures.{[}9{]} A \emph{browsernative
 microservice} therefore not only tries to cache data as much as
 possible, it should also bring in a lot of program logic as described in
 the previous chapters.
 
-\subsection{Evolutionary Design}\label{evolutionary-design}
+\subsection{2.8. Evolutionary Design}\label{evolutionary-design}
 
 Microservices tend to become smaller over time. An evolutionary design
 approach puts emphasizes on decomposition and scrapping the service.
@@ -625,7 +630,7 @@ often should be separated from parts undergoing a lot of churn.{[}4{]}
 And services which change for the same reason might be moved together or
 even could be merged.
 
-Being flexible when developing for the web is a selling point as
+Pursuing flexibility for web development is a selling point as
 innovation cycles for browser development is fast paced and technologies
 can change quickly. Frontend related hardware, software and
 methodologies innovate rapidly over time.
@@ -633,26 +638,26 @@ methodologies innovate rapidly over time.
 \emph{Browsernative microservices} should be perceived as complementary
 technology in contrast to full-service frameworks like Angular. Being
 native technology pursues a strong interopt approach with existing
-systems. Andrew Rota for example came up with the pattern to use small,
+systems. Andrew Rota for example came up with a pattern using small,
 encapsulated and stateless web components as leaves in the tree of React
-components instead of native HTML elements.{[}10{]} Even React code can
-profit from the expressiveness of custom components. As web components
-are native after registration there is no difference in using a native
-\texttt{button} over a \texttt{meaningful-button}. Most likely there
-will be always some cutting edge framework promising advantages over
-native code. Whatever new framework will be on the rise within the next
-years native components can eliminate future uncertainty and allowing
-rapid reassembling towards new architectures.
+components instead of native HTML elements.{[}10{]} Even React can
+eventually profit from the expressiveness of custom components using a
+custom \texttt{\textless{}meaningful-button\textgreater{}} over a native
+\texttt{\textless{}button\textgreater{}}. Most likely there will be
+always some cutting edge framework promising advantages over native
+code. Whatever new framework will be on the rise within the next years
+native components can eliminate future uncertainty and allowing rapid
+reassembling towards new architectures.
 
-\section{W3C specifications}\label{w3c-specifications}
+\section{3. W3C specifications}\label{w3c-specifications}
 
 For building a native microservice running on the ``bare-metal'' browser
 engine requires a bunch of new specifications and assumptions. Most
 importantly the quasi specification \textbf{Web Components} is needed.
-\emph{Web Components} is not a real standard. It's an amalgam of APIs
-from multiple w3c specs which can be used independently, too. A
-webdeveloper may choose one spec and embrace the freedom in architecture
-which can be combined with other frameworks/libraries.
+Web Components is not a real standard. It's an amalgam of APIs from
+multiple w3c specs which can be used independently. A web developer may
+choose one spec and embrace the freedom in architecture which can be
+combined with other frameworks/libraries.
 
 Depending on the context, some people argue for only two specs which
 essentially make it possible to create a scoped component but not caring
@@ -665,7 +670,7 @@ provide a rough understanding. It is not meant to cover all bits and
 pieces.
 
 \emph{Disclaimer:} This paper introduces many new browser build-ins with
-the focus on try and test. As the time of writing, many examples can be
+the focus on testability. As the time of writing, many examples can be
 tried frictionless in the console of the latest versions of
 \textbf{Google Chrome, Opera and Apple Safari}.\footnote{\href{http://jonrimmer.github.io/are-we-componentized-yet/}{Are
   we componentized yet?}} On Mozilla Firefox technologies work behind a
@@ -674,12 +679,12 @@ Browser implementation changes quickly and soon technology adoption
 won't be an issue. Meanwhile new standards can be used through
 \textbf{polyfills} even on legacy browsers.
 
-\subsection{\texorpdfstring{Custom Elements
-\href{http://w3c.github.io/webcomponents/spec/custom/}{(w3c)}}{Custom Elements (w3c)}}\label{custom-elements-w3c}
+\subsection{\texorpdfstring{3.1. Custom Elements
+\href{http://w3c.github.io/webcomponents/spec/custom/}{(w3c)}}{3.1. Custom Elements (w3c)}}\label{custom-elements-w3c}
 
-Custom elements are the fundamental building blocks for web components
-introducing the \emph{Single Responsibility Principle} to the browser.
-In essence, they provide a way to create \textbf{custom HTML tags}
+\emph{Custom elements} are the fundamental building blocks for web
+components introducing the \textbf{Single Responsibility Principle} to
+the browser. In short, they provide a way to create custom HTML tags
 subsuming behavior, design and functionality. An obligatory
 \textbf{HelloWorld} will give a flavor about the spec:
 
@@ -703,152 +708,144 @@ subsuming behavior, design and functionality. An obligatory
 \end{Highlighting}
 \end{Shaded}
 
-This example should be self-explanatory. Notably, custom elements come
-in the fashion of \emph{ES6 Classes}\footnote{\href{https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes}{JavaScript
+This example should be almost self-explanatory in functionality.
+\emph{Custom elements} come in the fashion of \textbf{ES6
+Classes}\footnote{\href{https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes}{JavaScript
   Classes}} in favor of the normal JavaScript prototype-based
-inheritance model. This class must inherit the base \texttt{HTMLElement}
-interface which~``ensures the newly created element inherits the entire
-DOM API and any properties/methods that you add to the class become part
-of the element's DOM interface.''{[}13{]} Like any other \emph{ES6
-class}, the new element can be specialized further on using the typical
-\texttt{extends} inheritance.
+inheritance model which was part of an older specification. Every valid
+element must extend the base \texttt{HTMLElement} interface
+which~``ensures the newly created element inherits the entire DOM API
+and any properties/methods that you add to the class become part of the
+element's DOM interface.''{[}13{]} Like any other ES6 class any
+\emph{custom element} can be specialized further using the typical
+inheritance model allowing higher levels of abstraction.
 
-The beauty of \emph{custom elements} comes with the keyword
-\texttt{this} which points to the element itself. Instead of querying
-and assigning behavior AFTER creation of the node, custom elements ship
-their functionality PRIOR initialization of the element. The so called
-\emph{fat-arrow} (\texttt{=\textgreater{}}) is just a new ES6 syntax
-feature for an anonymous function declaration.
+The beauty of \emph{custom elements} comes with the \textbf{bounded
+\texttt{this} keyword} which points to the element itself. Instead of
+querying and assigning behavior after creation of the node, custom
+elements ship their functionality on initialization of the element. The
+so called \emph{fat-arrow} (\texttt{=\textgreater{}}) is just a new ES6
+syntax feature for an anonymous function declaration.
 
-After declaration, the new HTML element needs to be registered in the
-global build-in \texttt{customElements} object with an tag name like
-\texttt{\textless{}hello-world\textgreater{}} acting as key to the
-element. Mind the dash inside the tag name to conform the spec. Finally,
-the new element can go live inside the HTML Document
-\texttt{index.html}.
+After declaration the new HTML element needs to be registered in the
+global build-in \texttt{customElements} object with an dedicated tag
+name acting as key to the element. Mind the dash inside the tag name to
+conform the spec. Finally, the new element can be mounted inside the
+HTML document.
 
-\subsubsection{Lifecycle methods}\label{lifecycle-methods}
+\subsubsection{3.1.1. Lifecycle methods}\label{lifecycle-methods}
 
-In addition to the \texttt{constructor()}, the spec defines so called
-\emph{lifecycle callbacks} for controlling the \textbf{behaviour in the
-DOM}. Many popular frameworks like ReactJS or AngularJS rely on similar
-approaches:
+In addition to the constructor which runs procedures on initialization,
+the spec defines \textbf{lifecycle callbacks} for controlling elements
+behavior towards DOM interaction. Many popular frameworks like React or
+Angular rely on similar approaches:
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{connectedCallback()}\\
-  Called upon the time of \emph{connecting or upgrading the node} which
-  means the moment the node is rendered inside the DOM. Typically this
-  method is called straight after the \texttt{constructor()} on insert.
-  Typically, this method contains setup code, such as fetching resources
-  or rendering elements according to attributes.{[}13{]} For a fast
-  initial render of the page, it is highly preferable to put many
-  proceedings in favor of the constructor.
+  connectedCallback()\\
+  Called upon the time of \textbf{connecting or upgrading the node}
+  which means the moment the node is rendered inside the DOM. Typically
+  this method is called straight after the constructor if the node is
+  inserted directly. For a faster initial render of the page it is
+  highly preferable to put many proceedings in this method. Usually this
+  method contains setup code such as fetching resources or rendering
+  elements according to attributes.{[}13{]}
 \item
-  \texttt{disconnectedCallback()}\\
-  Called upon the time of \emph{node removal}. Cleanup code like
-  removing eventListeners or disconnecting websockets can be put here.
+  disconnectedCallback()\\
+  Called upon the time of \textbf{node removal}. Cleanup code like
+  removing event listeners or disconnecting web sockets can be put here.
 \item
-  \texttt{attributeChangedCallback(attrName,\ oldVal,\ newVal)}\\
-  This method provides an \emph{Onchange handler} that runs for certain
-  attributes called with three values as defined in the signature. It is
-  meant to control an elements' transition from on \texttt{oldVal} to a
-  \texttt{newVal}. Due to performance issues, this callback is only
-  triggered for attributes registered in an \emph{observedAttributes}
-  array.
+  attributeChangedCallback(attrName, oldVal, newVal)\\
+  This method provides an \textbf{onchange handler} for certain elements
+  attributes. This method is used to guide elements' transition from an
+  old value to a new state. Due to performance issues this callback is
+  only triggered for attributes registered in a dedicated array shipped
+  with the element.
 \item
-  \texttt{adoptedCallback()}\\
-  Called when moving the node \emph{between documents}.
+  adoptedCallback()\\
+  Called when moving the node \textbf{between documents}. This method
+  comes handy when using HTML imports described later.
 \end{itemize}
 
-\subsubsection{Custom attributes}\label{custom-attributes}
+\subsubsection{3.1.2. Custom attributes}\label{custom-attributes}
 
-As previously mentioned, the custom elements must \texttt{extend} the
-\texttt{HTMLElement} interface. Therefore, the new element inherits base
-properties and methods commonly used in all HTML elements like
-\texttt{id,\ class,\ addEventListner} . Additionally, it is possible to
-define custom attributes using the \emph{custom elements'}
-\textbf{getter / setter interface} to steer the behavior of the element.
+As mentioned earlier any custom elements must extend the
+\texttt{HTMLElement} interface ensuring base properties and methods used
+in throughout all HTML elements like \textbf{id, class, addEventListner
+\ldots{}}. Additionally, it is possible to define custom attributes
+using the \emph{custom elements'} \textbf{getter / setter interface} to
+steer the behavior of the element.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
- \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
-  \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
-  \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
- \OperatorTok{\}}
- \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
-  \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
- \OperatorTok{\}}
-\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+  \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
+    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
+  \OperatorTok{\}}
+  \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
+    \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
+  \OperatorTok{\}}
+\OperatorTok{\}}
 \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
-\CommentTok{// Instantiation}
+\CommentTok{// Instantiation via JS instead of HTML}
 \KeywordTok{var} \NormalTok{el }\OperatorTok{=} \KeywordTok{new} \AttributeTok{HelloWorld}\NormalTok{()}\OperatorTok{;}
 \VariableTok{el}\NormalTok{.}\AttributeTok{sayhello} \OperatorTok{=} \StringTok{"earth"}\OperatorTok{;}
 \VariableTok{el}\NormalTok{.}\AttributeTok{sayhello}\OperatorTok{;}\CommentTok{//"earth"}
 \end{Highlighting}
 \end{Shaded}
 
-Native DOM properties, like \texttt{id} or \texttt{onclick}, reflect
-their values between HTML and JS.{[}14, Para. 2.6.1{]} For example
-declaring the HTML
-\texttt{\textless{}hello-world\ id="hello"\textgreater{}} like this
-equals to assign the ID in JS like \texttt{Node.id\ =\ "hello"}. This
-behavior won't work out-of-the-box with methods or properties defined
-setters. For example declaring
-\texttt{\textless{}hello-world\ sayhello="mars"\textgreater{}\textless{}/hello-world\textgreater{}}
-would't call the \texttt{sayhello} function in the previous setup.
+Native DOM properties always reflect their values between HTML and
+JS.{[}14, Para. 2.6.1{]} Declaring
+\texttt{\textless{}hello-world\ id="hello"\textgreater{}} equals to the
+JS declaration \texttt{new\ HelloWorld().id\ =\ "hello"}.
 
-A common workaround to bind HTML and JS behavior together is archived by
-using the aforementioned lifecycle method
-\texttt{attributeChangedCallback} to \textbf{bind changing HTML
-attributes to JS properties} and to map JS attributes to HTML with
-\texttt{this.setAttributes(...)} respectively. On insertion time HTML
-attributes might trigger custom JS methods retrieving HTML attributes
-using \texttt{this.getAttributes(...)} method.
+This behavior won't work out-of-the-box with methods defined with
+setters as they are strictly JS only . Mounting
+\texttt{\textless{}hello-world\ sayhello="mars"\textgreater{}} would't
+call the \texttt{sayhello} method in the previous setup. Value
+reflection can be implemented inside the \emph{custom elements} using
+the native methods \texttt{getAttributes} and \texttt{setAttributes}.
+Using them exhaustively throughout lifecycles methods the new components
+can configured to read and listen to HTML attributes accordingly.
 
-Concluding this section, a reader might already discover the
-\textbf{mental model} behind \emph{web compontents}. A custom element is
-similar to a named function where attributes treated as input variables.
-In the hierarchical nature of DOM, input can occur either top-down via
-assignments and bottom-up via captured events. The same goes true when
-talking about output. Even though it seems obvious, it might be helpful
-to keep this point in mind.
+Designing a \emph{custom element} this way creates HTML elements with
+named attribute interfaces reaching deep into JS functionality. With
+this mental model in mind a web developer can create highly dynamic web
+components.
 
-\subsubsection{Customized build-in
+\subsubsection{3.1.3. Customized build-in
 elements}\label{customized-build-in-elements}
 
-One aspect didn't mentioned yet is the possibility of creating
-sub-classes of build-in elements by extending the native Interfaces like
-the \texttt{HTMLButtonElement} interface. While this functionality is
-perfectly spec'd it is strongly rejected by some browser
-vendors.\footnote{https://github.com/w3c/webcomponents/issues/509} Most
-likely the spec will change in future in one or other way on this issue
-and therefore customized build-in elements left out of this paper
+One aspect didn't mentioned yet is the possibility of extending other
+build-in elements by extending other interfaces instead of the
+\texttt{HTMLElement} interface. While this functionality is perfectly
+spec'd it is strongly rejected by some browser vendors.\footnote{https://github.com/w3c/webcomponents/issues/509}
+Most likely the spec will change in future in one or other way on this
+issue and therefore customized build-in elements left out of this paper
 intentionally.
 
-\subsection{\texorpdfstring{Shadow DOM
-\href{http://w3c.github.io/webcomponents/spec/shadow/}{(w3c)}}{Shadow DOM (w3c)}}\label{shadow-dom-w3c}
+\subsection{\texorpdfstring{3.2. Shadow DOM
+\href{http://w3c.github.io/webcomponents/spec/shadow/}{(w3c)}}{3.2. Shadow DOM (w3c)}}\label{shadow-dom-w3c}
 
-A \emph{shadow DOM} is basically an isolated DOM tree living inside an
-another (hosting) DOM tree. The spec refers the hosting tree as
-\emph{light DOM tree} and the attached DOM as \emph{shadow DOM tree}.
-Conceptually, the \emph{shadow DOM} issues a single important topic in
-software development: \textbf{Encapsulation}. While the first spec
-\emph{custom elements} provides a sufficient way to encapsulate JS
-behavior, \emph{shadow DOM} coined strongly to in the direction of style
-encapsulation.
+A \emph{shadow DOM} is just an isolated DOM tree living inside an
+another DOM tree. The spec refers the hosting tree as \textbf{light DOM
+tree} and the attached DOM as \textbf{shadow DOM tree}. Conceptually
+\emph{shadow DOM} issues a single important issue for building scalable
+software which is namely \textbf{encapsulation}. While custom elements
+provide a good way to encapsulate JS behavior \emph{shadow DOM} tends
+strongly to the direction of style and event encapsulation.
 
-With an ever increasing complexity of an single-page application, the
+With an ever increasing complexity of single-page applications the
 global nature of the DOM creates a daunting situation for code
 organization and leads over times to highly fragmented bits of CSS and
-obscure CSS selectors or html wrappers. Of course, this situation lowers
-code clarity and reusability dramatically. The only solution which won't
-break with the existing global paradigm effectively is to allow separate
+obscured CSS selectors. Of course this situation lowers code clarity and
+reusability dramatically. The only solution which won't break with the
+existing global paradigm of the DOM effectively is to allow separate
 pieces of encapsulated code sit on top of the global DOM - introducing
-the shadowed DOM approach!
+the shadowed DOM approach.
 
 Enhancing the previous example the new encapsulated \texttt{HelloWorld}
 would like this:
@@ -858,7 +855,6 @@ would like this:
 \OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-   \CommentTok{// this.onclick...}
    \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
    \VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{innerHTML} \OperatorTok{=} \StringTok{'<p>hello</p>'}\OperatorTok{;}
  \OperatorTok{\}}
@@ -867,170 +863,167 @@ would like this:
 \end{Shaded}
 
 The new global method \texttt{attachShadow} adds a new document root to
-the \texttt{HelloWorld} which has the same properties as a normal DOM.
-Therefore, invoking \texttt{innerHTML} method would fill the new
-document (fragment) with some arbitrary content. Note that
-\texttt{shadowRoot} is marked as \textbf{open} which ensures that some
-events can bubble out and outside JS can reach in the new root. Nested
-children nodes and other content in the light DOM are ``shadowed'' by
-the new root and must be invited in by so called \texttt{slots}.
+the \texttt{HelloWorld} which has the same properties as a normal, light
+document object. Note that \texttt{shadowRoot} is marked as
+\textbf{open} which ensures that some events can bubble out and outside
+JS can reach in the new root.
 
-\subsubsection{Slots}\label{slots}
+Filling the \emph{shadow DOM} with an \texttt{innerHTML} string is
+rather impractical. To fill a \emph{shadow DOM} with life usually it
+invites light DOM child nodes nested under the hosting node using a
+technique called \texttt{slots}.
+
+\subsubsection{3.2.1. Slots}\label{slots}
 
 Contradicting to the simplified \texttt{HelloWorld} example, a
-\emph{shadow DOM} shouldn't contain any \sout{valuable} content. While
-technical possible any change of an element would require deeply nested
-calls from the \emph{light DOM} to the \emph{shadow DOM} to update the
-element in place. That's why \emph{shadow DOM} should be perceived more
-as \textbf{static HTML template} and provide therefore a kind of
-internal frame for the render engine. \texttt{Slots} are placeholders
-for \emph{light DOM} nodes used to mark the endpoints in question.
+\emph{shadow DOM} shouldn't contain dynamic content. Changing or
+interacting with the paragraph node from the example would require
+nested JS calls querying the hosting node, entering the \emph{shadow
+DOM} and applying a function. Imported JS behavior from third-party
+libraries in the \emph{light DOM} can't be used inside the \emph{shadow
+DOM}, too.
+
+That's why the shadowed documents should be more perceived as
+\textbf{static documents} filled and managed solely by the render
+engine. \texttt{Slots} are target areas for \emph{light DOM} nodes used
+to mark the endpoints in question.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{> index.html}
+\KeywordTok{<HelloWorld-with-ShadowDOM>}
+  \CommentTok{<!--}
+\CommentTok{    All child nodes will be moved inside the}
+\CommentTok{    shadowRoot if shadowRoot.innerHTML = '<slot></slot>'}
+\CommentTok{    -->}
+  \KeywordTok{<p>}\NormalTok{hello I will be scoped}\KeywordTok{</p>}
+\KeywordTok{</HelloWorld-with-ShadowDOM>}
+\end{Highlighting}
+\end{Shaded}
 
 Technically, the \emph{light DOM} nodes are not moved inside the
 \emph{shadow DOM}. Their just rendered in place. It's an subtle but
-important difference towards handling a node. JS behaviour and CSS
-styles applied in the \emph{light DOM} will still be valid in the
-\emph{shadow DOM}. The render engine literally taking the nodes and
-putting them inside the \texttt{slot}. This procedure is commonly
-referred as \textbf{flattening} of the DOM trees.
+important difference towards handling a node. All JS behavior and CSS
+styles applied in the \emph{light DOM} will be valid in the \emph{shadow
+DOM}. The render engine literally taking the nodes and drop them inside
+the \texttt{slot} tag. This procedure is commonly referred as
+\textbf{flattening} of the DOM trees.
 
-\paragraph{Named slots}\label{named-slots}
+It's possible to add semantics to the \emph{shadow DOM} in naming the
+slots which frees the \emph{light DOM} from the responsiblity to deliver
+nodes in a correct top-to-bottom order. Combining \emph{shadow DOM} with
+HTML templates provides the web developer with a flexible \textbf{HTML
+template engine}.
 
-A named slot is the preferable way for clear code organization. Taking
-for example
-\texttt{\textless{}slot\ name="hello"\textgreater{}Drop\ me\ a\ "hello"\ node\textless{}/slot\textgreater{}}
-targets all direct \emph{light DOM} child nodes of the hosting node
-matching the slot name like
-\texttt{\textless{}div\ slot="hello"\textgreater{}\textless{}/div\textgreater{}}.
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+FROM: light DOM & TO: shadow DOM\tabularnewline
+\midrule
+\endhead
+\texttt{\textless{}p\ slot="hello"\textgreater{}Named\textless{}/p\textgreater{}}
+&
+\texttt{\textless{}slot\ name="hello"\textgreater{}hello\ only\textless{}/slot\textgreater{}}\tabularnewline
+\texttt{\textless{}p\textgreater{}Unnamed\textless{}/p\textgreater{}} &
+\texttt{\textless{}slot\textgreater{}Unnamed\ nodes\textless{}/slot\textgreater{}}\tabularnewline
+\bottomrule
+\end{longtable}
+
 Writing a little documentation inside the
 \texttt{\textless{}slot\textgreater{}} tag is considered as a good
-practice as it will be rendered only if no matching \emph{light DOM}
-node is available. This functionality makes a \emph{custom element}
-pretty much self-explanatory.
+practice as it provides the developer with visual clues what nodes must
+be delivered. This functionality makes a \emph{shadow DOM} pretty much
+self-explanatory. Inside a default slot tag the render engine expands
+all \emph{light DOM} children without a named \texttt{slot} attribution.
 
-\paragraph{Unnamed slots}\label{unnamed-slots}
-
-Inside a so-called \emph{default slot} which looks like
-\texttt{\textless{}slot\textgreater{}Unnamed\ content\ goes\ here\textless{}/slot\textgreater{}},
-the render engine expands all direct \emph{light DOM} children without a
-\texttt{slot} attribute. In case of multiple default slots, the first
-slot takes it all.
-
-\subsubsection{Styling}\label{styling}
+\subsubsection{3.2.2. Styling}\label{styling}
 
 As mentioned in the last section, there is a distinct difference about
 the nature of nodes. Nodes declared and rendered exclusively in the
 \emph{shadow DOM} are not affected by any styling from outside. Nodes
-which are declared outside and distributed via \texttt{slots} will be
-styled in the \emph{light DOM} and can be additionally painted in the
-\emph{shadow DOM} through the new CSS-Selector \texttt{::slotted()}.
+which are distributed will be styled in the \emph{light DOM} and can be
+additionally painted in the \emph{shadow DOM}.
 
 Note that styles from the outside have an higher specify than styles
 assigned after distribution. Therefore it is generally a good advice to
 minimize the global stylings to some base styling for uniformity of the
-web site while leaving the specific stylings to the component. Due to
-the cascading nature of CSS, styles will still ``bleed in'' from
-ancestors to the \emph{light DOM} nodes.
+web site while leaving the specific stylings to the component. It is
+possible to \textbf{reset all styles} inside the \emph{light DOM} before
+distributing nodes using the \textbf{\texttt{all:\ initial}} reset. To
+ensure a consistent look between different shadow roots this technique
+should be used carefully.
 
-Regarding the importance style encapsulation, a couple of new CSS rules
-emerged that are exclusively targeting the \emph{shadow DOM}. The table
-below outlines styling possibilities for the use INSIDE the \emph{shadow
-DOM}:
+Regarding the importance style encapsulation, a couple of \textbf{new
+CSS rules} emerged that are exclusively targeting the \emph{shadow DOM}.
+The table below outlines styling possibilities for the use INSIDE the
+\emph{shadow DOM}:
 
 \begin{itemize}
 \tightlist
 \item
   ::slotted(selector)\\
   Applies to distributed nodes and repaints them after distribution.
-  \texttt{Slotted} won't override outsides styles but can complement
-  them with unset style rules.
+  Slotted won't override outsides styles but can complement them
+  previously unset style rules.
 \item
   :host\\
   The host property will add styles or change inherited ones inside
-  shadow DOM. Using \texttt{all:\ initial;} will ensure browser defaults
-  only.
+  shadow DOM. Aforementioned style resets can be placed here.
 \item
   :host(condition)\\
-  Like the previous one this node will style the shadow DOM but this
-  time based on attributes/conditions assigned to the hosting node.
+  Like the previous rule this selector will style the shadow DOM but
+  this time based on attributes/conditions assigned to the hosting node.
 \item
   :host-context(condition)\\
-  Like the previous one this node will style the shadow DOM but will
-  look after context set at the host node or even at the host ancestor.
+  Like the previous rule this selector will style the shadow DOM but
+  will look after context set at the host node or even at the host
+  ancestor.
 \end{itemize}
 
-Using the \emph{functional selector} of \texttt{:host()} or even the
-only-functional \texttt{:host-contest()} allows the creation of
-\textbf{context-aware custom elements}. A possible use case would be
-``theming'' a component (example taken from {[}15{]}):
+Using the \textbf{functional selectors} \texttt{host()} or
+\texttt{host-context()} allows the creation of context-aware custom
+elements. A possible usecase would be ``theming'' a component.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{> index.html}
-\KeywordTok{<body}\OtherTok{ class=}\StringTok{"darktheme"}\KeywordTok{>}
-  \KeywordTok{<fancy-tabs>}
-    \NormalTok{...}
-  \KeywordTok{</fancy-tabs>}
-\KeywordTok{</body>}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{> fancy-tabs shadowRoot}
-\NormalTok{<style>}
-\DecValTok{:}\NormalTok{host-context(}\FloatTok{.darktheme}\NormalTok{) }\KeywordTok{\{}
-\ErrorTok{ } \KeywordTok{color:} \DataTypeTok{white}\KeywordTok{;}
-\ErrorTok{ } \KeywordTok{background:} \DataTypeTok{black}\KeywordTok{;}
-\KeywordTok{\}}
-\NormalTok{</style>}
-\end{Highlighting}
-\end{Shaded}
-
-\subsubsection{JS Behavior}\label{js-behavior}
+\subsubsection{3.2.3. Behavior}\label{behavior}
 
 As mentioned earlier any logic applied to \emph{light DOM} nodes stays
 with the node even after redistribution. For the sake of separation of
 concerns the business logic should be part of the \emph{custom element}
 (the \emph{light DOM}) and not the part of the \emph{shadow DOM}. On the
-other hand there are numerous scenarios where JS is just concerned with
-\textbf{styling or animation of an element}.In this case it might be
-more straightforward to apply JS inside the \emph{shadow DOM} to avoid
-mixing with business logic handlers.
+other hand there are numerous scenarios where JS is used for styling or
+animation of an element. In this case it might be more straightforward
+to \textbf{apply JS inside the \emph{shadow DOM}} to avoid mixing with
+logic handlers with styling.
 
-Drilling down to a \emph{light DOM} node from an \emph{shadow DOM}
-context is not possible with querying the node directly with
-\texttt{.querySelector()} or \texttt{.getElementById()} as the node is
-not part of the context. To get a distributed node in question it needs
-the way over the slot node and call \texttt{slot.assinedNodes()} to
-receive an array of distributed node(s) which can be accessed and
-manipulated like any other node. Calling \texttt{.assignedNodes()} on an
-empty \texttt{slot} returns an empty array.
+It seems that a \emph{light DOM} node is in the \emph{shadow DOM}
+context after distribution. Visually this may be true but logically the
+node stays in the normal document. To reach a distributed node from the
+\emph{shadow DOM} to apply some JS behavior for styling it needs the
+extra way over the slot node. Calling \texttt{assinedNodes()} on the
+hosting slot element returns a linkage to the distributed node which can
+be accessed and manipulated like in the \emph{light DOM} context.
 
-Wrapping up this section, \emph{shadow DOM} provides a non-hacky way to
-create uniform looking \emph{custom elements} and even enhance styling
-possibilities without adding much overhead. Still, for smaller
-components with only one or two child nodes, just a little styling
-and/or no structured redistribution a \emph{shadow DOM} might be to hard
-to reason about. Eventually it all depends on the question of ``how hard
-is it to implement it without shadow DOM'' - which can't be answered
-universally. For a more in-depth guide, Google Engineer Eric Bidelman
-wroten a great primer on \emph{shadow DOM}{[}15{]}.
+Wrapping up this section \emph{shadow DOM} provides a non-hacky way to
+create uniform looking custom elements and even enhance styling
+possibilities without adding overhead. For small components with just a
+little styling a \emph{shadow DOM} might be over engineered. Eventually
+it all depends on the question of ``how hard is it to implement it
+without shadow DOM'' - which can't be answered universally. For a more
+in-depth guide, Google Engineer Eric Bidelman wroten a great primer on
+\emph{shadow DOM}{[}15{]}.
 
-So far, there is still a missing link between \emph{light DOM} and
-\emph{shadow DOM}. The observant reader may have already noticed the
-weak point in the \texttt{HelloWorld} example: how to ``vitalize'' the
-\emph{shadow DOM}. Recapturing the last \texttt{HelloWorld} example a
-string of markup was assigned to the \texttt{shadowRoot.innerHTML}
-property. While it works perfectly fine in this simple case, a string of
+There is still a missing link between \emph{light DOM} and \emph{shadow
+DOM}. The observant reader may have already noticed the weak point in
+the HelloWorld example: how to ``vitalize'' the \emph{shadow DOM} with
+slot or other element structuring instead of \texttt{innerHTML} strings.
+While strings works perfectly fine in this simple case a string of
 markup is rather cumbersome and error-prone and doesn't scale well. When
 putting quotes inside another quotes things break quickly. It makes the
 life hard for developers to work with it because it requires manual
-indentation and is out of syntax highlighting. That's the time templates
-come into play.
+indentation of code blocks and is typically out of syntax highlighting.
+That's the time HTML templates come into play.
 
-\subsection{\texorpdfstring{HTML Templates
-\href{https://www.w3.org/TR/html5/scripting-1.html\#the-template-element}{(w3c)}}{HTML Templates (w3c)}}\label{html-templates-w3c}
+\subsection{\texorpdfstring{3.3. HTML Templates
+\href{https://www.w3.org/TR/html5/scripting-1.html\#the-template-element}{(w3c)}}{3.3. HTML Templates (w3c)}}\label{html-templates-w3c}
 
 Among all other new standards \emph{HTML templates} are the most mature
 and adopted standard in the browser environment. All major browsers,
