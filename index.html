@@ -80,9 +80,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#web-worker-whatwg">3.6. Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></a></li>
 </ul></li>
 <li><a href="#building-a-browsernative-microservice">4. Building a browsernative microservice</a><ul>
-<li><a href="#root-container">Root container</a></li>
-<li><a href="#container-components">Container components</a></li>
-<li><a href="#presentational-components">Presentational components</a></li>
+<li><a href="#service-root">4.1. Service root</a></li>
+<li><a href="#container-components">4.2. Container components</a></li>
+<li><a href="#presentational-components">4.3. Presentational components</a></li>
 </ul></li>
 <li><a href="#thinking-further">5. Thinking further</a><ul>
 <li><a href="#riot-httpriotjs.comcompareweb-components">[^riot]: http://riotjs.com/compare/#web-components</a></li>
@@ -403,7 +403,8 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> a compl
 <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;message&#39;</span><span class="op">,</span> e <span class="op">=&gt;</span>
  <span class="kw">this</span>.<span class="at">postMessage</span>(<span class="st">&quot;Echo &quot;</span> <span class="op">+</span> <span class="va">e</span>.<span class="at">data</span>))<span class="op">;</span></code></pre></div>
 <h1 id="building-a-browsernative-microservice">4. Building a browsernative microservice</h1>
-<p>After getting confidence in microservice principles and technical background the paper should briefly join them to form a <em>browsernative microservices</em>. Needless to say the following example is overall simplified towards illustrating the connection between browsernative technologies and microservice patterns. Googles library Polymer is a good place for learning about web components in depth and make use of their toolbox. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single root element <code>&lt;shop-app&gt;</code>. This app made of several main views and many more invisible wrapper elements for routing, service worker caching, theming, etc. The whole shop runs as a single application fetching and updating remote resources and switching views. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
+<p>After getting confidence in microservice principles and technical background the paper should briefly join them to form a <em>browsernative microservices</em>. Needless to say the following example is overall simplified towards illustrating the connection between browsernative technologies and microservice patterns. Furthermore it is highly opinionated in development and shouldn't perceived as &quot;single source of truth&quot;.</p>
+<p>Googles library Polymer is a good place for learning about web components in depth and make use of their toolbox. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single root element <code>&lt;shop-app&gt;</code>. This app made of several main views and many more invisible wrapper elements for routing, service worker caching, theming, etc. The whole shop runs as a single application fetching and updating remote resources and switching views. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
 <p>The current checkout can be found at https://shop.polymer-project.org/checkout. At the time of writing the checkout is a single, 671 lines of code long Polymer component including all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the microservice into fine grained components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element.</p>
 <p>By breaking down the service the <strong>team defined the business boundaries</strong> within the checkout process and ended up with following granular service blocks:</p>
 <ol type="1">
@@ -425,8 +426,8 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> a compl
 <p>Firstly, Abramov defined a pattern around <strong>presentational components</strong> only related with the concern about <em>how things look</em>. This component literally doesn't know anything about the service in question which makes the component highly flexible and reusable. They are controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles being overwritten. Furthermore, it may contain several templates to change it's look on different demands.</p>
 <p>Secondly, Abramov described components he refers as <strong>containers</strong>. A container component is concerned with <em>how things work</em>.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Containers acts as invisible wrappers around presentational components acting in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently they might contain more JS and less if any HTML markup. We probably don't need to utilize Shadow DOM as no styles are involved.</p>
 <p>Last but not least, the pattern can expanded for illustrational purposes to <strong>native components</strong> which is every build-in HTMLElement like the HTMLButtonElement. Native components are mostly deep nested elements providing the actual functionality in the browser UI. They are solely controllable and styleable from the outside and are therefore wrapped in presentational components and/or containers.</p>
-<p>Lets start the service description top-down beginning with the <strong>root container</strong> managing the overall service.</p>
-<h2 id="root-container">Root container</h2>
+<p>Lets start the service description top-down beginning with the <strong>service root container</strong> managing the overall service.</p>
+<h2 id="service-root">4.1. Service root</h2>
 <p>The root container <code>&lt;shop-checkout&gt;</code> is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS won't be necessary at this point as no styling is involved. A simplified root container for the checkout might look like the following code snippet.</p>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; shop-checkout.html
 <span class="co">&lt;!-- IMPORTS --&gt;</span>
@@ -491,8 +492,8 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> a compl
                             |</code></pre>
 <p>Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created with additional resources from the server or syncing with local storage like in the polymer-shop.</p>
 <p>While the msg handlers are basic &quot;dumb&quot; switch statements the <strong>smartness</strong> solely arouse from intelligent controllers processing the message. This communication model offers lots of possibilities for <strong>evolutionary design</strong> as child nodes can be loosely dropped. Every child node can be expanded into another full microservice or split up into separate nodes without notice of the service root. Communication might <strong>fail graceful</strong> providing a default console log in case switches aren't defined yet.</p>
-<h2 id="container-components">Container components</h2>
-<p>The second layer of the checkout microservice like <code>&lt;sign-in&gt;</code> or <code>&lt;shipping-details&gt;</code> still contain a lot of logic and no or less styling. Their job is to control their underlying presentational leaf components, aggregating events and to define a <strong>set of actions towards the model</strong> . Every container mounted directly under the service root may have a dedicated area inside the worker thread where it's fulfil his duties. For example, a typical <code>&lt;sign-in&gt;</code> contains merely two fields username and password and a submit button. The component listens for the submit action, aggregating the credentials and might add some semantics to it like <em>action: 'SIGNIN SUBMITTED'</em>. Fields and action message will be dispatched towards the model for further processing like initiating a authorization process.</p>
+<h2 id="container-components">4.2. Container components</h2>
+<p>The second layer of the checkout microservice like <code>&lt;sign-in&gt;</code> or <code>&lt;shipping-details&gt;</code> still contain mostly logic and no or less styling. Their job is to control their underlying presentational leaf components, aggregating events and to define a <strong>set of actions towards the model</strong> . Every container mounted directly under the service root may have a dedicated area inside the worker thread where it's fulfil his duties. For example, a typical <code>&lt;sign-in&gt;</code> contains merely two fields username and password and a submit button. The component listens for the submit action, aggregating the credentials and might add some semantics to it like <em>action: 'SIGNIN SUBMITTED'</em>. Fields and action message will be dispatched towards the model for further processing like initiating a authorization process.</p>
 <p>Every container component is eligible to aggregate subordinate events from their children, buffer them and interact with the model trough via a <strong>unified message system</strong>. A base class, from which <code>&lt;sign-in&gt;</code> or <code>&lt;shipping-details&gt;</code> can be extended might look like this:</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">class</span> SimpleContainer <span class="kw">extends</span> HTMLElement <span class="op">{</span>
   <span class="co">// constructor, static methods ...</span>
@@ -505,21 +506,55 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> a compl
     )<span class="op">;</span>
   <span class="op">}</span>
   set <span class="at">_receive</span>(msg) <span class="op">{</span>
-  <span class="co">// switch to methods</span>
-    <span class="va">console</span>.<span class="at">log</span>(<span class="kw">this</span>.<span class="at">localName</span> <span class="op">+</span> <span class="st">&quot;received msg&quot;</span>)<span class="op">;</span>
-    <span class="va">console</span>.<span class="at">log</span>(msg)<span class="op">;</span>
+    <span class="co">// switch to methods</span>
+    <span class="va">console</span>.<span class="at">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span>.<span class="at">localName</span><span class="sc">}</span><span class="vs"> received </span><span class="sc">${</span>msg<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
 <p>Extending the <code>SimpleContainer</code> will equip every container node with the unified message interface. Calling <code>this._dispatch(msg)</code> within the container will trigger an event bubbling upstream. The service root will implement a simple event listener for <code>checkout</code> events. After receiving an answer from the MODEL a service root can query the container child node in question and push forward the answer over the <code>_receive</code> property.</p>
 <p>There might be even more middleware containers pulled in between presentational leafs and the service root to fulfil some extra work either like filters on the event or without caring about checkout events altogether. Changing or enhancing any functionality requires only the controllers in the container in question and the endpoint section at the model. <strong>Infrastructure automation</strong> might be achieved by dynamically evaluating the mounted containers beneath the service root and modeling the &quot;backend&quot; model accordingly. Due to it's standardized message system the containers are testable within standardized tests.</p>
-<h2 id="presentational-components">Presentational components</h2>
-<p>In comparison to the former presentational component is build mostly</p>
-<p>template switch</p>
-<p>css</p>
-<p>shadow dom</p>
+<h2 id="presentational-components">4.3. Presentational components</h2>
+<p>In comparison to the former container the presentational component is build mostly around views and styling and shipping less or no logic towards handling the component. To extend the last <code>&lt;sign-in&gt;</code> container example a typical presentational component structure could look like the following top-level structure</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;sign-in-container&gt;</span>
+  <span class="kw">&lt;sign-in-presentational&gt;</span>
+  <span class="kw">&lt;/sign-in-presentational&gt;</span>
+<span class="kw">&lt;/sign-in-container&gt;</span></code></pre></div>
+<p>The <code>&lt;sign-in-presentational&gt;</code> contains all required input fields and oauth connectors to Google or Facebook but <strong>will not care about events they create</strong>. A presentation component is usually steered via HTML attributes. Contrary to the former containers the presentational component highly utilizes <strong>shadow DOM and HTML templates</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; sign-in-presentational.html
+<span class="co">&lt;!-- IMPORTS --&gt;</span>
+<span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;import&quot;</span><span class="ot"> href=</span><span class="st">&quot;facebook-oauth.html&quot;</span><span class="ot"> async</span><span class="kw">&gt;</span>
+<span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;import&quot;</span><span class="ot"> href=</span><span class="st">&quot;high-res-template.html&quot;</span><span class="ot"> async</span><span class="kw">&gt;</span>
+...
+
+<span class="co">&lt;!-- VIEW --&gt;</span>
+<span class="kw">&lt;sign-in-presentational&gt;</span>
+  <span class="kw">&lt;high-res-template&gt;</span>
+    <span class="kw">&lt;facebook-oauth&gt;&lt;/facebook-oauth&gt;</span>
+    <span class="kw">&lt;slot</span><span class="ot"> name=</span><span class="st">&quot;form&quot;</span><span class="kw">&gt;&lt;/slot&gt;</span>
+    <span class="kw">&lt;slot</span><span class="ot"> name=</span><span class="st">&quot;button&quot;</span><span class="kw">&gt;&lt;/slot&gt;</span>
+  <span class="kw">&lt;/high-res-template&gt;</span>
+  
+  <span class="kw">&lt;template</span><span class="ot"> id=</span><span class="st">&quot;lowres&quot;</span><span class="kw">&gt;</span>...<span class="kw">&lt;/template&gt;</span>
+  <span class="kw">&lt;template</span><span class="ot"> id=</span><span class="st">&quot;mobile&quot;</span><span class="kw">&gt;</span>...<span class="kw">&lt;/template&gt;</span>
+<span class="kw">&lt;/sign-in-presentational&gt;</span>
+
+<span class="kw">&lt;script&gt;</span>
+  <span class="kw">class</span> SignIn <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+    <span class="at">constructor</span>() <span class="op">{</span>
+      <span class="kw">super</span>()<span class="op">;</span>
+      <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
+      <span class="co">// append templates according to window.innerWidth</span>
+      <span class="co">// run this.getAttribute(&#39;htmlprop&#39;) to control element</span>
+    <span class="op">}</span>
+    <span class="at">attributeChangedCallback</span>(attrName<span class="op">,</span> oldVal<span class="op">,</span> newVal) <span class="op">{</span>
+      <span class="co">// react on changing attributes</span>
+    <span class="op">}</span>
+  <span class="op">}</span>
+  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;sign-in-presentational&#39;</span><span class="op">,</span> SignIn)<span class="op">;</span>
+<span class="op">&lt;</span><span class="ss">/script&gt;</span></code></pre></div>
+<p>Presentational components require configuration and usually ship a long list of CSS selectors. Whereas it's possible to expand templates in place it could be also possible to define <strong>template components</strong> to atomize the component further and increase code readability.</p>
 <h1 id="thinking-further">5. Thinking further</h1>
-<p>Following a <strong>browsernative first</strong> principle this paper didn't made use of third-party libraries so far. Contrary to the example in the last section there are a few reasons why web components shouldn't be used without any proprietary technology. At first, from a technical perspective web components are relatively young and at the time of writing only the newer Chrome and Opera browsers can handle them correctly. Most probably it will take a long time until native web components can be safely used without additional legacy support.The second inevitable question is the notion if they should be used pure from a <strong>simplicity perspective</strong> without any proprietary technology now and future.</p>
-<p>Talking about web components it is impossible to avoid technologies like <strong>React</strong> altogether. In the last couple years React introduced some good concepts to web development like the notion of state, passing data as properties and declarative event management just to name a few. Many of those design decisions were made to overall <strong>simplify browser development through standardized methodologies</strong>. The principles of microservices could be applied to React development maybe even further as for example the communication model involves a lot of delegation and decomposition.</p>
+<p>Following a <strong>browsernative first</strong> principle this paper didn't made use of third-party libraries so far. Contrary to the example in the last section there are a few reasons why web components shouldn't be used without any proprietary technology. At first, from a technical perspective web components are relatively young and at the time of writing only the newer Chrome and Opera browsers can handle them correctly. Most probably it will take a long time until native web components can be safely used without additional legacy support.The second inevitable question is the notion whether proprietary technology promotes <strong>simplicity</strong> or complects the implementation.</p>
+<p>Talking about web components it is impossible to avoid technologies like <strong>React</strong> altogether. In the last couple years React introduced some good concepts to web development like the idea of state, passing data as properties and declarative event management just to name a few. Many of those design decisions were made to overall <strong>simplify browser development through standardized methodologies</strong>. The principles of microservices could be applied to React development maybe even further as for example the communication model involves a lot of delegation and decomposition.</p>
 <p>Many of those features and design decisions in React created much of a hype around the library and technologies like the virtual DOM while web components never caught up in momentum at a comparable rate. According to Github Googles Polymer project is even six months older than React but has less than one third of its stars. Other notable web components projects like Bosonic<a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a> or Mozilla's X-tag<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a> are more dead than alive, too.</p>
 <p>It seems like the web developing community in a broader sense demands for features and standardization in frameworks like React (and many others to be fair). Web components and related libraries clearly missed a selling point in providing standardized ways for developing scalable components and applications or being to cumbersome to use at all. For the future it remains unclear if web components will eventually gain wider adoption within the UI developing community or will be adopted as low-level technology for framework development emphasized by Sebastian Markbage, one of the React creators.<span class="citation" data-cites="Rauschmayer2015">(Rauschmayer 2015)</span></p>
 <p>One interesting approach for building web components is the &quot;reactish&quot; Skate<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a>. Following the functional rendering model from React it combines native methods with additional functionalities known from React like event management. Given the focus on native technologies it only weights around 4kb (minified and gzipped) which is ten times less than React. <strong>Small encapsulated micro UI frameworks</strong> like Skate could be certainly the near future of web development and will hopefully gain more attention. The more mature UI framework Riot already expressed their intention to gradually develop towards web components.[^riot]</p>
