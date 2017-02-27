@@ -69,9 +69,6 @@
 \usepackage{longtable,booktabs}
 % Fix footnotes in tables (requires footnote package)
 \IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
-\usepackage[normalem]{ulem}
-% avoid problems with \sout in headers with hyperref:
-\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 \IfFileExists{parskip.sty}{%
 \usepackage{parskip}
 }{% else
@@ -123,36 +120,36 @@ service API to overcome tricky abstraction constraints.
 Simplicity is prerequisite for reliability. - Edsger W. Dijkstra
 \end{quote}
 
-Computers can scale, humans can't. Ever since a program or complex
-system made by humans has been constrained by humans mental
-capabilities. Like in the analogy of juggling balls, our brain can just
-``juggle'' a few things at a time. Rich Hickey, the inventor of the
-programming language Clojure gave an inspirational keynote on the topic
-of \textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
+Computers can scale, humans can't. Ever since a complex system made by
+humans has been constrained by humans mental capabilities. Like in the
+analogy of juggling balls our brain can just ``juggle'' a few things at
+a time. Rich Hickey, the inventor of the programming language Clojure
+gave an inspirational keynote on the topic of
+\textbf{simplicity}.\footnote{\href{https://www.youtube.com/watch?v=rI8tNMsozo0\&t=46s}{Rails
   Conf 2012 Keynote: Simplicity Matters by Rich Hickey}} In every sphere
-of a humans life, simplicity aligns perception with our mental
+of a humans life simplicity aligns perception with our mental
 capacities.
 
 Derived from the Latin word \textbf{simplex}, simple can be understood
 as ``literally, uncompounded or onefold''\footnote{\href{http://www.etymonline.com/index.php?term=simple}{Etymology
-  Dictionary}} which points directly to the unidimensional aspect. While
+  Dictionary}} which points towards an unidimensional nature. While
 complexity describes the multilayered und entangled nature of
 conditions, simplicity empowers the human brain to reason about issues
 in a straightforward manner. It certainly has some overlapping's with
-easy, but while easy is more of a relative nature, simple can be laid
+easy, but while easy is more of a relative spirit, simple can be laid
 out as a objective manner and therefore universally applicable.
 
 Software development is undoubtedly rich in complexity and full of
-subtle pitfalls. In a typical scenario, a piece of software evolves over
-time in one or another opinionated direction. Layers of new abstractions
-wrestling with old legacy abstractions and mutation becomes untraceable.
-Subtle bugs start to creep in. Eventually the small piece of software
-may end up in a highly complected monolith which will determine future
-design decisions to a painful degree. Future strategies of the
-company/organization will be highly determined by the current state in
-the need of ``keeping the lights on''.
+subtle pitfalls. In a typical scenario a growing software project
+evolves in one or another opinionated direction over time. Layers of
+abstractions wrestling with aged legacy code requiring layers of
+middleware. Mutating assets create subtle bugs and so forth. Eventually
+the small piece of software may end up in a highly complected monolith
+which will determine future design decisions to a painful degree.
+Opaqueness of the system will slow down innovation to a minimum in the
+need of ``keeping the lights on''.
 
-On the other side of this dystopian scenario, the truly modular system
+On the other side of this dystopian scenario a truly modular system
 architecture abandons many of those potential inconsistencies. The whole
 system is divided in pluggable parts, object mutation is either
 traceable or avoided altogether in favor of immutable data structures.
@@ -163,7 +160,7 @@ is crucial for future decisions and implementations. Recalling again the
 unidimensional nature of simplicity.
 
 Simplicity in ``the web'', read as a loose generalization of
-``everything that runs in the browser'', is certainly a story full of
+``everything that runs in the browser'' is certainly a story full of
 misconceptions. While simplicity in the backend is mostly a matter of
 principles and patterns, any browser-based frontend is restricted on the
 highly deterministic nature of the browser platform.
@@ -203,14 +200,15 @@ and design rules into maintainable components. While the DOM can't be
 scoped, JS can. Many frameworks, like ReactJS, AngularJS or VueJS just
 to name a few, ditched the old rule of separated HTML, CSS and JS in
 favor of an additional layer of abstracted JS components (containing
-content, markup and styling). Quiet often those frameworks mimic a MVC
-pattern on top of the browser engine which is a reasonable simple design
-pattern to build graphical user interfaces. While frameworks are a valid
-approach for building scalable web applications they remain highly
-opinionated, embody inherent complexity themselves and can change and
-break over time. Another downside is code inflation which is a crucial
-point for performance. All of those bottlenecks in the web demand for a
-new standardized way for creating and evolving complex web services.
+structure, behavior and sometimes styling). Quiet often those frameworks
+mimic a MVC pattern on top of the browser engine which is a reasonable
+simple design pattern to build graphical user interfaces. While
+frameworks are a valid approach for building scalable web applications
+they remain highly opinionated, embody inherent complexity themselves
+and can change and break over time. Another downside is code inflation
+which is a crucial point for performance. All of those bottlenecks in
+the web demand for a new standardized way for creating and evolving
+complex web services.
 
 In the year 2013 thinkers, creators and browser vendors joined together
 to propose \emph{The Extensible Web Manifesto}.\footnote{\href{https://extensiblewebmanifesto.org/}{The
@@ -461,10 +459,7 @@ solution nowadays. Languages like TypeScript, ClojureScript or
 PureScript compile to JS even exclusively. Once web components hit a
 critical mass there will be most likely some library support or foreign
 function interface towards ES6 modules (which are mandatory for the new
-specifications). With the rise of WebAssembly, a new low-level
-programming language for the browser, the determination on JS will
-hypothetical deteriorate and new quasi native languages for the web
-might gain traction.
+specifications).
 
 Another more real life decentralization aspect derives from the easiness
 of deployment in a safe, sandboxed environment. Web components virtually
@@ -680,7 +675,7 @@ won't be an issue. Meanwhile new standards can be used through
 \textbf{polyfills} even on legacy browsers.
 
 \subsection{\texorpdfstring{3.1. Custom Elements
-\href{http://w3c.github.io/webcomponents/spec/custom/}{(w3c)}}{3.1. Custom Elements (w3c)}}\label{custom-elements-w3c}
+\href{https://html.spec.whatwg.org/multipage/scripting.html\#custom-elements}{(whatwg)}}{3.1. Custom Elements (whatwg)}}\label{custom-elements-whatwg}
 
 \emph{Custom elements} are the fundamental building blocks for web
 components introducing the \textbf{Single Responsibility Principle} to
@@ -690,7 +685,7 @@ subsuming behavior, design and functionality. An obligatory
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\OperatorTok{>} \VariableTok{HelloWorld}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
   \KeywordTok{super}\NormalTok{()}\OperatorTok{;} \CommentTok{// mandatory in constructor}
@@ -775,15 +770,16 @@ As mentioned earlier any custom elements must extend the
 in throughout all HTML elements like \textbf{id, class, addEventListner
 \ldots{}}. Additionally, it is possible to define custom attributes
 using the \emph{custom elements'} \textbf{getter / setter interface} to
-steer the behavior of the element.
+steer the behavior of the element. Note that the keywords \textbf{get}
+and \textbf{set} as well as the previously used \textbf{constructor} are
+optional!
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\OperatorTok{>} \VariableTok{HelloWorld}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
   \NormalTok{set }\AttributeTok{sayhello}\NormalTok{(val) }\OperatorTok{\{}
     \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello} \OperatorTok{=} \NormalTok{val}\OperatorTok{;}
-    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\NormalTok{)}\OperatorTok{;}
   \OperatorTok{\}}
   \NormalTok{get }\AttributeTok{sayhello}\NormalTok{() }\OperatorTok{\{}
     \ControlFlowTok{return} \KeywordTok{this}\NormalTok{.}\AttributeTok{_hello}\OperatorTok{;}
@@ -792,8 +788,8 @@ steer the behavior of the element.
 \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
 \CommentTok{// Instantiation via JS instead of HTML}
 \KeywordTok{var} \NormalTok{el }\OperatorTok{=} \KeywordTok{new} \AttributeTok{HelloWorld}\NormalTok{()}\OperatorTok{;}
-\VariableTok{el}\NormalTok{.}\AttributeTok{sayhello} \OperatorTok{=} \StringTok{"earth"}\OperatorTok{;}
-\VariableTok{el}\NormalTok{.}\AttributeTok{sayhello}\OperatorTok{;}\CommentTok{//"earth"}
+\VariableTok{el}\NormalTok{.}\AttributeTok{sayhello} \OperatorTok{=} \StringTok{"earth"}\OperatorTok{;} \CommentTok{// "Call" the setter}
+\VariableTok{el}\NormalTok{.}\AttributeTok{sayhello}\OperatorTok{;}\CommentTok{// Yields "earth"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -852,7 +848,7 @@ would like this:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\OperatorTok{>} \VariableTok{main}\NormalTok{.}\AttributeTok{js}
+\OperatorTok{>} \VariableTok{HelloWorld}\NormalTok{.}\AttributeTok{js}
 \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
  \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
    \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
@@ -864,7 +860,7 @@ would like this:
 
 The new global method \texttt{attachShadow} adds a new document root to
 the \texttt{HelloWorld} which has the same properties as a normal, light
-document object. Note that \texttt{shadowRoot} is marked as
+document object. Note that the \texttt{shadowRoot} object is marked as
 \textbf{open} which ensures that some events can bubble out and outside
 JS can reach in the new root.
 
@@ -1017,24 +1013,24 @@ the HelloWorld example: how to ``vitalize'' the \emph{shadow DOM} with
 slot or other element structuring instead of \texttt{innerHTML} strings.
 While strings works perfectly fine in this simple case a string of
 markup is rather cumbersome and error-prone and doesn't scale well. When
-putting quotes inside another quotes things break quickly. It makes the
-life hard for developers to work with it because it requires manual
-indentation of code blocks and is typically out of syntax highlighting.
-That's the time HTML templates come into play.
+putting quotes inside other quotes things break quickly. Strings make
+development harder because code editor features like indentation or
+syntax highlighting won't be supported. The HTML templates is set to
+fill this gap.
 
 \subsection{\texorpdfstring{3.3. HTML Templates
-\href{https://www.w3.org/TR/html5/scripting-1.html\#the-template-element}{(w3c)}}{3.3. HTML Templates (w3c)}}\label{html-templates-w3c}
+\href{https://html.spec.whatwg.org/multipage/scripting.html\#the-template-element}{(whatwg)}}{3.3. HTML Templates (whatwg)}}\label{html-templates-whatwg}
 
-Among all other new standards \emph{HTML templates} are the most mature
-and adopted standard in the browser environment. All major browsers,
-except from Internet Explorer, support this standard.
+Among all other new specifications \emph{HTML templates} are the most
+mature and adopted standard in the browser environment. All major
+browsers support it since years.
 
-One core concept in templates is efficiency: Whatever dropped inside a
-\texttt{template} tag \sout{bucket} will be parsed on runtime - but not
-constructed into the \emph{content tree}. It remains plain HTML Markup
-sitting somewhere in the document until the time of activation.
+One core concept in templates is browser performance. Elements inside a
+\texttt{template} tag will be parsed on runtime - but not constructed
+and rendered into the content tree. They're remaining plain HTML markup
+sitting in the document until the time of activation.
 
-Activation typically takes four steps:
+Activation usually takes four steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1045,97 +1041,101 @@ Activation typically takes four steps:
 \item
   \textbf{Parsing the content and preparing the templates' content}\\
   const content = node.content;\\
-  -\textgreater{} Returns a \emph{DocumentFragment} object. Handling is
-  straight forward content.querySelector(`img').src = `logo.png';
+  Returns a DocumentFragment object.
 \item
-  \textbf{Optional: Cloning the \emph{DocumentFragment} for multiple
-  use}\\
+  \textbf{Optional: Cloning the fragment for multiple use}\\
   const clone = content.cloneNode(``deep'');
 \item
   \textbf{Appending the clone/original to destination}\\
   document.body.appendChild(clone);
 \end{enumerate}
 
-As easy and minimal \emph{HTML templates} are, they're missing out a
-crucial feature other template implementations usually have. As
-templates are basically just dump containers for HTML Markup, there is
-no way to define some logic as \textbf{placeholders} where content
-should appear. Of course, with heavy use of JS things could be modeled
-this way. The idiomatic way tends more towards a \emph{Shadow DOM \&
-HTML templates} symbiosis.
+As easy and minimal \emph{HTML templates} are they're missing out a
+crucial feature other template implementations used to have. As
+templates are basically just containers for HTML markup there is no
+idiomatic way to define \textbf{placeholders} for dynamic content.
+Templates could be mock up this way using JS for altering the content
+but the much cleaner way leverages the previously described slot
+technique from shadow DOM.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{> index.html}
+\NormalTok{> hello-world-component.html}
 \KeywordTok{<hello-world>}
- \KeywordTok{<p}\OtherTok{ id=}\StringTok{"sendto"}\OtherTok{ slot=}\StringTok{"placeholder"}\KeywordTok{>}
-  \NormalTok{Hello World Web Component  }
- \KeywordTok{</p>}
+  \KeywordTok{<template}\OtherTok{ id=}\StringTok{"hello"}\KeywordTok{>}
+  \CommentTok{<!-- styling -->}
+    \KeywordTok{<style>}
+      \FloatTok{#hellowrap} \KeywordTok{\{}
+        \KeywordTok{font-weight:} \DataTypeTok{bold}\KeywordTok{;}
+        \KeywordTok{color:} \NormalTok{orange}\KeywordTok{;}
+      \KeywordTok{\}}
+    \KeywordTok{</style>}
+    
+    \CommentTok{<!-- structure -->}
+    \KeywordTok{<div}\OtherTok{ id=}\StringTok{"hellowrap"}\KeywordTok{>}
+      \KeywordTok{<slot}\OtherTok{ name=}\StringTok{"placeholder"}\KeywordTok{>}
+        \NormalTok{Named placeholder}
+      \KeywordTok{</slot>}
+    \KeywordTok{</div>}
+  \KeywordTok{</template>}
+  
+  \CommentTok{<!-- light DOM / typical inserted at index.html -->}
+  \KeywordTok{<p}\OtherTok{ slot=}\StringTok{"placeholder"}\KeywordTok{>}
+    \NormalTok{Hello World Web Component}
+  \KeywordTok{</p>}
 \KeywordTok{</hello-world>}
 
-\CommentTok{<!-- COMPONENT STARTS HERE -->}
-\KeywordTok{<template}\OtherTok{ id=}\StringTok{"hello"}\KeywordTok{>}
- \CommentTok{<!-- STYLES -->}
- \KeywordTok{<style>}
-  \FloatTok{#stylewrapper} \KeywordTok{\{}
-   \KeywordTok{font-weight:} \DataTypeTok{bold}\KeywordTok{;}
-   \KeywordTok{color:} \NormalTok{orange}\KeywordTok{;}
-  \KeywordTok{\}}
- \KeywordTok{</style>}
- \CommentTok{<!-- CONTENT -->}
- \KeywordTok{<div}\OtherTok{ id=}\StringTok{"stylewrapper"}\KeywordTok{>}
-  \KeywordTok{<slot}\OtherTok{ name=}\StringTok{"placeholder"}\KeywordTok{>}
-   \NormalTok{Named placeholder}
-  \KeywordTok{</slot>}
- \KeywordTok{</div>}
-\KeywordTok{</template>}
-
 \KeywordTok{<script>}
- \CommentTok{// Switched to anonymous class notation}
- \CommentTok{// for keeping associated code together.}
- \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,}
-  \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-   \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
-    \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
-    \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-    \KeywordTok{const} \NormalTok{helloTemplate }\OperatorTok{=} \VariableTok{document}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#hello'}\NormalTok{)}\OperatorTok{;}
-    \KeywordTok{this}\NormalTok{.}\VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{helloTemplate}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
-   \OperatorTok{\}}
-  \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+  \KeywordTok{class} \NormalTok{HelloWorld }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+      \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+      \KeywordTok{const} \NormalTok{temp }\OperatorTok{=} \KeywordTok{this}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'template#hello'}\NormalTok{)}\OperatorTok{;}
+      \KeywordTok{this}\NormalTok{.}\VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{temp}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
+    \OperatorTok{\}}
+  \OperatorTok{\}}
+  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{HelloWorld)}\OperatorTok{;}
 \OperatorTok{<}\SpecialStringTok{/script>}
 \end{Highlighting}
 \end{Shaded}
 
 The updated \texttt{HelloWorld} component looks already pretty mature.
-It combines all the previous mentioned standards into one blob of HTML.
-\emph{Custom Elements} serves the logic, \emph{Shadow DOM} scopes the
-styles and \emph{HTML Templates} efficiently glues DOM and \emph{Shadow
-DOM} together. This separation of concerns comes with a huge gain in
-flexibility. In a real world scenario \texttt{HelloWorld} would
-contain/reference multiple \emph{HTML Templates} and could switch them
-around without any fuss. A developer might to split up templates into
+It combines all the previous mentioned standards into one HTML file.
+Custom elements serves the logic, shadow DOM scopes the styles and
+\emph{HTML Templates} efficiently glues light DOM and shadow DOM
+together. This separation of concerns comes with a surplus in
+flexibility. In a real world scenario \texttt{HelloWorld} could
+reference multiple \emph{HTML Templates} and switch them around without
+any fuss. Even further a developer might split up templates into named
 \textbf{STYLE} templates and \textbf{CONTENT} templates to increase
 reusability even further.
 
 The last standard in the row of four is not concerned with the internals
-of a \emph{web component}. \emph{HTML Imports} serves the need for an
-efficient distribution mechanism of components.
+implementation of a web component. HTML Imports serves the need for an
+efficient distribution mechanism of components and other HTML resources.
 
-\subsection{\texorpdfstring{HTML Imports
-\href{https://www.w3.org/TR/html-imports/}{(w3c)}}{HTML Imports (w3c)}}\label{html-imports-w3c}
+\subsection{\texorpdfstring{3.4. HTML Imports
+\href{https://www.w3.org/TR/html-imports/}{(w3c)}}{3.4. HTML Imports (w3c)}}\label{html-imports-w3c}
 
 Importing the \texttt{HelloWorld} component is a one-liner:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{> index.html}
 \KeywordTok{<link}\OtherTok{ rel=}\StringTok{"import"}\OtherTok{ href=}\StringTok{"Hello.html"}\OtherTok{ async}\KeywordTok{>}
+
+\KeywordTok{<hello-world>}
+  \KeywordTok{<p}\OtherTok{ slot=}\StringTok{"placeholder"}\KeywordTok{>}
+    \NormalTok{Hello World Web Component}
+  \KeywordTok{</p>}
+\KeywordTok{</hello-world>}
 \end{Highlighting}
 \end{Shaded}
 
-The \texttt{async} flag is optional but like in any other fetching
-event, strongly recommended. Once the imported HTML document comes into
-scope, activation follows a very similar pattern like the aforementioned
-\emph{HTML templates}:
+The \texttt{async} flag is optional but recommended like any other
+fetching event. Once the imported HTML document comes into scope
+activation follows a very similar process compared to the aforementioned
+HTML templates:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1144,75 +1144,69 @@ scope, activation follows a very similar pattern like the aforementioned
 \item
   \textbf{Parsing the content and preparing the render}\\
   const content = linknode.import; -\textgreater{} Unlike the \emph{HTML
-  template} the content a fully equipped document object.
+  template} a complete document object is constructed.
 \item
   \textbf{Optional: Cloning some nodes for multiple use}
 \item
   \textbf{Appending the clone/original to destination}
 \end{enumerate}
 
-This again is the imperative way to handle a generic \emph{HTML Import}.
-In the declarative world of \emph{web components} a component is
-activated, parsed and anchored solely by its' tag name
-\texttt{\textless{}hello-world\textgreater{}\textless{}/hello-world\textgreater{}}.
-Preliminary, the component needs proper configuration. The next section
-will elaborate the right configuration and composition of a component to
-work out-of-the-box.
+Again this is the imperative way to handle a generic \emph{HTML Import}.
+In the declarative world of web components a component is
+\textbf{parsed, auto-activated and anchored} solely by its' tag name
+\texttt{\textless{}hello-world\textgreater{}\textless{}/hello-world\textgreater{}}
+on purpose. The very own lifecycle method \textbf{adoptedCallback()} in
+custom elements shows the strong interconnection between those
+standards.
 
-Despite from being just a practical document importer \emph{HTML
-imports} acts like a fully fledged dependency manager for the browser.
-Multiple resources, ranging from stylesheets, scripts, documents, media
-files and even other \texttt{imports} can be grouped together in a
-logical \texttt{import} statement. Internally, the browser engine keeps
-track for every imported resource so it won't be loaded twice. The
-inherent complexity is in fact a stumbling block for wider browser
-adoption. Currently only Googles blink web engine supports \emph{HTML
-Imports} as they are the driving force behind the \emph{web components}
-spec in general. Mozilla and Apple imposed distaste for \emph{HTML
-Imports} as a whole. One reason for this can be found in the
-incompatibility of the spec with the upcoming \emph{ES6 module
-loader}.\footnote{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
+\emph{HTML imports} can import everything which is wrappable with HTML
+markup. Stylesheets, scripts, documents, media files and even further
+imports statements can form a semantic \emph{HTML import} statement. The
+far reaching possibilities of a single standard has its downsides.
+According to Mozilla \emph{HTML imports} are not fully compatible with
+the dependency model of the new ES6 modules.\footnote{https://hacks.mozilla.org/2014/12/mozilla-and-web-components/}
+Under the current situation Mozilla and Apple and Microsoft won't
+implement \emph{HTML Imports} soon if any. Currently only Googles blink
+web engine supports \emph{HTML Imports} as they are the driving force
+behind the web components specs in general. Despite the discrepancies
+among browser vendors \emph{HTML Imports} are part of this paper as no
+other native standard can ship bundled HTML, CSS and JS which is a core
+concept behind web components.
 
-Despite the discrepancies among browser vendors \emph{HTML Imports}
-should still be part of the paper as no other native browser technology
-can bundle up CSS, JS and HTML that efficient.
+\subsection{\texorpdfstring{3.5. Custom Events
+\href{https://dom.spec.whatwg.org/\#interface-customevent}{(whatwg)}}{3.5. Custom Events (whatwg)}}\label{custom-events-whatwg}
 
-\subsection{\texorpdfstring{Appendix A: Custom Events
-\href{https://dom.spec.whatwg.org/\#interface-customevent}{(whatwg)}}{Appendix A: Custom Events (whatwg)}}\label{appendix-a-custom-events-whatwg}
-
-Events are first-class citizens in the browser world and \emph{Custom
-Events} are no exception. The \emph{Custom Elements} interface is part
-of the DOM since years but with the rise of \emph{Custom Elements} they
-will most likely become an indispensable building block of \emph{web
-components}.
+Events are first-class citizens in the browser. After all they provide a
+neat communication channel for dynamic interactions. \emph{Custom
+Events} are part of the DOM since years but with the rise of web
+components they will most likely become an indispensable building block
+of web components.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{> index.html}
+\NormalTok{> hello-world-component.html}
+
 \KeywordTok{<hello-world>}
  \KeywordTok{<button>}\NormalTok{Launch CustomEvent}\KeywordTok{</button>}
 \KeywordTok{</hello-world>}
-\CommentTok{<!-- COMPONENT STARTS HERE -->}
+
 \KeywordTok{<script>}
  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} 
  \KeywordTok{class} \KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
   \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
     \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
-   \CommentTok{// Craft a CustomEvent e}
-    \KeywordTok{const} \NormalTok{e }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \OperatorTok{\{}
-    \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,} \CommentTok{//important!}
+   
+   \CommentTok{// Craft a helloevent}
+    \KeywordTok{const} \NormalTok{helloevent }\OperatorTok{=} \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'helloevent'}\OperatorTok{,} \OperatorTok{\{}
+    \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,}
     \DataTypeTok{detail}\OperatorTok{:} \StringTok{'Contains scalar or object'}
    \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-   \CommentTok{// Launch e on child button click}
+   
+   \CommentTok{// Launch helloevent if child button clicks}
    \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'click'}\OperatorTok{,} \NormalTok{click }\OperatorTok{=>} \OperatorTok{\{}
-    \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(e)}
+    \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(helloevent)}
     \VariableTok{click}\NormalTok{.}\AttributeTok{stopPropagation}\NormalTok{()}\OperatorTok{;}
-   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-   \CommentTok{// Catch e. Typically done by some parent}
-     \CommentTok{// node. Message in detail property}
-   \KeywordTok{this}\NormalTok{.}\AttributeTok{addEventListener}\NormalTok{(}\StringTok{'hello-world'}\OperatorTok{,} \NormalTok{e }\OperatorTok{=>} \OperatorTok{\{}
-    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\VariableTok{e}\NormalTok{.}\AttributeTok{detail}\NormalTok{)}
-   \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+   \OperatorTok{\}}\NormalTok{)}
   \OperatorTok{\}}
  \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
 \OperatorTok{<}\SpecialStringTok{/script>}
@@ -1221,54 +1215,53 @@ components}.
 
 Naming events after the emitting tag makes the API almost
 self-explanatory. The \texttt{detail} property can be loaded with
-primitives as well as objects. The further sections will elaborate a
-feasible architecture for building a scaling microservice architecture.
+scalars as well as objects. Subsequent parent nodes may catch the custom
+event with a clear understanding about the source node.
 
-Chaining and aggregating events from child nodes should be practiced and
-exercised quiet frequently. As mentioned earlier in the \emph{Custom
-Elements} section, the pattern of \textbf{extending native elements}
-should be somewhat dismissed as it may never implemented outside of
-Chrome. Nevertheless, it is possible to create own kind of quasi native
-buttons when chaining a \emph{CustomEvent} directly after the native
-click event.
+Chaining and aggregating events from child nodes can be frequently used
+within web components. One use case could be creating a custom button
+like in the previous example. As mentioned earlier in the Custom
+Elements section at 3.1.3. , the pattern of \textbf{extending native
+elements} should be somewhat dismissed as other browser vendors may
+never implement it. A common workaround to eventually create a own
+version a button could be made with a thin wrapper around the native
+button and chaining a \emph{Custom Event} after the click event.
 
-Another typical \emph{custom element} use case can be as an actor on
-(native) child elements. In this case, the \emph{Custom Element} catches
-events from children, buffers or rebuild them and eventually fires an
-event towards the document root.
+Another common web components use case can be a \textbf{middleware}
+subscribing to certain child events and acting upon them. This involves
+catching events, buffering, destructuring and creation of an own event
+towards the document root. By design, events only bubble upstream
+towards parent nodes. For handing down information towards the child
+nodes we need to query the child node directly.
 
-Unfortunately events only work ``upstream'' towards parent nodes. Still
-the web platform offers plenty of possibilities to talk back to child
-nodes.
-
-\subsection{\texorpdfstring{Appendix B: Web Worker
-\href{https://html.spec.whatwg.org/multipage/workers.html}{(whatwg)}}{Appendix B: Web Worker (whatwg)}}\label{appendix-b-web-worker-whatwg}
+\subsection{\texorpdfstring{3.6. Web Worker
+\href{https://html.spec.whatwg.org/multipage/workers.html}{(whatwg)}}{3.6. Web Worker (whatwg)}}\label{web-worker-whatwg}
 
 Like \emph{Custom Events}, \emph{Web Workers} had been around for a long
 time and therefore enjoy full support among major browsers. They emerged
 at around 2009 when discussions about browser performance was still in
-the early days. Nevertheless, the addressed problem of \emph{Web
-Workers} is a fundamental language problem of JS itself.
+the early days but addressing fundamental performance bottleneck of the
+JS language.
 
 JS runs in a single-threaded language environment. Every script in the
 browser environment, from handling UI events to query and process larget
-amounts of API data and manipulating the DOM, runs on the same
-thread{[}16{]}. Putting a lot of work to the single main thread can slow
-down the web service significantly. From time to time scripts can block
-or fail for whatever reason which leads to a frozen or crashed UI. A
-worker can overcome the bottleneck of the single-threaded nature with
-spawning new \textbf{background threads} which allows the UI to stay
-responsive even when computation-heavy tasks should be carried out.
-Furthermore, a worker thread adds a performance advantage embracing the
-multi core CPU architecture most devices running on today. To grasp the
-full potential of workers, a reader might dive deeper into the Angular 2
-architecture, where most of the application layer is abstracted from the
-main rendering thread into worker threads.\footnote{\href{https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E}{Angular
+amounts of data or manipulating the DOM runs on a single thread{[}16{]}.
+Putting a lot of work to the single main thread can slow down the web
+service significantly. From time to time scripts can block or fail for
+whatever reason which leads to a frozen or crashed UI. A worker can
+overcome the bottleneck of the single-threaded nature with spawning new
+\textbf{background threads} which allows the UI to stay responsive even
+when computation-heavy tasks needs to perform. Furthermore, a worker
+thread adds a performance advantage embracing the multi core CPU
+architecture most devices running on today. To grasp the full potential
+of workers a reader might dive deeper into the Angular 2 architecture,
+where most of the application layer is abstracted from the main
+rendering thread into worker threads.\footnote{\href{https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E}{Angular
   2 Rendering Architecture}}
 
 A \emph{Web Worker} spawns a new background thread where scripts can run
-concurrent to the main thread. Usually a worker is loaded from a workers
-dedicated file to embrace this kind of separation.
+concurrent to the main thread. Usually a worker is loaded from dedicated
+file to embrace separation.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1299,17 +1292,17 @@ based interface} with the main thread.
 \end{Highlighting}
 \end{Shaded}
 
-\section{Building an browsernative
-microservice}\label{building-an-browsernative-microservice}
+\section{4. Building a browsernative
+microservice}\label{building-a-browsernative-microservice}
 
 After getting confidence in microservice principles and technical
 background the paper should briefly join them to form a
-\emph{browsernative microservices}. Needless to say the described
-example is overall simplified to only illustrate the connection between
-browsernative technologies and microservice patterns. Googles library
-Polymer is a good place for learning about web components in depth and
-make use of their simple command line tools. One of their most famous
-proof of concept is the so-called
+\emph{browsernative microservices}. Needless to say the following
+example is overall simplified towards illustrating the connection
+between browsernative technologies and microservice patterns. Googles
+library Polymer is a good place for learning about web components in
+depth and make use of their toolbox. One of their most famous proof of
+concept is the so-called
 \href{https://shop.polymer-project.org/}{Polymer Shop} which is a
 fully-fledged online shop nested within a single root element
 \texttt{\textless{}shop-app\textgreater{}}. This app made of several
@@ -1320,18 +1313,16 @@ Let's assume we work in a sales engineering team of the Polymer Shop and
 need to rebuild the checkout microservice.
 
 The current checkout can be found at
-https://shop.polymer-project.org/checkout. Currently the checkout is a
-single, 671 lines of code long Polymer component including all required
-fields for sign in, shipping, billing and summarizing the order. In the
-spirit of microservices we will split up the microservice into fine
-grained components. The shopping cart data is pulled out of a local
-storage JSON entity set up previously by another custom-element.
+https://shop.polymer-project.org/checkout. At the time of writing the
+checkout is a single, 671 lines of code long Polymer component including
+all required fields for sign in, shipping, billing and summarizing the
+order. In the spirit of microservices we will split up the microservice
+into fine grained components. The shopping cart data is pulled out of a
+local storage JSON entity set up previously by another custom-element.
 
-\subsection{Checkout microservice}\label{checkout-microservice}
-
-By breaking down the service the team defined the business boundaries
-within the checkout process and ended up with following granular service
-blocks:
+By breaking down the service the \textbf{team defined the business
+boundaries} within the checkout process and ended up with following
+granular service blocks:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1362,30 +1353,32 @@ top-level microservice might look like the following snippet:
 \end{Shaded}
 
 Yet already we see the simplicity arouse from web components as they
-persue a clear structure. Each of the child components should act
-independently over other child nodes utilizing the loose coupling
-principle. Each child ships all the HTML, CSS and JS code needed to
-fulfil its work following the high cohesion principle. Each component
-may contain different views to accommodate different bounded contexts
-resulting from different devices. And last but not least, all of them
-communicate over an unobstrusive message bus via the service root
-component \texttt{\textless{}shop-checkout\textgreater{}}.
+persue a clear markup. Each of the child components may act
+independently over other child nodes utilizing the \textbf{loose
+coupling principle}. Each child ships all the HTML, CSS and JS code
+needed to fulfil its work following the \textbf{high cohesion
+principle}. Each component may contain different views to accommodate
+different \textbf{bounded contexts resulting from different devices}.
+And last but not least, all of them communicate over an
+\textbf{unobtrusive message bus} via the service root component
+\texttt{\textless{}shop-checkout\textgreater{}}.
 
 Before diving deeper into implementation, its worth to clarify an
 \textbf{architectural pattern} behind components. Any reader of the
 paper came across ReactJS / Redux, the concept of components may look
 familiar. Dan Abramov, the creator of Redux, once defined a simple
-dichotomous pattern for creating UI components. Firstly, he came up with
-the idea of \textbf{presentational components} only related with the
-concern about \emph{how things look}. This component literally doesn't
-know anything about the service in question which makes the component
-highly flexible and reusable. They are controlled solely from the
-outside, receiving data and dispatching unbiased events on user
-interaction.{[}17{]} Most probably every presentational component
-embodies more HTML/CSS markup and less JS code. It should encapsulate
-its styles from bleeding out and protect its styles being overwritten.
-Furthermore, it may contain several templates to change it's look on
-different demands.
+dichotomous pattern for creating UI components.
+
+Firstly, Abramov defined a pattern around \textbf{presentational
+components} only related with the concern about \emph{how things look}.
+This component literally doesn't know anything about the service in
+question which makes the component highly flexible and reusable. They
+are controlled solely from the outside, receiving data and dispatching
+unbiased events on user interaction.{[}17{]} Most probably every
+presentational component embodies more HTML/CSS markup and less JS code.
+It should encapsulate its styles from bleeding out and protect its
+styles being overwritten. Furthermore, it may contain several templates
+to change it's look on different demands.
 
 Secondly, Abramov described components he refers as \textbf{containers}.
 A container component is concerned with \emph{how things work}.{[}17{]}
@@ -1394,24 +1387,25 @@ acting in the sense of UNIX filters. Their job is to fetch data from
 child nodes, aggregating events, interacting with the model and push
 state back to the presentational components. Consequently they might
 contain more JS and less if any HTML markup. We probably don't need to
-utilize ShadowDOM as no styles are involved.
+utilize Shadow DOM as no styles are involved.
 
-Last but not least, we can expand the model for illustrational purposes
+Last but not least, the pattern can expanded for illustrational purposes
 to \textbf{native components} which is every build-in HTMLElement like
-the HTMLButtonElement. They are solely controllable and styleable from
-the outside and must therefore wrapped in presentational components
-and/or containers.
+the HTMLButtonElement. Native components are mostly deep nested elements
+providing the actual functionality in the browser UI. They are solely
+controllable and styleable from the outside and are therefore wrapped in
+presentational components and/or containers.
 
 Lets start the service description top-down beginning with the
 \textbf{root container} managing the overall service.
 
-\subsubsection{Root container}\label{root-container}
+\subsection{Root container}\label{root-container}
 
 The root container \texttt{\textless{}shop-checkout\textgreater{}} is
 basically just an encapsulation layer in terms of service
 functionalities. Encapsulation of CSS won't be necessary at this point
-as no styling is involved. The simplified root container might look like
-the following code snippet
+as no styling is involved. A simplified root container for the checkout
+might look like the following code snippet.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1458,12 +1452,14 @@ the following code snippet
 \end{Highlighting}
 \end{Shaded}
 
-The purpose of this simplified code snippet is to outline the MVC
-threefold in the service root. On runtime the root container acts mostly
-like a \textbf{message dispatcher} implementing the microservice
-principle of smart endpoints and dumb pipes.
+The purpose of this simplified code snippet is to outline the
+\textbf{MVC threefold} in the service root. The MODEL is pushed into the
+worker thread, the CONTROLLER in the custom element and the VIEW in the
+HTML structuring. On runtime the root container acts like a
+\textbf{message dispatcher} implementing the microservice principle of
+smart endpoints and dumb pipes.
 
-In order to interact with the MODEL, every child node must implement the
+In order to interact with the MODEL every child node must implement the
 \textbf{dedicated \texttt{checkout}} custom event (which will be
 explained further on in the next section). Summarizing the
 unidirectional communication from the service root perspective looks
@@ -1492,19 +1488,21 @@ VIEW thread                 |               MODEL thread
 \end{verbatim}
 
 Effects are yielded by the asynchronous operation of messages and create
-actions returned to sender by the message handlers. Effects can be
-created by external messages, like subscription to an WebSocket, too.
-Effects may be created with additional resources from the server or
-syncing with local storage like in the polymer-shop.
+actions returned to sender. Effects can be created by external messages,
+like subscription to an WebSocket, too. Effects may be created with
+additional resources from the server or syncing with local storage like
+in the polymer-shop.
 
 While the msg handlers are basic ``dumb'' switch statements the
 \textbf{smartness} solely arouse from intelligent controllers processing
 the message. This communication model offers lots of possibilities for
-\textbf{evolutionary design} as child nodes can be loosely dropped in
-the service root and communication might \textbf{fail graceful} as
-simply nothing happens if one or another switch is not defined.
+\textbf{evolutionary design} as child nodes can be loosely dropped.
+Every child node can be expanded into another full microservice or split
+up into separate nodes without notice of the service root. Communication
+might \textbf{fail graceful} providing a default console log in case
+switches aren't defined yet.
 
-\subsubsection{Container components}\label{container-components}
+\subsection{Container components}\label{container-components}
 
 The second layer of the checkout microservice like
 \texttt{\textless{}sign-in\textgreater{}} or
@@ -1525,19 +1523,19 @@ Every container component is eligible to aggregate subordinate events
 from their children, buffer them and interact with the model trough via
 a \textbf{unified message system}. A base class, from which
 \texttt{\textless{}sign-in\textgreater{}} or
-\texttt{\textless{}shipping-details\textgreater{}} can be extended can
+\texttt{\textless{}shipping-details\textgreater{}} can be extended might
 look like this:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{class} \NormalTok{CheckoutContainerBase }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
-  \CommentTok{// static methods for testing...}
+\KeywordTok{class} \NormalTok{SimpleContainer }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+  \CommentTok{// constructor, static methods ...}
   \NormalTok{set }\AttributeTok{_dispatch}\NormalTok{(msg) }\OperatorTok{\{}
     \KeywordTok{this}\NormalTok{.}\AttributeTok{dispatchEvent}\NormalTok{(}
       \KeywordTok{new} \AttributeTok{CustomEvent}\NormalTok{(}\StringTok{'checkout'}\OperatorTok{,} \OperatorTok{\{}
       \DataTypeTok{bubbles}\OperatorTok{:} \KeywordTok{true}\OperatorTok{,}
       \DataTypeTok{detail}\OperatorTok{:} \NormalTok{msg}
-      \OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+      \OperatorTok{\}}\NormalTok{)}
     \NormalTok{)}\OperatorTok{;}
   \OperatorTok{\}}
   \NormalTok{set }\AttributeTok{_receive}\NormalTok{(msg) }\OperatorTok{\{}
@@ -1549,37 +1547,87 @@ look like this:
 \end{Highlighting}
 \end{Shaded}
 
-Extending the \texttt{CheckoutContainerBase} will equipped every
-container node with the unified message interface. Calling
-\texttt{this.\_dispatch(msg)} within a within the container will trigger
-an event bubbling upstream. The service root will implement a simple
-event listener for \texttt{checkout} events. After receiving an answer
-from the MODEL a service root can \texttt{querySelector} the container
-node in question and push forward the answer over the \texttt{\_receive}
-property.
+Extending the \texttt{SimpleContainer} will equip every container node
+with the unified message interface. Calling
+\texttt{this.\_dispatch(msg)} within the container will trigger an event
+bubbling upstream. The service root will implement a simple event
+listener for \texttt{checkout} events. After receiving an answer from
+the MODEL a service root can query the container child node in question
+and push forward the answer over the \texttt{\_receive} property.
 
 There might be even more middleware containers pulled in between
-presentational leafs and service root component to do some extra work
-without caring about bubbling events altogether. Changing or enhancing
-any functionality requires only to touch the controllers in the
-containers in question and the endpoint section at the model.
-\textbf{Infrastructure automation} might be achieved by dynamically
-evaluating the mounted containers beneath the service root and modeling
-the ``backend'' model accordingly. Due to it's standardized message
-system the containers are testable within standardized tests.
+presentational leafs and the service root to fulfil some extra work
+either like filters on the event or without caring about checkout events
+altogether. Changing or enhancing any functionality requires only the
+controllers in the container in question and the endpoint section at the
+model. \textbf{Infrastructure automation} might be achieved by
+dynamically evaluating the mounted containers beneath the service root
+and modeling the ``backend'' model accordingly. Due to it's standardized
+message system the containers are testable within standardized tests.
 
-\subsubsection{Presentational
-components}\label{presentational-components}
+\subsection{Presentational components}\label{presentational-components}
 
 In comparison to the former presentational component is build mostly
 
-\section{Thinking further}\label{thinking-further}
+template switch
 
-cohesive HTML JS CSS
+css
 
-virtual DOM
+shadow dom
 
-declarative event management
+\section{5. Thinking further}\label{thinking-further}
+
+Following a \textbf{browsernative first} principle this paper didn't
+made use of third-party libraries so far. Contrary to the example in the
+last section there are a few reasons why web components shouldn't be
+used without any proprietary technology. At first, from a technical
+perspective web components are relatively young and at the time of
+writing only the newer Chrome and Opera browsers can handle them
+correctly. Most probably it will take a long time until native web
+components can be safely used without additional legacy support.The
+second inevitable question is the notion if they should be used pure
+from a \textbf{simplicity perspective} without any proprietary
+technology now and future.
+
+Talking about web components it is impossible to avoid technologies like
+\textbf{React} altogether. In the last couple years React introduced
+some good concepts to web development like the notion of state, passing
+data as properties and declarative event management just to name a few.
+Many of those design decisions were made to overall \textbf{simplify
+browser development through standardized methodologies}. The principles
+of microservices could be applied to React development maybe even
+further as for example the communication model involves a lot of
+delegation and decomposition.
+
+Many of those features and design decisions in React created much of a
+hype around the library and technologies like the virtual DOM while web
+components never caught up in momentum at a comparable rate. According
+to Github Googles Polymer project is even six months older than React
+but has less than one third of its stars. Other notable web components
+projects like Bosonic\footnote{https://github.com/bosonic/bosonic/} or
+Mozilla's X-tag\footnote{https://github.com/x-tag/core} are more dead
+than alive, too.
+
+It seems like the web developing community in a broader sense demands
+for features and standardization in frameworks like React (and many
+others to be fair). Web components and related libraries clearly missed
+a selling point in providing standardized ways for developing scalable
+components and applications or being to cumbersome to use at all. For
+the future it remains unclear if web components will eventually gain
+wider adoption within the UI developing community or will be adopted as
+low-level technology for framework development emphasized by Sebastian
+Markbage, one of the React creators.{[}18{]}
+
+One interesting approach for building web components is the ``reactish''
+Skate\footnote{https://github.com/skatejs/skatejs/}. Following the
+functional rendering model from React it combines native methods with
+additional functionalities known from React like event management. Given
+the focus on native technologies it only weights around 4kb (minified
+and gzipped) which is ten times less than React. \textbf{Small
+encapsulated micro UI frameworks} like Skate could be certainly the near
+future of web development and will hopefully gain more attention. The
+more mature UI framework Riot already expressed their intention to
+gradually develop towards web components.\footnote{http://riotjs.com/compare/\#web-components}
 
 \hypertarget{refs}{}
 \hypertarget{ref-Filloux2016}{}
@@ -1667,5 +1715,10 @@ Available: \url{https://www.html5rocks.com/en/tutorials/workers/basics/}
 Medium.'' 2015 {[}Online{]}. Available:
 \url{https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0}.
 {[}Accessed: 01-Dec-2016{]}
+
+\hypertarget{ref-Rauschmayer2015}{}
+{[}18{]} D. A. Rauschmayer, ``Tree-shaking with webpack 2 and babel 6.''
+2015 {[}Online{]}. Available:
+\url{http://www.2ality.com/2015/12/webpack-tree-shaking.html}
 
 \end{document}
