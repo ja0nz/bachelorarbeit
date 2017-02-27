@@ -4,8 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de">
-  <title>Browsernative Microservices</title>
+  <title></title>
   <style type="text/css">code{white-space: pre;}</style>
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -51,12 +50,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <link rel="stylesheet" href="assets/css/academic-pub.css">
 </head>
 <body>
-<header>
-<h1 class="title">Browsernative Microservices</h1>
-<h1 class="subtitle">Modular web architecture through new W3C specifications</h1>
-<h2 class="author">Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de</h2>
-<h3 class="date">Januar 2017</h3>
-</header>
 <nav id="TOC">
 <ul>
 <li><a href="#simplicity-and-the-web">1. Simplicity and the web</a></li>
@@ -71,7 +64,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#evolutionary-design">2.8. Evolutionary Design</a></li>
 </ul></li>
 <li><a href="#w3c-specifications">3. W3C specifications</a><ul>
-<li><a href="#custom-elements-w3c">3.1. Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></a><ul>
+<li><a href="#custom-elements-whatwg">3.1. Custom Elements <a href="https://html.spec.whatwg.org/multipage/scripting.html#custom-elements">(whatwg)</a></a><ul>
 <li><a href="#lifecycle-methods">3.1.1. Lifecycle methods</a></li>
 <li><a href="#custom-attributes">3.1.2. Custom attributes</a></li>
 <li><a href="#customized-build-in-elements">3.1.3. Customized build-in elements</a></li>
@@ -81,38 +74,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="#styling">3.2.2. Styling</a></li>
 <li><a href="#behavior">3.2.3. Behavior</a></li>
 </ul></li>
-<li><a href="#html-templates-w3c">3.3. HTML Templates <a href="https://www.w3.org/TR/html5/scripting-1.html#the-template-element">(w3c)</a></a></li>
-<li><a href="#html-imports-w3c">HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></a></li>
-<li><a href="#appendix-a-custom-events-whatwg">Appendix A: Custom Events <a href="https://dom.spec.whatwg.org/#interface-customevent">(whatwg)</a></a></li>
-<li><a href="#appendix-b-web-worker-whatwg">Appendix B: Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></a></li>
+<li><a href="#html-templates-whatwg">3.3. HTML Templates <a href="https://html.spec.whatwg.org/multipage/scripting.html#the-template-element">(whatwg)</a></a></li>
+<li><a href="#html-imports-w3c">3.4. HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></a></li>
+<li><a href="#custom-events-whatwg">3.5. Custom Events <a href="https://dom.spec.whatwg.org/#interface-customevent">(whatwg)</a></a></li>
+<li><a href="#web-worker-whatwg">3.6. Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></a></li>
 </ul></li>
-<li><a href="#building-an-browsernative-microservice">Building an browsernative microservice</a><ul>
-<li><a href="#checkout-microservice">Checkout microservice</a><ul>
+<li><a href="#building-a-browsernative-microservice">4. Building a browsernative microservice</a><ul>
 <li><a href="#root-container">Root container</a></li>
 <li><a href="#container-components">Container components</a></li>
 <li><a href="#presentational-components">Presentational components</a></li>
 </ul></li>
+<li><a href="#thinking-further">5. Thinking further</a><ul>
+<li><a href="#riot-httpriotjs.comcompareweb-components">[^riot]: http://riotjs.com/compare/#web-components</a></li>
 </ul></li>
-<li><a href="#thinking-further">Thinking further</a></li>
 </ul>
 </nav>
-<div class="abstract">
-Abstract - Building complex web applications nowadays require additional layers of abstraction and often heavily depend on proprietary frameworks. New specifications build right into the browserengine provide a native service API to overcome tricky abstraction constraints.
-</div>
 <div id="main">
 <h1 id="simplicity-and-the-web">1. Simplicity and the web</h1>
 <blockquote>
 <p>Simplicity is prerequisite for reliability. - Edsger W. Dijkstra</p>
 </blockquote>
-<p>Computers can scale, humans can't. Ever since a program or complex system made by humans has been constrained by humans mental capabilities. Like in the analogy of juggling balls, our brain can just &quot;juggle&quot; a few things at a time. Rich Hickey, the inventor of the programming language Clojure gave an inspirational keynote on the topic of <strong>simplicity</strong>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> In every sphere of a humans life, simplicity aligns perception with our mental capacities.</p>
-<p>Derived from the Latin word <strong>simplex</strong>, simple can be understood as &quot;literally, uncompounded or onefold&quot;<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> which points directly to the unidimensional aspect. While complexity describes the multilayered und entangled nature of conditions, simplicity empowers the human brain to reason about issues in a straightforward manner. It certainly has some overlapping's with easy, but while easy is more of a relative nature, simple can be laid out as a objective manner and therefore universally applicable.</p>
-<p>Software development is undoubtedly rich in complexity and full of subtle pitfalls. In a typical scenario, a piece of software evolves over time in one or another opinionated direction. Layers of new abstractions wrestling with old legacy abstractions and mutation becomes untraceable. Subtle bugs start to creep in. Eventually the small piece of software may end up in a highly complected monolith which will determine future design decisions to a painful degree. Future strategies of the company/organization will be highly determined by the current state in the need of &quot;keeping the lights on&quot;.</p>
-<p>On the other side of this dystopian scenario, the truly modular system architecture abandons many of those potential inconsistencies. The whole system is divided in pluggable parts, object mutation is either traceable or avoided altogether in favor of immutable data structures. As Rich Hickey argues, design decisions should be made under the <strong>impression of extending, substitution, moving, combining and repurposing</strong>. The ability to reason about the program at any given time is crucial for future decisions and implementations. Recalling again the unidimensional nature of simplicity.</p>
-<p>Simplicity in &quot;the web&quot;, read as a loose generalization of &quot;everything that runs in the browser&quot;, is certainly a story full of misconceptions. While simplicity in the backend is mostly a matter of principles and patterns, any browser-based frontend is restricted on the highly deterministic nature of the browser platform.</p>
+<p>Computers can scale, humans can't. Ever since a complex system made by humans has been constrained by humans mental capabilities. Like in the analogy of juggling balls our brain can just &quot;juggle&quot; a few things at a time. Rich Hickey, the inventor of the programming language Clojure gave an inspirational keynote on the topic of <strong>simplicity</strong>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> In every sphere of a humans life simplicity aligns perception with our mental capacities.</p>
+<p>Derived from the Latin word <strong>simplex</strong>, simple can be understood as &quot;literally, uncompounded or onefold&quot;<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> which points towards an unidimensional nature. While complexity describes the multilayered und entangled nature of conditions, simplicity empowers the human brain to reason about issues in a straightforward manner. It certainly has some overlapping's with easy, but while easy is more of a relative spirit, simple can be laid out as a objective manner and therefore universally applicable.</p>
+<p>Software development is undoubtedly rich in complexity and full of subtle pitfalls. In a typical scenario a growing software project evolves in one or another opinionated direction over time. Layers of abstractions wrestling with aged legacy code requiring layers of middleware. Mutating assets create subtle bugs and so forth. Eventually the small piece of software may end up in a highly complected monolith which will determine future design decisions to a painful degree. Opaqueness of the system will slow down innovation to a minimum in the need of &quot;keeping the lights on&quot;.</p>
+<p>On the other side of this dystopian scenario a truly modular system architecture abandons many of those potential inconsistencies. The whole system is divided in pluggable parts, object mutation is either traceable or avoided altogether in favor of immutable data structures. As Rich Hickey argues, design decisions should be made under the <strong>impression of extending, substitution, moving, combining and repurposing</strong>. The ability to reason about the program at any given time is crucial for future decisions and implementations. Recalling again the unidimensional nature of simplicity.</p>
+<p>Simplicity in &quot;the web&quot;, read as a loose generalization of &quot;everything that runs in the browser&quot; is certainly a story full of misconceptions. While simplicity in the backend is mostly a matter of principles and patterns, any browser-based frontend is restricted on the highly deterministic nature of the browser platform.</p>
 <p>In the last four years the average transfer size of a webpage doubled to currently around 2.5 MB.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> Leaving images, fonts or other content aside the size of HTML, CSS and JS sums up to a total average of 550 kb. One character weights around 1 byte which means an average webpage is delivering 550.000 character or around 125 pages of single-spaced text. Frederic Filloux analyzed the payload on different newspaper websites and came to the conclusion, that only round about 5-6 % of the transferred characters made for human consumption.<span class="citation" data-cites="Filloux2016">(Filloux 2016)</span></p>
 <p>Having an 95 % overhead is rather undesirable for both the consumers and creators of the website. Since it's a widespread problem without a single point of failure one can argue the platform itself is the failure. By design, every pageload results in a monolithic DOM tree managed by the browser engine. Whether rendering just a bunch of static text nodes or an ever changing webapp the underlying global nature of the DOM tree remains the same. Every additional piece of code added to the webpage will invisibly add another fold of complexity to this global object.</p>
 <p>In an non-deterministic runtime environment, encapsulation and modularization is a typical pattern to make complexity manageable and accommodate future uncertainty.<span class="citation" data-cites="Baldwin2006">(Baldwin and Clark 2006, 1)</span> Since years the average JS payload is steadily rising which can be interpreted as a trend towards more dynamic websites. The demands to the browser platform changed from a static page renderer to a <strong>dynamic UI machine</strong> without changing the underlying architecture significantly. Under the current situation only additional layers of abstraction can wrestle complexity.</p>
-<p>In the recent years many <strong>frameworks</strong>, libraries and methodologies approached the global nature of the DOM by scoping assets and design rules into maintainable components. While the DOM can't be scoped, JS can. Many frameworks, like ReactJS, AngularJS or VueJS just to name a few, ditched the old rule of separated HTML, CSS and JS in favor of an additional layer of abstracted JS components (containing content, markup and styling). Quiet often those frameworks mimic a MVC pattern on top of the browser engine which is a reasonable simple design pattern to build graphical user interfaces. While frameworks are a valid approach for building scalable web applications they remain highly opinionated, embody inherent complexity themselves and can change and break over time. Another downside is code inflation which is a crucial point for performance. All of those bottlenecks in the web demand for a new standardized way for creating and evolving complex web services.</p>
+<p>In the recent years many <strong>frameworks</strong>, libraries and methodologies approached the global nature of the DOM by scoping assets and design rules into maintainable components. While the DOM can't be scoped, JS can. Many frameworks, like ReactJS, AngularJS or VueJS just to name a few, ditched the old rule of separated HTML, CSS and JS in favor of an additional layer of abstracted JS components (containing structure, behavior and sometimes styling). Quiet often those frameworks mimic a MVC pattern on top of the browser engine which is a reasonable simple design pattern to build graphical user interfaces. While frameworks are a valid approach for building scalable web applications they remain highly opinionated, embody inherent complexity themselves and can change and break over time. Another downside is code inflation which is a crucial point for performance. All of those bottlenecks in the web demand for a new standardized way for creating and evolving complex web services.</p>
 <p>In the year 2013 thinkers, creators and browser vendors joined together to propose <em>The Extensible Web Manifesto</em>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> The manifestos claim was to enhance the current web platforms with new low-level capabilities. Those features should empower creators of the web to write more declarative code and abandon known problems and artificial abstractions. Four years later, the enhancement of JavaScript leapfrogged and many new low-level APIs brought to life. With this new APIs at hand a vivid web developer can create robust websites with less code and less additional libraries. This paper is an approach to unfold these <strong>browsernative</strong> technologies to create overall simple and resilient <strong>microservices</strong> for the browser</p>
 <h1 id="microservices">2. Microservices</h1>
 <p>In search of a better, simpler web architecture one might look on already established pattern that proofed to fulfill enterprise needs. Microservices are a good approach for tearing big monolithic systems into fine-grained simple services with explicit defined boundaries. In a nutshell a microservice is a small, autonomous service that works together with other services seamlessly.<span class="citation" data-cites="Newman2015">(Newman 2016, 2)</span> Or with the words of Fowler and Lewis: &quot;... the microservice architectural style is an approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms, often an HTTP resource API.&quot;<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> Yet at this point a reader might spot some similarities with microservices and the browser-based development: Both wrestling the problem of monolithic architecture and both using lightweight communication mechanisms. In fact, many big companies of &quot;the web&quot; like Amazon or Netflix successfully transformed their monolithic system into a service based system which gives a taste of the power behind microservices.<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span></p>
@@ -139,7 +129,7 @@ Abstract - Building complex web applications nowadays require additional layers 
 <p>Microservices are separate entities and decentralization is important to ensure autonomy. This paper already described fragmented services bounded to singular business context choreographed by simple communication protocols developed and evolved by autonomous teams.</p>
 <p>This distributed nature empowers teams to create their own technology stack, tools and services designed in the spirit of language- and platform independence and share their knowledge with other parties.<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> In the recent years many big companies like Facebook, Google, Netflix and others followed that spirit and published their ideas and implementations open source. The previously mentioned ReactJS for example is a product of Facebooks need to ensure a consistent frontend experience. In fact, many tools and techniques are byproduct of vital interaction of concrete domain problems and their implementations.</p>
 <p>The spirit of freedom can't be applied universally to <em>browsernative microservices</em> as the browser and its underlying DOM will be the limitation factor to a certain degree. Talking about the browser, a reader might be tempted to narrowly thinking of the obvious VIEW layer only - which is not true anymore. In the recent years the major browser engines grow to to a fully-fledged app deployment platform offering connectors to build-in databases, multithreading support and ever-growing JS build-ins like speech synthesis or push notifications. So-called <strong>Progressive Web Apps</strong><a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a>, a bunch of criteria for building good browser apps, can achieve a similar look and feel like native apps. And last but not least services like NativeScript<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> effectively compiling &quot;the web&quot; to native machine code lowering the boundary between native and browser code even further.</p>
-<p>JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for various reasons. Transpiling languages to JS as target language is a stable solution nowadays. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interface towards ES6 modules (which are mandatory for the new specifications). With the rise of WebAssembly, a new low-level programming language for the browser, the determination on JS will hypothetical deteriorate and new quasi native languages for the web might gain traction.</p>
+<p>JS is the widely accepted language of the web. Nevertheless, a microservice engineering team might choose another language for various reasons. Transpiling languages to JS as target language is a stable solution nowadays. Languages like TypeScript, ClojureScript or PureScript compile to JS even exclusively. Once web components hit a critical mass there will be most likely some library support or foreign function interface towards ES6 modules (which are mandatory for the new specifications).</p>
 <p>Another more real life decentralization aspect derives from the easiness of deployment in a safe, sandboxed environment. Web components virtually ship no overhead or require dedicated build tools. This makes them ideal candidates for sharing and open source publishing similar to the largest JS package registry NPM. In the spirit of NPM web components can be perceived as frontend packages with an HTML interface instead of a JS signature. Webcomponents.org<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> is a registry for ready-to-use components of every scale and purpose where for even Google shares a lot of their material design elements.</p>
 <h2 id="decentralized-data-management">2.5. Decentralized Data Management</h2>
 <p>Data Management in a microservice follows the same modular philosophy like the service implementation. As mentioned earlier different bounded contexts make different assumptions of the underlying models. A <em>browsernative microservices</em> takes this idea even further and expands it to the fragmented world of electronic devices. Decentralized decisions about conceptual models demand for decentralized data storage decisions.<span class="citation" data-cites="Fowler2014">(Fowler and Lewis 2014)</span> Todays web architectures aims to leverage an increasing amout of processing to the client to avoid time-consuming roundtrips especially in mobiles networks.<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> Since network roundtrips are costly it is a good advice to only query as much data as needed and cache as much as possible. The build-in LocalStorage or its successor IndexedDB are mature persistence technologies and libraries like PouchDB<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> even offer backend adapters for syncing out of the box.</p>
@@ -178,9 +168,9 @@ Abstract - Building complex web applications nowadays require additional layers 
 <p>For building a native microservice running on the &quot;bare-metal&quot; browser engine requires a bunch of new specifications and assumptions. Most importantly the quasi specification <strong>Web Components</strong> is needed. Web Components is not a real standard. It's an amalgam of APIs from multiple w3c specs which can be used independently. A web developer may choose one spec and embrace the freedom in architecture which can be combined with other frameworks/libraries.</p>
 <p>Depending on the context, some people argue for only two specs which essentially make it possible to create a scoped component but not caring too much on it's distribution<span class="citation" data-cites="Buchner2016">(Buchner 2016)</span>. Some people prefer the three specs <span class="citation" data-cites="vanKesteren2014">(Kesteren 2014)</span>, but the majority advocating the four specs variant, which is listed on the quasi-official <a href="http://webcomponents.org">webcomponents.org</a> website. For the purpose of this article, all four specs will be discussed briefly to provide a rough understanding. It is not meant to cover all bits and pieces.</p>
 <p><em>Disclaimer:</em> This paper introduces many new browser build-ins with the focus on testability. As the time of writing, many examples can be tried frictionless in the console of the latest versions of <strong>Google Chrome, Opera and Apple Safari</strong>.<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> On Mozilla Firefox technologies work behind a flag and Microsoft Edge implementation is unfortunately far behind. But Browser implementation changes quickly and soon technology adoption won't be an issue. Meanwhile new standards can be used through <strong>polyfills</strong> even on legacy browsers.</p>
-<h2 id="custom-elements-w3c">3.1. Custom Elements <a href="http://w3c.github.io/webcomponents/spec/custom/">(w3c)</a></h2>
+<h2 id="custom-elements-whatwg">3.1. Custom Elements <a href="https://html.spec.whatwg.org/multipage/scripting.html#custom-elements">(whatwg)</a></h2>
 <p><em>Custom elements</em> are the fundamental building blocks for web components introducing the <strong>Single Responsibility Principle</strong> to the browser. In short, they provide a way to create custom HTML tags subsuming behavior, design and functionality. An obligatory <strong>HelloWorld</strong> will give a flavor about the spec:</p>
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">HelloWorld</span>.<span class="at">js</span>
 <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
  <span class="at">constructor</span>() <span class="op">{</span>
   <span class="kw">super</span>()<span class="op">;</span> <span class="co">// mandatory in constructor</span>
@@ -206,12 +196,11 @@ This method provides an <strong>onchange handler</strong> for certain elements a
 Called when moving the node <strong>between documents</strong>. This method comes handy when using HTML imports described later.</li>
 </ul>
 <h3 id="custom-attributes">3.1.2. Custom attributes</h3>
-<p>As mentioned earlier any custom elements must extend the <code>HTMLElement</code> interface ensuring base properties and methods used in throughout all HTML elements like <strong>id, class, addEventListner ...</strong>. Additionally, it is possible to define custom attributes using the <em>custom elements'</em> <strong>getter / setter interface</strong> to steer the behavior of the element.</p>
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
+<p>As mentioned earlier any custom elements must extend the <code>HTMLElement</code> interface ensuring base properties and methods used in throughout all HTML elements like <strong>id, class, addEventListner ...</strong>. Additionally, it is possible to define custom attributes using the <em>custom elements'</em> <strong>getter / setter interface</strong> to steer the behavior of the element. Note that the keywords <strong>get</strong> and <strong>set</strong> as well as the previously used <strong>constructor</strong> are optional!</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">HelloWorld</span>.<span class="at">js</span>
 <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
   set <span class="at">sayhello</span>(val) <span class="op">{</span>
     <span class="kw">this</span>.<span class="at">_hello</span> <span class="op">=</span> val<span class="op">;</span>
-    <span class="va">console</span>.<span class="at">log</span>(<span class="kw">this</span>.<span class="at">_hello</span>)<span class="op">;</span>
   <span class="op">}</span>
   get <span class="at">sayhello</span>() <span class="op">{</span>
     <span class="cf">return</span> <span class="kw">this</span>.<span class="at">_hello</span><span class="op">;</span>
@@ -220,8 +209,8 @@ Called when moving the node <strong>between documents</strong>. This method come
 <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> HelloWorld)<span class="op">;</span>
 <span class="co">// Instantiation via JS instead of HTML</span>
 <span class="kw">var</span> el <span class="op">=</span> <span class="kw">new</span> <span class="at">HelloWorld</span>()<span class="op">;</span>
-<span class="va">el</span>.<span class="at">sayhello</span> <span class="op">=</span> <span class="st">&quot;earth&quot;</span><span class="op">;</span>
-<span class="va">el</span>.<span class="at">sayhello</span><span class="op">;</span><span class="co">//&quot;earth&quot;</span></code></pre></div>
+<span class="va">el</span>.<span class="at">sayhello</span> <span class="op">=</span> <span class="st">&quot;earth&quot;</span><span class="op">;</span> <span class="co">// &quot;Call&quot; the setter</span>
+<span class="va">el</span>.<span class="at">sayhello</span><span class="op">;</span><span class="co">// Yields &quot;earth&quot;</span></code></pre></div>
 <p>Native DOM properties always reflect their values between HTML and JS.<span class="citation" data-cites="HTML">(<em>HTML Living Standard — Last Updated 11 January 2017</em>, n.d., para. 2.6.1)</span> Declaring <code>&lt;hello-world id=&quot;hello&quot;&gt;</code> equals to the JS declaration <code>new HelloWorld().id = &quot;hello&quot;</code>.</p>
 <p>This behavior won't work out-of-the-box with methods defined with setters as they are strictly JS only . Mounting <code>&lt;hello-world sayhello=&quot;mars&quot;&gt;</code> would't call the <code>sayhello</code> method in the previous setup. Value reflection can be implemented inside the <em>custom elements</em> using the native methods <code>getAttributes</code> and <code>setAttributes</code>. Using them exhaustively throughout lifecycles methods the new components can configured to read and listen to HTML attributes accordingly.</p>
 <p>Designing a <em>custom element</em> this way creates HTML elements with named attribute interfaces reaching deep into JS functionality. With this mental model in mind a web developer can create highly dynamic web components.</p>
@@ -231,14 +220,14 @@ Called when moving the node <strong>between documents</strong>. This method come
 <p>A <em>shadow DOM</em> is just an isolated DOM tree living inside an another DOM tree. The spec refers the hosting tree as <strong>light DOM tree</strong> and the attached DOM as <strong>shadow DOM tree</strong>. Conceptually <em>shadow DOM</em> issues a single important issue for building scalable software which is namely <strong>encapsulation</strong>. While custom elements provide a good way to encapsulate JS behavior <em>shadow DOM</em> tends strongly to the direction of style and event encapsulation.</p>
 <p>With an ever increasing complexity of single-page applications the global nature of the DOM creates a daunting situation for code organization and leads over times to highly fragmented bits of CSS and obscured CSS selectors. Of course this situation lowers code clarity and reusability dramatically. The only solution which won't break with the existing global paradigm of the DOM effectively is to allow separate pieces of encapsulated code sit on top of the global DOM - introducing the shadowed DOM approach.</p>
 <p>Enhancing the previous example the new encapsulated <code>HelloWorld</code> would like this:</p>
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">HelloWorld</span>.<span class="at">js</span>
 <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
  <span class="at">constructor</span>() <span class="op">{</span>
    <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
    <span class="va">shadowRoot</span>.<span class="at">innerHTML</span> <span class="op">=</span> <span class="st">&#39;&lt;p&gt;hello&lt;/p&gt;&#39;</span><span class="op">;</span>
  <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p>The new global method <code>attachShadow</code> adds a new document root to the <code>HelloWorld</code> which has the same properties as a normal, light document object. Note that <code>shadowRoot</code> is marked as <strong>open</strong> which ensures that some events can bubble out and outside JS can reach in the new root.</p>
+<p>The new global method <code>attachShadow</code> adds a new document root to the <code>HelloWorld</code> which has the same properties as a normal, light document object. Note that the <code>shadowRoot</code> object is marked as <strong>open</strong> which ensures that some events can bubble out and outside JS can reach in the new root.</p>
 <p>Filling the <em>shadow DOM</em> with an <code>innerHTML</code> string is rather impractical. To fill a <em>shadow DOM</em> with life usually it invites light DOM child nodes nested under the hosting node using a technique called <code>slots</code>.</p>
 <h3 id="slots">3.2.1. Slots</h3>
 <p>Contradicting to the simplified <code>HelloWorld</code> example, a <em>shadow DOM</em> shouldn't contain dynamic content. Changing or interacting with the paragraph node from the example would require nested JS calls querying the hosting node, entering the <em>shadow DOM</em> and applying a function. Imported JS behavior from third-party libraries in the <em>light DOM</em> can't be used inside the <em>shadow DOM</em>, too.</p>
@@ -291,114 +280,116 @@ Like the previous rule this selector will style the shadow DOM but will look aft
 <p>As mentioned earlier any logic applied to <em>light DOM</em> nodes stays with the node even after redistribution. For the sake of separation of concerns the business logic should be part of the <em>custom element</em> (the <em>light DOM</em>) and not the part of the <em>shadow DOM</em>. On the other hand there are numerous scenarios where JS is used for styling or animation of an element. In this case it might be more straightforward to <strong>apply JS inside the <em>shadow DOM</em></strong> to avoid mixing with logic handlers with styling.</p>
 <p>It seems that a <em>light DOM</em> node is in the <em>shadow DOM</em> context after distribution. Visually this may be true but logically the node stays in the normal document. To reach a distributed node from the <em>shadow DOM</em> to apply some JS behavior for styling it needs the extra way over the slot node. Calling <code>assinedNodes()</code> on the hosting slot element returns a linkage to the distributed node which can be accessed and manipulated like in the <em>light DOM</em> context.</p>
 <p>Wrapping up this section <em>shadow DOM</em> provides a non-hacky way to create uniform looking custom elements and even enhance styling possibilities without adding overhead. For small components with just a little styling a <em>shadow DOM</em> might be over engineered. Eventually it all depends on the question of &quot;how hard is it to implement it without shadow DOM&quot; - which can't be answered universally. For a more in-depth guide, Google Engineer Eric Bidelman wroten a great primer on <em>shadow DOM</em><span class="citation" data-cites="Bidelman2016shadow">(Bidelman 2016b)</span>.</p>
-<p>There is still a missing link between <em>light DOM</em> and <em>shadow DOM</em>. The observant reader may have already noticed the weak point in the HelloWorld example: how to &quot;vitalize&quot; the <em>shadow DOM</em> with slot or other element structuring instead of <code>innerHTML</code> strings. While strings works perfectly fine in this simple case a string of markup is rather cumbersome and error-prone and doesn't scale well. When putting quotes inside another quotes things break quickly. It makes the life hard for developers to work with it because it requires manual indentation of code blocks and is typically out of syntax highlighting. That's the time HTML templates come into play.</p>
-<h2 id="html-templates-w3c">3.3. HTML Templates <a href="https://www.w3.org/TR/html5/scripting-1.html#the-template-element">(w3c)</a></h2>
-<p>Among all other new standards <em>HTML templates</em> are the most mature and adopted standard in the browser environment. All major browsers, except from Internet Explorer, support this standard.</p>
-<p>One core concept in templates is efficiency: Whatever dropped inside a <code>template</code> tag <del>bucket</del> will be parsed on runtime - but not constructed into the <em>content tree</em>. It remains plain HTML Markup sitting somewhere in the document until the time of activation.</p>
-<p>Activation typically takes four steps:</p>
+<p>There is still a missing link between <em>light DOM</em> and <em>shadow DOM</em>. The observant reader may have already noticed the weak point in the HelloWorld example: how to &quot;vitalize&quot; the <em>shadow DOM</em> with slot or other element structuring instead of <code>innerHTML</code> strings. While strings works perfectly fine in this simple case a string of markup is rather cumbersome and error-prone and doesn't scale well. When putting quotes inside other quotes things break quickly. Strings make development harder because code editor features like indentation or syntax highlighting won't be supported. The HTML templates is set to fill this gap.</p>
+<h2 id="html-templates-whatwg">3.3. HTML Templates <a href="https://html.spec.whatwg.org/multipage/scripting.html#the-template-element">(whatwg)</a></h2>
+<p>Among all other new specifications <em>HTML templates</em> are the most mature and adopted standard in the browser environment. All major browsers support it since years.</p>
+<p>One core concept in templates is browser performance. Elements inside a <code>template</code> tag will be parsed on runtime - but not constructed and rendered into the content tree. They're remaining plain HTML markup sitting in the document until the time of activation.</p>
+<p>Activation usually takes four steps:</p>
 <ol type="1">
 <li><strong>Querying the template node in question</strong><br />
 const node = document.querySelector('template');</li>
 <li><strong>Parsing the content and preparing the templates' content</strong><br />
 const content = node.content;<br />
--&gt; Returns a <em>DocumentFragment</em> object. Handling is straight forward content.querySelector('img').src = 'logo.png';</li>
-<li><strong>Optional: Cloning the <em>DocumentFragment</em> for multiple use</strong><br />
+Returns a DocumentFragment object.</li>
+<li><strong>Optional: Cloning the fragment for multiple use</strong><br />
 const clone = content.cloneNode(&quot;deep&quot;);</li>
 <li><strong>Appending the clone/original to destination</strong><br />
 document.body.appendChild(clone);</li>
 </ol>
-<p>As easy and minimal <em>HTML templates</em> are, they're missing out a crucial feature other template implementations usually have. As templates are basically just dump containers for HTML Markup, there is no way to define some logic as <strong>placeholders</strong> where content should appear. Of course, with heavy use of JS things could be modeled this way. The idiomatic way tends more towards a <em>Shadow DOM &amp; HTML templates</em> symbiosis.</p>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; index.html
+<p>As easy and minimal <em>HTML templates</em> are they're missing out a crucial feature other template implementations used to have. As templates are basically just containers for HTML markup there is no idiomatic way to define <strong>placeholders</strong> for dynamic content. Templates could be mock up this way using JS for altering the content but the much cleaner way leverages the previously described slot technique from shadow DOM.</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; hello-world-component.html
 <span class="kw">&lt;hello-world&gt;</span>
- <span class="kw">&lt;p</span><span class="ot"> id=</span><span class="st">&quot;sendto&quot;</span><span class="ot"> slot=</span><span class="st">&quot;placeholder&quot;</span><span class="kw">&gt;</span>
-  Hello World Web Component  
- <span class="kw">&lt;/p&gt;</span>
+  <span class="kw">&lt;template</span><span class="ot"> id=</span><span class="st">&quot;hello&quot;</span><span class="kw">&gt;</span>
+  <span class="co">&lt;!-- styling --&gt;</span>
+    <span class="kw">&lt;style&gt;</span>
+      <span class="fl">#hellowrap</span> <span class="kw">{</span>
+        <span class="kw">font-weight:</span> <span class="dt">bold</span><span class="kw">;</span>
+        <span class="kw">color:</span> orange<span class="kw">;</span>
+      <span class="kw">}</span>
+    <span class="kw">&lt;/style&gt;</span>
+    
+    <span class="co">&lt;!-- structure --&gt;</span>
+    <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;hellowrap&quot;</span><span class="kw">&gt;</span>
+      <span class="kw">&lt;slot</span><span class="ot"> name=</span><span class="st">&quot;placeholder&quot;</span><span class="kw">&gt;</span>
+        Named placeholder
+      <span class="kw">&lt;/slot&gt;</span>
+    <span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;/template&gt;</span>
+  
+  <span class="co">&lt;!-- light DOM / typical inserted at index.html --&gt;</span>
+  <span class="kw">&lt;p</span><span class="ot"> slot=</span><span class="st">&quot;placeholder&quot;</span><span class="kw">&gt;</span>
+    Hello World Web Component
+  <span class="kw">&lt;/p&gt;</span>
 <span class="kw">&lt;/hello-world&gt;</span>
 
-<span class="co">&lt;!-- COMPONENT STARTS HERE --&gt;</span>
-<span class="kw">&lt;template</span><span class="ot"> id=</span><span class="st">&quot;hello&quot;</span><span class="kw">&gt;</span>
- <span class="co">&lt;!-- STYLES --&gt;</span>
- <span class="kw">&lt;style&gt;</span>
-  <span class="fl">#stylewrapper</span> <span class="kw">{</span>
-   <span class="kw">font-weight:</span> <span class="dt">bold</span><span class="kw">;</span>
-   <span class="kw">color:</span> orange<span class="kw">;</span>
-  <span class="kw">}</span>
- <span class="kw">&lt;/style&gt;</span>
- <span class="co">&lt;!-- CONTENT --&gt;</span>
- <span class="kw">&lt;div</span><span class="ot"> id=</span><span class="st">&quot;stylewrapper&quot;</span><span class="kw">&gt;</span>
-  <span class="kw">&lt;slot</span><span class="ot"> name=</span><span class="st">&quot;placeholder&quot;</span><span class="kw">&gt;</span>
-   Named placeholder
-  <span class="kw">&lt;/slot&gt;</span>
- <span class="kw">&lt;/div&gt;</span>
-<span class="kw">&lt;/template&gt;</span>
-
 <span class="kw">&lt;script&gt;</span>
- <span class="co">// Switched to anonymous class notation</span>
- <span class="co">// for keeping associated code together.</span>
- <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span>
-  <span class="kw">class</span> <span class="kw">extends</span> HTMLElement <span class="op">{</span>
-   <span class="at">constructor</span>() <span class="op">{</span>
-    <span class="kw">super</span>()<span class="op">;</span>
-    <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
-    <span class="kw">const</span> helloTemplate <span class="op">=</span> <span class="va">document</span>.<span class="at">querySelector</span>(<span class="st">&#39;#hello&#39;</span>)<span class="op">;</span>
-    <span class="kw">this</span>.<span class="va">shadowRoot</span>.<span class="at">appendChild</span>(<span class="va">helloTemplate</span>.<span class="at">content</span>)<span class="op">;</span>
-   <span class="op">}</span>
-  <span class="op">}</span>)<span class="op">;</span>
+  <span class="kw">class</span> HelloWorld <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+    <span class="at">constructor</span>() <span class="op">{</span>
+      <span class="kw">super</span>()<span class="op">;</span>
+      <span class="kw">this</span>.<span class="at">attachShadow</span>(<span class="op">{</span><span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span><span class="op">}</span>)<span class="op">;</span>
+      <span class="kw">const</span> temp <span class="op">=</span> <span class="kw">this</span>.<span class="at">querySelector</span>(<span class="st">&#39;template#hello&#39;</span>)<span class="op">;</span>
+      <span class="kw">this</span>.<span class="va">shadowRoot</span>.<span class="at">appendChild</span>(<span class="va">temp</span>.<span class="at">content</span>)<span class="op">;</span>
+    <span class="op">}</span>
+  <span class="op">}</span>
+  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> HelloWorld)<span class="op">;</span>
 <span class="op">&lt;</span><span class="ss">/script&gt;</span></code></pre></div>
-<p>The updated <code>HelloWorld</code> component looks already pretty mature. It combines all the previous mentioned standards into one blob of HTML. <em>Custom Elements</em> serves the logic, <em>Shadow DOM</em> scopes the styles and <em>HTML Templates</em> efficiently glues DOM and <em>Shadow DOM</em> together. This separation of concerns comes with a huge gain in flexibility. In a real world scenario <code>HelloWorld</code> would contain/reference multiple <em>HTML Templates</em> and could switch them around without any fuss. A developer might to split up templates into <strong>STYLE</strong> templates and <strong>CONTENT</strong> templates to increase reusability even further.</p>
-<p>The last standard in the row of four is not concerned with the internals of a <em>web component</em>. <em>HTML Imports</em> serves the need for an efficient distribution mechanism of components.</p>
-<h2 id="html-imports-w3c">HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></h2>
+<p>The updated <code>HelloWorld</code> component looks already pretty mature. It combines all the previous mentioned standards into one HTML file. Custom elements serves the logic, shadow DOM scopes the styles and <em>HTML Templates</em> efficiently glues light DOM and shadow DOM together. This separation of concerns comes with a surplus in flexibility. In a real world scenario <code>HelloWorld</code> could reference multiple <em>HTML Templates</em> and switch them around without any fuss. Even further a developer might split up templates into named <strong>STYLE</strong> templates and <strong>CONTENT</strong> templates to increase reusability even further.</p>
+<p>The last standard in the row of four is not concerned with the internals implementation of a web component. HTML Imports serves the need for an efficient distribution mechanism of components and other HTML resources.</p>
+<h2 id="html-imports-w3c">3.4. HTML Imports <a href="https://www.w3.org/TR/html-imports/">(w3c)</a></h2>
 <p>Importing the <code>HelloWorld</code> component is a one-liner:</p>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;import&quot;</span><span class="ot"> href=</span><span class="st">&quot;Hello.html&quot;</span><span class="ot"> async</span><span class="kw">&gt;</span></code></pre></div>
-<p>The <code>async</code> flag is optional but like in any other fetching event, strongly recommended. Once the imported HTML document comes into scope, activation follows a very similar pattern like the aforementioned <em>HTML templates</em>:</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; index.html
+<span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;import&quot;</span><span class="ot"> href=</span><span class="st">&quot;Hello.html&quot;</span><span class="ot"> async</span><span class="kw">&gt;</span>
+
+<span class="kw">&lt;hello-world&gt;</span>
+  <span class="kw">&lt;p</span><span class="ot"> slot=</span><span class="st">&quot;placeholder&quot;</span><span class="kw">&gt;</span>
+    Hello World Web Component
+  <span class="kw">&lt;/p&gt;</span>
+<span class="kw">&lt;/hello-world&gt;</span></code></pre></div>
+<p>The <code>async</code> flag is optional but recommended like any other fetching event. Once the imported HTML document comes into scope activation follows a very similar process compared to the aforementioned HTML templates:</p>
 <ol type="1">
 <li><p><strong>Querying the link node</strong></p></li>
 <li><p><strong>Parsing the content and preparing the render</strong><br />
-const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the content a fully equipped document object.</p></li>
+const content = linknode.import; -&gt; Unlike the <em>HTML template</em> a complete document object is constructed.</p></li>
 <li><p><strong>Optional: Cloning some nodes for multiple use</strong></p></li>
 <li><p><strong>Appending the clone/original to destination</strong></p></li>
 </ol>
-<p>This again is the imperative way to handle a generic <em>HTML Import</em>. In the declarative world of <em>web components</em> a component is activated, parsed and anchored solely by its' tag name <code>&lt;hello-world&gt;&lt;/hello-world&gt;</code>. Preliminary, the component needs proper configuration. The next section will elaborate the right configuration and composition of a component to work out-of-the-box.</p>
-<p>Despite from being just a practical document importer <em>HTML imports</em> acts like a fully fledged dependency manager for the browser. Multiple resources, ranging from stylesheets, scripts, documents, media files and even other <code>imports</code> can be grouped together in a logical <code>import</code> statement. Internally, the browser engine keeps track for every imported resource so it won't be loaded twice. The inherent complexity is in fact a stumbling block for wider browser adoption. Currently only Googles blink web engine supports <em>HTML Imports</em> as they are the driving force behind the <em>web components</em> spec in general. Mozilla and Apple imposed distaste for <em>HTML Imports</em> as a whole. One reason for this can be found in the incompatibility of the spec with the upcoming <em>ES6 module loader</em>.<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a></p>
-<p>Despite the discrepancies among browser vendors <em>HTML Imports</em> should still be part of the paper as no other native browser technology can bundle up CSS, JS and HTML that efficient.</p>
-<h2 id="appendix-a-custom-events-whatwg">Appendix A: Custom Events <a href="https://dom.spec.whatwg.org/#interface-customevent">(whatwg)</a></h2>
-<p>Events are first-class citizens in the browser world and <em>Custom Events</em> are no exception. The <em>Custom Elements</em> interface is part of the DOM since years but with the rise of <em>Custom Elements</em> they will most likely become an indispensable building block of <em>web components</em>.</p>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; index.html
+<p>Again this is the imperative way to handle a generic <em>HTML Import</em>. In the declarative world of web components a component is <strong>parsed, auto-activated and anchored</strong> solely by its' tag name <code>&lt;hello-world&gt;&lt;/hello-world&gt;</code> on purpose. The very own lifecycle method <strong>adoptedCallback()</strong> in custom elements shows the strong interconnection between those standards.</p>
+<p><em>HTML imports</em> can import everything which is wrappable with HTML markup. Stylesheets, scripts, documents, media files and even further imports statements can form a semantic <em>HTML import</em> statement. The far reaching possibilities of a single standard has its downsides. According to Mozilla <em>HTML imports</em> are not fully compatible with the dependency model of the new ES6 modules.<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a> Under the current situation Mozilla and Apple and Microsoft won't implement <em>HTML Imports</em> soon if any. Currently only Googles blink web engine supports <em>HTML Imports</em> as they are the driving force behind the web components specs in general. Despite the discrepancies among browser vendors <em>HTML Imports</em> are part of this paper as no other native standard can ship bundled HTML, CSS and JS which is a core concept behind web components.</p>
+<h2 id="custom-events-whatwg">3.5. Custom Events <a href="https://dom.spec.whatwg.org/#interface-customevent">(whatwg)</a></h2>
+<p>Events are first-class citizens in the browser. After all they provide a neat communication channel for dynamic interactions. <em>Custom Events</em> are part of the DOM since years but with the rise of web components they will most likely become an indispensable building block of web components.</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; hello-world-component.html
+
 <span class="kw">&lt;hello-world&gt;</span>
  <span class="kw">&lt;button&gt;</span>Launch CustomEvent<span class="kw">&lt;/button&gt;</span>
 <span class="kw">&lt;/hello-world&gt;</span>
-<span class="co">&lt;!-- COMPONENT STARTS HERE --&gt;</span>
+
 <span class="kw">&lt;script&gt;</span>
  <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> 
  <span class="kw">class</span> <span class="kw">extends</span> HTMLElement <span class="op">{</span>
   <span class="at">constructor</span>() <span class="op">{</span>
     <span class="kw">super</span>()<span class="op">;</span>
-   <span class="co">// Craft a CustomEvent e</span>
-    <span class="kw">const</span> e <span class="op">=</span> <span class="kw">new</span> <span class="at">CustomEvent</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> <span class="op">{</span>
-    <span class="dt">bubbles</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="co">//important!</span>
+   
+   <span class="co">// Craft a helloevent</span>
+    <span class="kw">const</span> helloevent <span class="op">=</span> <span class="kw">new</span> <span class="at">CustomEvent</span>(<span class="st">&#39;helloevent&#39;</span><span class="op">,</span> <span class="op">{</span>
+    <span class="dt">bubbles</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
     <span class="dt">detail</span><span class="op">:</span> <span class="st">&#39;Contains scalar or object&#39;</span>
    <span class="op">}</span>)<span class="op">;</span>
-   <span class="co">// Launch e on child button click</span>
+   
+   <span class="co">// Launch helloevent if child button clicks</span>
    <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;click&#39;</span><span class="op">,</span> click <span class="op">=&gt;</span> <span class="op">{</span>
-    <span class="kw">this</span>.<span class="at">dispatchEvent</span>(e)
+    <span class="kw">this</span>.<span class="at">dispatchEvent</span>(helloevent)
     <span class="va">click</span>.<span class="at">stopPropagation</span>()<span class="op">;</span>
-   <span class="op">}</span>)<span class="op">;</span>
-   <span class="co">// Catch e. Typically done by some parent</span>
-     <span class="co">// node. Message in detail property</span>
-   <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;hello-world&#39;</span><span class="op">,</span> e <span class="op">=&gt;</span> <span class="op">{</span>
-    <span class="va">console</span>.<span class="at">log</span>(<span class="va">e</span>.<span class="at">detail</span>)
-   <span class="op">}</span>)<span class="op">;</span>
+   <span class="op">}</span>)
   <span class="op">}</span>
  <span class="op">}</span>)<span class="op">;</span>
 <span class="op">&lt;</span><span class="ss">/script&gt;</span></code></pre></div>
-<p>Naming events after the emitting tag makes the API almost self-explanatory. The <code>detail</code> property can be loaded with primitives as well as objects. The further sections will elaborate a feasible architecture for building a scaling microservice architecture.</p>
-<p>Chaining and aggregating events from child nodes should be practiced and exercised quiet frequently. As mentioned earlier in the <em>Custom Elements</em> section, the pattern of <strong>extending native elements</strong> should be somewhat dismissed as it may never implemented outside of Chrome. Nevertheless, it is possible to create own kind of quasi native buttons when chaining a <em>CustomEvent</em> directly after the native click event.</p>
-<p>Another typical <em>custom element</em> use case can be as an actor on (native) child elements. In this case, the <em>Custom Element</em> catches events from children, buffers or rebuild them and eventually fires an event towards the document root.</p>
-<p>Unfortunately events only work &quot;upstream&quot; towards parent nodes. Still the web platform offers plenty of possibilities to talk back to child nodes.</p>
-<h2 id="appendix-b-web-worker-whatwg">Appendix B: Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></h2>
-<p>Like <em>Custom Events</em>, <em>Web Workers</em> had been around for a long time and therefore enjoy full support among major browsers. They emerged at around 2009 when discussions about browser performance was still in the early days. Nevertheless, the addressed problem of <em>Web Workers</em> is a fundamental language problem of JS itself.</p>
-<p>JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of API data and manipulating the DOM, runs on the same thread<span class="citation" data-cites="Bidelman2010">(Bidelman 2010)</span>. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen or crashed UI. A worker can overcome the bottleneck of the single-threaded nature with spawning new <strong>background threads</strong> which allows the UI to stay responsive even when computation-heavy tasks should be carried out. Furthermore, a worker thread adds a performance advantage embracing the multi core CPU architecture most devices running on today. To grasp the full potential of workers, a reader might dive deeper into the Angular 2 architecture, where most of the application layer is abstracted from the main rendering thread into worker threads.<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a></p>
-<p>A <em>Web Worker</em> spawns a new background thread where scripts can run concurrent to the main thread. Usually a worker is loaded from a workers dedicated file to embrace this kind of separation.</p>
+<p>Naming events after the emitting tag makes the API almost self-explanatory. The <code>detail</code> property can be loaded with scalars as well as objects. Subsequent parent nodes may catch the custom event with a clear understanding about the source node.</p>
+<p>Chaining and aggregating events from child nodes can be frequently used within web components. One use case could be creating a custom button like in the previous example. As mentioned earlier in the Custom Elements section at 3.1.3. , the pattern of <strong>extending native elements</strong> should be somewhat dismissed as other browser vendors may never implement it. A common workaround to eventually create a own version a button could be made with a thin wrapper around the native button and chaining a <em>Custom Event</em> after the click event.</p>
+<p>Another common web components use case can be a <strong>middleware</strong> subscribing to certain child events and acting upon them. This involves catching events, buffering, destructuring and creation of an own event towards the document root. By design, events only bubble upstream towards parent nodes. For handing down information towards the child nodes we need to query the child node directly.</p>
+<h2 id="web-worker-whatwg">3.6. Web Worker <a href="https://html.spec.whatwg.org/multipage/workers.html">(whatwg)</a></h2>
+<p>Like <em>Custom Events</em>, <em>Web Workers</em> had been around for a long time and therefore enjoy full support among major browsers. They emerged at around 2009 when discussions about browser performance was still in the early days but addressing fundamental performance bottleneck of the JS language.</p>
+<p>JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process larget amounts of data or manipulating the DOM runs on a single thread<span class="citation" data-cites="Bidelman2010">(Bidelman 2010)</span>. Putting a lot of work to the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen or crashed UI. A worker can overcome the bottleneck of the single-threaded nature with spawning new <strong>background threads</strong> which allows the UI to stay responsive even when computation-heavy tasks needs to perform. Furthermore, a worker thread adds a performance advantage embracing the multi core CPU architecture most devices running on today. To grasp the full potential of workers a reader might dive deeper into the Angular 2 architecture, where most of the application layer is abstracted from the main rendering thread into worker threads.<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a></p>
+<p>A <em>Web Worker</em> spawns a new background thread where scripts can run concurrent to the main thread. Usually a worker is loaded from dedicated file to embrace separation.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> worker <span class="op">=</span> <span class="kw">new</span> <span class="at">Worker</span>(<span class="st">&#39;worker.js&#39;</span>)<span class="op">;</span></code></pre></div>
 <p>After initialization a worker communicates over a simple <strong>message based interface</strong> with the main thread.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&gt;</span> <span class="va">main</span>.<span class="at">js</span>
@@ -411,11 +402,10 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <span class="co">// Receive msg and echo back</span>
 <span class="kw">this</span>.<span class="at">addEventListener</span>(<span class="st">&#39;message&#39;</span><span class="op">,</span> e <span class="op">=&gt;</span>
  <span class="kw">this</span>.<span class="at">postMessage</span>(<span class="st">&quot;Echo &quot;</span> <span class="op">+</span> <span class="va">e</span>.<span class="at">data</span>))<span class="op">;</span></code></pre></div>
-<h1 id="building-an-browsernative-microservice">Building an browsernative microservice</h1>
-<p>After getting confidence in microservice principles and technical background the paper should briefly join them to form a <em>browsernative microservices</em>. Needless to say the described example is overall simplified to only illustrate the connection between browsernative technologies and microservice patterns. Googles library Polymer is a good place for learning about web components in depth and make use of their simple command line tools. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single root element <code>&lt;shop-app&gt;</code>. This app made of several main views and many more invisible wrapper elements for routing, service worker caching, theming, etc. The whole shop runs as a single application fetching and updating remote resources and switching views. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
-<p>The current checkout can be found at https://shop.polymer-project.org/checkout. Currently the checkout is a single, 671 lines of code long Polymer component including all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the microservice into fine grained components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element.</p>
-<h2 id="checkout-microservice">Checkout microservice</h2>
-<p>By breaking down the service the team defined the business boundaries within the checkout process and ended up with following granular service blocks:</p>
+<h1 id="building-a-browsernative-microservice">4. Building a browsernative microservice</h1>
+<p>After getting confidence in microservice principles and technical background the paper should briefly join them to form a <em>browsernative microservices</em>. Needless to say the following example is overall simplified towards illustrating the connection between browsernative technologies and microservice patterns. Googles library Polymer is a good place for learning about web components in depth and make use of their toolbox. One of their most famous proof of concept is the so-called <a href="https://shop.polymer-project.org/">Polymer Shop</a> which is a fully-fledged online shop nested within a single root element <code>&lt;shop-app&gt;</code>. This app made of several main views and many more invisible wrapper elements for routing, service worker caching, theming, etc. The whole shop runs as a single application fetching and updating remote resources and switching views. Let's assume we work in a sales engineering team of the Polymer Shop and need to rebuild the checkout microservice.</p>
+<p>The current checkout can be found at https://shop.polymer-project.org/checkout. At the time of writing the checkout is a single, 671 lines of code long Polymer component including all required fields for sign in, shipping, billing and summarizing the order. In the spirit of microservices we will split up the microservice into fine grained components. The shopping cart data is pulled out of a local storage JSON entity set up previously by another custom-element.</p>
+<p>By breaking down the service the <strong>team defined the business boundaries</strong> within the checkout process and ended up with following granular service blocks:</p>
 <ol type="1">
 <li>Sign in or Sign up</li>
 <li>Shipping details</li>
@@ -430,13 +420,14 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
   <span class="kw">&lt;payment-details&gt;&lt;/payment-details&gt;</span>
   <span class="kw">&lt;place-order&gt;&lt;/place-order&gt;</span>
 <span class="kw">&lt;/shop-checkout&gt;</span></code></pre></div>
-<p>Yet already we see the simplicity arouse from web components as they persue a clear structure. Each of the child components should act independently over other child nodes utilizing the loose coupling principle. Each child ships all the HTML, CSS and JS code needed to fulfil its work following the high cohesion principle. Each component may contain different views to accommodate different bounded contexts resulting from different devices. And last but not least, all of them communicate over an unobstrusive message bus via the service root component <code>&lt;shop-checkout&gt;</code>.</p>
-<p>Before diving deeper into implementation, its worth to clarify an <strong>architectural pattern</strong> behind components. Any reader of the paper came across ReactJS / Redux, the concept of components may look familiar. Dan Abramov, the creator of Redux, once defined a simple dichotomous pattern for creating UI components. Firstly, he came up with the idea of <strong>presentational components</strong> only related with the concern about <em>how things look</em>. This component literally doesn't know anything about the service in question which makes the component highly flexible and reusable. They are controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles being overwritten. Furthermore, it may contain several templates to change it's look on different demands.</p>
-<p>Secondly, Abramov described components he refers as <strong>containers</strong>. A container component is concerned with <em>how things work</em>.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Containers acts as invisible wrappers around presentational components acting in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently they might contain more JS and less if any HTML markup. We probably don't need to utilize ShadowDOM as no styles are involved.</p>
-<p>Last but not least, we can expand the model for illustrational purposes to <strong>native components</strong> which is every build-in HTMLElement like the HTMLButtonElement. They are solely controllable and styleable from the outside and must therefore wrapped in presentational components and/or containers.</p>
+<p>Yet already we see the simplicity arouse from web components as they persue a clear markup. Each of the child components may act independently over other child nodes utilizing the <strong>loose coupling principle</strong>. Each child ships all the HTML, CSS and JS code needed to fulfil its work following the <strong>high cohesion principle</strong>. Each component may contain different views to accommodate different <strong>bounded contexts resulting from different devices</strong>. And last but not least, all of them communicate over an <strong>unobtrusive message bus</strong> via the service root component <code>&lt;shop-checkout&gt;</code>.</p>
+<p>Before diving deeper into implementation, its worth to clarify an <strong>architectural pattern</strong> behind components. Any reader of the paper came across ReactJS / Redux, the concept of components may look familiar. Dan Abramov, the creator of Redux, once defined a simple dichotomous pattern for creating UI components.</p>
+<p>Firstly, Abramov defined a pattern around <strong>presentational components</strong> only related with the concern about <em>how things look</em>. This component literally doesn't know anything about the service in question which makes the component highly flexible and reusable. They are controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles being overwritten. Furthermore, it may contain several templates to change it's look on different demands.</p>
+<p>Secondly, Abramov described components he refers as <strong>containers</strong>. A container component is concerned with <em>how things work</em>.<span class="citation" data-cites="Abramov2015">(Abramov 2015)</span> Containers acts as invisible wrappers around presentational components acting in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently they might contain more JS and less if any HTML markup. We probably don't need to utilize Shadow DOM as no styles are involved.</p>
+<p>Last but not least, the pattern can expanded for illustrational purposes to <strong>native components</strong> which is every build-in HTMLElement like the HTMLButtonElement. Native components are mostly deep nested elements providing the actual functionality in the browser UI. They are solely controllable and styleable from the outside and are therefore wrapped in presentational components and/or containers.</p>
 <p>Lets start the service description top-down beginning with the <strong>root container</strong> managing the overall service.</p>
-<h3 id="root-container">Root container</h3>
-<p>The root container <code>&lt;shop-checkout&gt;</code> is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS won't be necessary at this point as no styling is involved. The simplified root container might look like the following code snippet</p>
+<h2 id="root-container">Root container</h2>
+<p>The root container <code>&lt;shop-checkout&gt;</code> is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS won't be necessary at this point as no styling is involved. A simplified root container for the checkout might look like the following code snippet.</p>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">&gt; shop-checkout.html
 <span class="co">&lt;!-- IMPORTS --&gt;</span>
 <span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;import&quot;</span><span class="ot"> href=</span><span class="st">&quot;sign-in.html&quot;</span><span class="ot"> async</span><span class="kw">&gt;</span>
@@ -477,8 +468,8 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <span class="op">}</span>    
 <span class="va">customElements</span>.<span class="at">define</span>(<span class="st">&#39;shop-checkout&#39;</span><span class="op">,</span> shopCheckout)<span class="op">;</span>
 <span class="op">&lt;</span><span class="ss">/script&gt;</span></code></pre></div>
-<p>The purpose of this simplified code snippet is to outline the MVC threefold in the service root. On runtime the root container acts mostly like a <strong>message dispatcher</strong> implementing the microservice principle of smart endpoints and dumb pipes.</p>
-<p>In order to interact with the MODEL, every child node must implement the <strong>dedicated <code>checkout</code></strong> custom event (which will be explained further on in the next section). Summarizing the unidirectional communication from the service root perspective looks like following plot:</p>
+<p>The purpose of this simplified code snippet is to outline the <strong>MVC threefold</strong> in the service root. The MODEL is pushed into the worker thread, the CONTROLLER in the custom element and the VIEW in the HTML structuring. On runtime the root container acts like a <strong>message dispatcher</strong> implementing the microservice principle of smart endpoints and dumb pipes.</p>
+<p>In order to interact with the MODEL every child node must implement the <strong>dedicated <code>checkout</code></strong> custom event (which will be explained further on in the next section). Summarizing the unidirectional communication from the service root perspective looks like following plot:</p>
 <pre><code>VIEW thread                 |               MODEL thread
                             |
 +----------+                |               +----------+
@@ -498,19 +489,19 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 | Handler  | &lt;--------Action Msg----------  |  Action  |
 +----------+                |               +----------+    
                             |</code></pre>
-<p>Effects are yielded by the asynchronous operation of messages and create actions returned to sender by the message handlers. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created with additional resources from the server or syncing with local storage like in the polymer-shop.</p>
-<p>While the msg handlers are basic &quot;dumb&quot; switch statements the <strong>smartness</strong> solely arouse from intelligent controllers processing the message. This communication model offers lots of possibilities for <strong>evolutionary design</strong> as child nodes can be loosely dropped in the service root and communication might <strong>fail graceful</strong> as simply nothing happens if one or another switch is not defined.</p>
-<h3 id="container-components">Container components</h3>
+<p>Effects are yielded by the asynchronous operation of messages and create actions returned to sender. Effects can be created by external messages, like subscription to an WebSocket, too. Effects may be created with additional resources from the server or syncing with local storage like in the polymer-shop.</p>
+<p>While the msg handlers are basic &quot;dumb&quot; switch statements the <strong>smartness</strong> solely arouse from intelligent controllers processing the message. This communication model offers lots of possibilities for <strong>evolutionary design</strong> as child nodes can be loosely dropped. Every child node can be expanded into another full microservice or split up into separate nodes without notice of the service root. Communication might <strong>fail graceful</strong> providing a default console log in case switches aren't defined yet.</p>
+<h2 id="container-components">Container components</h2>
 <p>The second layer of the checkout microservice like <code>&lt;sign-in&gt;</code> or <code>&lt;shipping-details&gt;</code> still contain a lot of logic and no or less styling. Their job is to control their underlying presentational leaf components, aggregating events and to define a <strong>set of actions towards the model</strong> . Every container mounted directly under the service root may have a dedicated area inside the worker thread where it's fulfil his duties. For example, a typical <code>&lt;sign-in&gt;</code> contains merely two fields username and password and a submit button. The component listens for the submit action, aggregating the credentials and might add some semantics to it like <em>action: 'SIGNIN SUBMITTED'</em>. Fields and action message will be dispatched towards the model for further processing like initiating a authorization process.</p>
-<p>Every container component is eligible to aggregate subordinate events from their children, buffer them and interact with the model trough via a <strong>unified message system</strong>. A base class, from which <code>&lt;sign-in&gt;</code> or <code>&lt;shipping-details&gt;</code> can be extended can look like this:</p>
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">class</span> CheckoutContainerBase <span class="kw">extends</span> HTMLElement <span class="op">{</span>
-  <span class="co">// static methods for testing...</span>
+<p>Every container component is eligible to aggregate subordinate events from their children, buffer them and interact with the model trough via a <strong>unified message system</strong>. A base class, from which <code>&lt;sign-in&gt;</code> or <code>&lt;shipping-details&gt;</code> can be extended might look like this:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">class</span> SimpleContainer <span class="kw">extends</span> HTMLElement <span class="op">{</span>
+  <span class="co">// constructor, static methods ...</span>
   set <span class="at">_dispatch</span>(msg) <span class="op">{</span>
     <span class="kw">this</span>.<span class="at">dispatchEvent</span>(
       <span class="kw">new</span> <span class="at">CustomEvent</span>(<span class="st">&#39;checkout&#39;</span><span class="op">,</span> <span class="op">{</span>
       <span class="dt">bubbles</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
       <span class="dt">detail</span><span class="op">:</span> msg
-      <span class="op">}</span>)<span class="op">;</span>
+      <span class="op">}</span>)
     )<span class="op">;</span>
   <span class="op">}</span>
   set <span class="at">_receive</span>(msg) <span class="op">{</span>
@@ -519,14 +510,21 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
     <span class="va">console</span>.<span class="at">log</span>(msg)<span class="op">;</span>
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<p>Extending the <code>CheckoutContainerBase</code> will equipped every container node with the unified message interface. Calling <code>this._dispatch(msg)</code> within a within the container will trigger an event bubbling upstream. The service root will implement a simple event listener for <code>checkout</code> events. After receiving an answer from the MODEL a service root can <code>querySelector</code> the container node in question and push forward the answer over the <code>_receive</code> property.</p>
-<p>There might be even more middleware containers pulled in between presentational leafs and service root component to do some extra work without caring about bubbling events altogether. Changing or enhancing any functionality requires only to touch the controllers in the containers in question and the endpoint section at the model. <strong>Infrastructure automation</strong> might be achieved by dynamically evaluating the mounted containers beneath the service root and modeling the &quot;backend&quot; model accordingly. Due to it's standardized message system the containers are testable within standardized tests.</p>
-<h3 id="presentational-components">Presentational components</h3>
+<p>Extending the <code>SimpleContainer</code> will equip every container node with the unified message interface. Calling <code>this._dispatch(msg)</code> within the container will trigger an event bubbling upstream. The service root will implement a simple event listener for <code>checkout</code> events. After receiving an answer from the MODEL a service root can query the container child node in question and push forward the answer over the <code>_receive</code> property.</p>
+<p>There might be even more middleware containers pulled in between presentational leafs and the service root to fulfil some extra work either like filters on the event or without caring about checkout events altogether. Changing or enhancing any functionality requires only the controllers in the container in question and the endpoint section at the model. <strong>Infrastructure automation</strong> might be achieved by dynamically evaluating the mounted containers beneath the service root and modeling the &quot;backend&quot; model accordingly. Due to it's standardized message system the containers are testable within standardized tests.</p>
+<h2 id="presentational-components">Presentational components</h2>
 <p>In comparison to the former presentational component is build mostly</p>
-<h1 id="thinking-further">Thinking further</h1>
-<p>cohesive HTML JS CSS</p>
-<p>virtual DOM</p>
-<p>declarative event management</p>
+<p>template switch</p>
+<p>css</p>
+<p>shadow dom</p>
+<h1 id="thinking-further">5. Thinking further</h1>
+<p>Following a <strong>browsernative first</strong> principle this paper didn't made use of third-party libraries so far. Contrary to the example in the last section there are a few reasons why web components shouldn't be used without any proprietary technology. At first, from a technical perspective web components are relatively young and at the time of writing only the newer Chrome and Opera browsers can handle them correctly. Most probably it will take a long time until native web components can be safely used without additional legacy support.The second inevitable question is the notion if they should be used pure from a <strong>simplicity perspective</strong> without any proprietary technology now and future.</p>
+<p>Talking about web components it is impossible to avoid technologies like <strong>React</strong> altogether. In the last couple years React introduced some good concepts to web development like the notion of state, passing data as properties and declarative event management just to name a few. Many of those design decisions were made to overall <strong>simplify browser development through standardized methodologies</strong>. The principles of microservices could be applied to React development maybe even further as for example the communication model involves a lot of delegation and decomposition.</p>
+<p>Many of those features and design decisions in React created much of a hype around the library and technologies like the virtual DOM while web components never caught up in momentum at a comparable rate. According to Github Googles Polymer project is even six months older than React but has less than one third of its stars. Other notable web components projects like Bosonic<a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a> or Mozilla's X-tag<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a> are more dead than alive, too.</p>
+<p>It seems like the web developing community in a broader sense demands for features and standardization in frameworks like React (and many others to be fair). Web components and related libraries clearly missed a selling point in providing standardized ways for developing scalable components and applications or being to cumbersome to use at all. For the future it remains unclear if web components will eventually gain wider adoption within the UI developing community or will be adopted as low-level technology for framework development emphasized by Sebastian Markbage, one of the React creators.<span class="citation" data-cites="Rauschmayer2015">(Rauschmayer 2015)</span></p>
+<p>One interesting approach for building web components is the &quot;reactish&quot; Skate<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a>. Following the functional rendering model from React it combines native methods with additional functionalities known from React like event management. Given the focus on native technologies it only weights around 4kb (minified and gzipped) which is ten times less than React. <strong>Small encapsulated micro UI frameworks</strong> like Skate could be certainly the near future of web development and will hopefully gain more attention. The more mature UI framework Riot already expressed their intention to gradually develop towards web components.[^riot]</p>
+<h2 id="riot-httpriotjs.comcompareweb-components">[^riot]: http://riotjs.com/compare/#web-components</h2>
+<p>title: Browsernative Microservices subtitle: Modular web architecture through new W3C specifications author: Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de date: Januar 2017 abstract: Building complex web applications nowadays require additional layers of abstraction and often heavily depend on proprietary frameworks. New specifications build right into the browserengine provide a native service API to overcome tricky abstraction constraints. ...</p>
 <div id="refs" class="references">
 <div id="ref-Abramov2015">
 <p>Abramov, Dan. 2015. “Presentational and Container Components – Medium.” <a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0" class="uri">https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0</a>.</p>
@@ -576,6 +574,9 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <div id="ref-Newman2015">
 <p>Newman, Sam. 2016. <em>Building Microservices</em>. O’Reilly Media, Inc.</p>
 </div>
+<div id="ref-Rauschmayer2015">
+<p>Rauschmayer, Dr. Axel. 2015. “Tree-Shaking with Webpack 2 and Babel 6.” <a href="http://www.2ality.com/2015/12/webpack-tree-shaking.html" class="uri">http://www.2ality.com/2015/12/webpack-tree-shaking.html</a>.</p>
+</div>
 <div id="ref-Rota2015">
 <p>Rota, Andrew. 2015. “React.js Conf 2015 - the Complementarity of React and Web Components.” <a href="https://www.youtube.com/watch?t=124&amp;v=g0TD0efcwVg" class="uri">https://www.youtube.com/watch?t=124&amp;v=g0TD0efcwVg</a>.</p>
 </div>
@@ -602,6 +603,9 @@ const content = linknode.import; -&gt; Unlike the <em>HTML template</em> the con
 <li id="fn17"><p>https://github.com/w3c/webcomponents/issues/509<a href="#fnref17">↩</a></p></li>
 <li id="fn18"><p>https://hacks.mozilla.org/2014/12/mozilla-and-web-components/<a href="#fnref18">↩</a></p></li>
 <li id="fn19"><p><a href="https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E">Angular 2 Rendering Architecture</a><a href="#fnref19">↩</a></p></li>
+<li id="fn20"><p>https://github.com/bosonic/bosonic/<a href="#fnref20">↩</a></p></li>
+<li id="fn21"><p>https://github.com/x-tag/core<a href="#fnref21">↩</a></p></li>
+<li id="fn22"><p>https://github.com/skatejs/skatejs/<a href="#fnref22">↩</a></p></li>
 </ol>
 </section>
 </div>
