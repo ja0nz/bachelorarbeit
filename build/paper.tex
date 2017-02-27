@@ -105,9 +105,16 @@
 \maketitle
 \begin{abstract}
 Building complex web applications nowadays require additional layers of
-abstraction and often heavily depend on proprietary frameworks. New
-specifications build right into the browserengine provide a native
-service API to overcome tricky abstraction constraints.
+abstraction and often heavily depend on indispensable frameworks. While
+they perfectly circumstance the global paradigm of the DOM they remain
+highly proprietary attached to the framework. New w3c specifications
+build right into the browser provide a native service API in the need to
+create standardized web components for the browser. As of 2017 all major
+browsers will ship those technologies in their browsers. The paper not
+only provides an introduction to the specification. As an assessment
+criteria of it will match those specifications against the concept of
+microservices which is an modular system architecture to build scalable
+applications.
 \end{abstract}
 
 {
@@ -130,14 +137,14 @@ gave an inspirational keynote on the topic of
 of a humans life simplicity aligns perception with our mental
 capacities.
 
-Derived from the Latin word \textbf{simplex}, simple can be understood
-as ``literally, uncompounded or onefold''\footnote{\href{http://www.etymonline.com/index.php?term=simple}{Etymology
-  Dictionary}} which points towards an unidimensional nature. While
-complexity describes the multilayered und entangled nature of
-conditions, simplicity empowers the human brain to reason about issues
-in a straightforward manner. It certainly has some overlapping's with
-easy, but while easy is more of a relative spirit, simple can be laid
-out as a objective manner and therefore universally applicable.
+Derived from the Latin word \textbf{simplex} simple can be understood as
+``literally, uncompounded or onefold''\footnote{\href{http://www.etymonline.com/index.php?term=simple}{Etymology
+  Dictionary}} which points towards an unidimensional state. While
+complexity describes the multilayered und entangled nature of conditions
+simplicity empowers the human brain to reason about issues
+straightforward. It certainly has some overlapping's with easy, but
+while easy is more of a relative spirit, simple can be laid out as a
+objective manner and therefore universally applicable.
 
 Software development is undoubtedly rich in complexity and full of
 subtle pitfalls. In a typical scenario a growing software project
@@ -168,7 +175,7 @@ highly deterministic nature of the browser platform.
 In the last four years the average transfer size of a webpage doubled to
 currently around 2.5 MB.\footnote{\href{http://httparchive.org/trends.php}{HTTPArchive
   Trends}} Leaving images, fonts or other content aside the size of
-HTML, CSS and JS sums up to a total average of 550 kb. One character
+HTML, CSS and JS sums up to an total average of 550 KB. One character
 weights around 1 byte which means an average webpage is delivering
 550.000 character or around 125 pages of single-spaced text. Frederic
 Filloux analyzed the payload on different newspaper websites and came to
@@ -197,18 +204,17 @@ only additional layers of abstraction can wrestle complexity.
 In the recent years many \textbf{frameworks}, libraries and
 methodologies approached the global nature of the DOM by scoping assets
 and design rules into maintainable components. While the DOM can't be
-scoped, JS can. Many frameworks, like ReactJS, AngularJS or VueJS just
-to name a few, ditched the old rule of separated HTML, CSS and JS in
-favor of an additional layer of abstracted JS components (containing
-structure, behavior and sometimes styling). Quiet often those frameworks
-mimic a MVC pattern on top of the browser engine which is a reasonable
-simple design pattern to build graphical user interfaces. While
-frameworks are a valid approach for building scalable web applications
-they remain highly opinionated, embody inherent complexity themselves
-and can change and break over time. Another downside is code inflation
-which is a crucial point for performance. All of those bottlenecks in
-the web demand for a new standardized way for creating and evolving
-complex web services.
+scoped, JS can. Many frameworks, like React, Angular or Vue just to name
+a few, ditched the old rule of separated HTML, CSS and JS in favor of an
+additional layer of abstracted JS components (containing structure,
+behavior and sometimes styling). Quiet often those frameworks mimic a
+MVC pattern on top of the browser engine which is a reasonable simple
+design pattern to build UIs. While frameworks are a valid approach for
+building scalable web applications they remain highly opinionated embody
+inherent complexity themselves and can change and break over time.
+Another downside is code inflation which is a crucial point for
+performance. All of those bottlenecks in the web demand for a new
+standardized way for creating and evolving complex web services.
 
 In the year 2013 thinkers, creators and browser vendors joined together
 to propose \emph{The Extensible Web Manifesto}.\footnote{\href{https://extensiblewebmanifesto.org/}{The
@@ -268,17 +274,18 @@ about \textbf{services}.
 
 The first principle of services is the \textbf{loose coupling
 principle}: changing and deploying one service shouldn't result in
-changing other parts of the system.{[}3, p. 30{]}. Mutations or shadowed
-variables, which is happening a lot in CSS, making it hard to keep
-changes ought to only affect one place in the application. A
-\emph{browsernative microservice} therefore pushing encapsulation and
-avoiding variable mutations outside its scope as much as possible.
-Practically, CSS will be scoped and JS fosters immutable JS entities and
-avoids variables leaking into the global namespace.
+changing other parts of the system.{[}3, p. 30{]} Picking CSS for
+example, where variables tend to be shadowed by higher specific values
+making it increasingly difficult to keep changes ought to only affect
+one place in the application. A \emph{browsernative microservice}
+therefore pushing encapsulation and avoiding variable mutations outside
+its scope as much as possible. One solution would be scoped CSS / JS to
+avoid variables leaking into the global namespace as well as hidden
+implementation details to avoid mutating values.
 
 The second principle of services is the \textbf{high cohesion
 principle}: Whether designing a microservice or it's components we want
-related behavior sit together, and unrelated behavior to sit
+related behavior sit together and unrelated behavior to sit
 elsewhere.{[}3, p. 30{]} High cohesion can be enhanced towards the more
 dynamic \textbf{Single Responsibility Principle}: ``Gather together
 those things that change for the same reason and separate those things
@@ -294,11 +301,11 @@ and CSS}. Understanding the relation of HTML markup and another CSS file
 adds incidental complexity. Different approaches emerged over the recent
 years to join the forces. Most notable the dedicated frontend language
 \emph{elm}\footnote{\href{http://elm-lang.org/}{elm lang}} where MODEL,
-VIEW and CONTROLLER sit in one place. A browsernative service aims for a
-combinement of the web native trinity HTML, JS and CSS.
+VIEW and CONTROLLER sit in one place. A \emph{browsernative service}
+sought for an combination of the web native trinity HTML, JS and CSS.
 
 Traditional web development relies on \textbf{libraries} to enhance the
-service capabilities of the web platform. Compared to libraries, a
+service capabilities of the web platform. Compared to libraries a
 component service offers multiple advantages for building, deployment
 and shipping. As expressed earlier a \emph{components for the web}, or
 web component, is \textbf{self-contained} which means it embodies all
@@ -1571,7 +1578,7 @@ message system the containers are testable within standardized tests.
 components}\label{presentational-components}
 
 In comparison to the former container the presentational component is
-build mostly around views and styling and shipping less or no logic
+build mostly around views and styling containing less or no logic
 towards handling the component. To extend the last
 \texttt{\textless{}sign-in\textgreater{}} container example a typical
 presentational component structure could look like the following
@@ -1635,31 +1642,32 @@ list of CSS selectors. Whereas it's possible to expand templates in
 place it could be also possible to define \textbf{template components}
 to atomize the component further and increase code readability.
 
+tests
+
 \section{5. Thinking further}\label{thinking-further}
 
-Following a \textbf{browsernative first} principle this paper didn't
-made use of third-party libraries so far. Contrary to the example in the
-last section there are a few reasons why web components shouldn't be
-used without any proprietary technology. At first, from a technical
-perspective web components are relatively young and at the time of
-writing only the newer Chrome and Opera browsers can handle them
-correctly. Most probably it will take a long time until native web
-components can be safely used without additional legacy support.The
-second inevitable question is the notion whether proprietary technology
-promotes \textbf{simplicity} or complects the implementation.
+Following a \textbf{browsernative first} dogma this paper didn't put
+third-party libraries into view so far in the search of an independent
+approach. Nevertheless, it should be clear to this point that the
+example in the last section is far away from being usable in production.
+At first, from a technical perspective web components are relatively
+young and at the time of writing only usable in \textbf{newer Chrome and
+Opera browsers}. Most probably it will take a long time until native web
+components can be safely used without additional legacy support. The
+troublesome \emph{HTML imports} spec will certainly need even longer
+which inevitable opens up the question if web components are useful from
+today on. And second, do web components align with the notion of
+simplicity if too many downsides and possible pitfalls require
+attention?!
 
-Talking about web components it is impossible to avoid technologies like
-\textbf{React} altogether. In the last couple years React introduced
-some good concepts to web development like the idea of state, passing
-data as properties and declarative event management just to name a few.
-Many of those design decisions were made to overall \textbf{simplify
-browser development through standardized methodologies}. The principles
-of microservices could be applied to React development maybe even
-further as for example the communication model involves a lot of
-delegation and decomposition.
-
-Many of those features and design decisions in React created much of a
-hype around the library and technologies like the virtual DOM while web
+Any profound discussion about web components would be incomplete without
+touching component alternatives like \textbf{React}. In the last couple
+years React introduced new concepts to web development like the idea of
+state, passing data as properties and declarative event management just
+to name a few. Those design decisions were made to overall simplify
+browser development with full browser support right from the start.
+Overall, Reacts perception about UI development created much of a hype
+around the library and technologies like the virtual DOM while web
 components never caught up in momentum at a comparable rate. According
 to Github Googles Polymer project is even six months older than React
 but has less than one third of its stars. Other notable web components
@@ -1667,26 +1675,34 @@ projects like Bosonic\footnote{https://github.com/bosonic/bosonic/} or
 Mozilla's X-tag\footnote{https://github.com/x-tag/core} are more dead
 than alive, too.
 
-It seems like the web developing community in a broader sense demands
-for features and standardization in frameworks like React (and many
-others to be fair). Web components and related libraries clearly missed
-a selling point in providing standardized ways for developing scalable
-components and applications or being to cumbersome to use at all. For
-the future it remains unclear if web components will eventually gain
-wider adoption within the UI developing community or will be adopted as
-low-level technology for framework development emphasized by Sebastian
-Markbage, one of the React creators.{[}18{]}
+It seems like the web developing community in a broader sense values
+\textbf{standardized procedures, tooling and browser support} in
+frameworks like React (and many others to be fair). Web components and
+related libraries clearly missed a real selling point towards React and
+Angular. Providing guidelines, simpler syntax and features missed out or
+being to cumbersome to use at all. For the future it remains unclear if
+web components will eventually gain wider adoption within the UI
+developing community or will be adopted as low-level technology for
+framework development emphasized by Sebastian Markbage, one of the React
+creators.{[}18{]}
 
-One interesting approach for building web components is the ``reactish''
-Skate\footnote{https://github.com/skatejs/skatejs/}. Following the
-functional rendering model from React it combines native methods with
-additional functionalities known from React like event management. Given
-the focus on native technologies it only weights around 4kb (minified
-and gzipped) which is ten times less than React. \textbf{Small
-encapsulated micro UI frameworks} like Skate could be certainly the near
-future of web development and will hopefully gain more attention. The
-more mature UI framework Riot already expressed their intention to
-gradually develop towards web components.\footnote{http://riotjs.com/compare/\#web-components}
+Even though the downsides seems heavy weight there are notable attempts
+to bring web components into production. A very good example is the
+``reactish'' library Skate\footnote{https://github.com/skatejs/skatejs/}.
+Following the functional rendering model from React it combines native
+methods with additional functionalities known from React like
+declarative event management. Given the focus on native technologies it
+only weights around 4kb (minified and gzipped) which is ten times less
+than React. \textbf{Small encapsulated micro UI frameworks} like Skate
+could certainly be the near future of web development and will hopefully
+pave the way of web components.
+
+The role of web components may not result in an isolated framework but
+move towards a common denominator for future Reacts, Angulars,
+Vues\ldots{} which makes it worth considering it as recyclable
+technology foundation. The more mature UI framework Riot already
+expressed their intention to gradually develop towards web
+components.\footnote{http://riotjs.com/compare/\#web-components}
 
 \hypertarget{refs}{}
 \hypertarget{ref-Filloux2016}{}

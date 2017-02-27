@@ -3,5 +3,5 @@ title: Browsernative Microservices
 subtitle: Modular web architecture through new W3C specifications
 author: Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de
 date: Januar 2017
-abstract: Building complex web applications nowadays require additional layers of abstraction and often heavily depend on proprietary frameworks. New specifications build right into the browserengine provide a native service API to overcome tricky abstraction constraints.
+abstract: Building complex web applications nowadays require additional layers of abstraction and often heavily depend on indispensable frameworks. While they perfectly circumstance the global paradigm of the DOM they remain highly proprietary attached to the framework. New w3c specifications build right into the browser provide a native service API in the need to create standardized web components for the browser. As of 2017 all major browsers will ship those technologies in their browsers. The paper not only provides an introduction to the specification. As an assessment criteria of it will match those specifications against the concept of microservices which is an modular system architecture to build scalable applications.   
 ...
