@@ -1299,10 +1299,13 @@ After getting confidence in microservice principles and technical
 background the paper should briefly join them to form a
 \emph{browsernative microservices}. Needless to say the following
 example is overall simplified towards illustrating the connection
-between browsernative technologies and microservice patterns. Googles
-library Polymer is a good place for learning about web components in
-depth and make use of their toolbox. One of their most famous proof of
-concept is the so-called
+between browsernative technologies and microservice patterns.
+Furthermore it is highly opinionated in development and shouldn't
+perceived as ``single source of truth''.
+
+Googles library Polymer is a good place for learning about web
+components in depth and make use of their toolbox. One of their most
+famous proof of concept is the so-called
 \href{https://shop.polymer-project.org/}{Polymer Shop} which is a
 fully-fledged online shop nested within a single root element
 \texttt{\textless{}shop-app\textgreater{}}. This app made of several
@@ -1397,9 +1400,9 @@ controllable and styleable from the outside and are therefore wrapped in
 presentational components and/or containers.
 
 Lets start the service description top-down beginning with the
-\textbf{root container} managing the overall service.
+\textbf{service root container} managing the overall service.
 
-\subsection{Root container}\label{root-container}
+\subsection{4.1. Service root}\label{service-root}
 
 The root container \texttt{\textless{}shop-checkout\textgreater{}} is
 basically just an encapsulation layer in terms of service
@@ -1502,16 +1505,16 @@ up into separate nodes without notice of the service root. Communication
 might \textbf{fail graceful} providing a default console log in case
 switches aren't defined yet.
 
-\subsection{Container components}\label{container-components}
+\subsection{4.2. Container components}\label{container-components}
 
 The second layer of the checkout microservice like
 \texttt{\textless{}sign-in\textgreater{}} or
-\texttt{\textless{}shipping-details\textgreater{}} still contain a lot
-of logic and no or less styling. Their job is to control their
-underlying presentational leaf components, aggregating events and to
-define a \textbf{set of actions towards the model} . Every container
-mounted directly under the service root may have a dedicated area inside
-the worker thread where it's fulfil his duties. For example, a typical
+\texttt{\textless{}shipping-details\textgreater{}} still contain mostly
+logic and no or less styling. Their job is to control their underlying
+presentational leaf components, aggregating events and to define a
+\textbf{set of actions towards the model} . Every container mounted
+directly under the service root may have a dedicated area inside the
+worker thread where it's fulfil his duties. For example, a typical
 \texttt{\textless{}sign-in\textgreater{}} contains merely two fields
 username and password and a submit button. The component listens for the
 submit action, aggregating the credentials and might add some semantics
@@ -1539,9 +1542,8 @@ look like this:
     \NormalTok{)}\OperatorTok{;}
   \OperatorTok{\}}
   \NormalTok{set }\AttributeTok{_receive}\NormalTok{(msg) }\OperatorTok{\{}
-  \CommentTok{// switch to methods}
-    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\KeywordTok{this}\NormalTok{.}\AttributeTok{localName} \OperatorTok{+} \StringTok{"received msg"}\NormalTok{)}\OperatorTok{;}
-    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(msg)}\OperatorTok{;}
+    \CommentTok{// switch to methods}
+    \VariableTok{console}\NormalTok{.}\AttributeTok{log}\NormalTok{(}\VerbatimStringTok{`}\SpecialCharTok{$\{}\KeywordTok{this}\NormalTok{.}\AttributeTok{localName}\SpecialCharTok{\}}\VerbatimStringTok{ received }\SpecialCharTok{$\{}\NormalTok{msg}\SpecialCharTok{\}}\VerbatimStringTok{`}\NormalTok{)}\OperatorTok{;}
   \OperatorTok{\}}
 \OperatorTok{\}}
 \end{Highlighting}
@@ -1565,15 +1567,73 @@ dynamically evaluating the mounted containers beneath the service root
 and modeling the ``backend'' model accordingly. Due to it's standardized
 message system the containers are testable within standardized tests.
 
-\subsection{Presentational components}\label{presentational-components}
+\subsection{4.3. Presentational
+components}\label{presentational-components}
 
-In comparison to the former presentational component is build mostly
+In comparison to the former container the presentational component is
+build mostly around views and styling and shipping less or no logic
+towards handling the component. To extend the last
+\texttt{\textless{}sign-in\textgreater{}} container example a typical
+presentational component structure could look like the following
+top-level structure
 
-template switch
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{<sign-in-container>}
+  \KeywordTok{<sign-in-presentational>}
+  \KeywordTok{</sign-in-presentational>}
+\KeywordTok{</sign-in-container>}
+\end{Highlighting}
+\end{Shaded}
 
-css
+The \texttt{\textless{}sign-in-presentational\textgreater{}} contains
+all required input fields and oauth connectors to Google or Facebook but
+\textbf{will not care about events they create}. A presentation
+component is usually steered via HTML attributes. Contrary to the former
+containers the presentational component highly utilizes \textbf{shadow
+DOM and HTML templates}.
 
-shadow dom
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{> sign-in-presentational.html}
+\CommentTok{<!-- IMPORTS -->}
+\KeywordTok{<link}\OtherTok{ rel=}\StringTok{"import"}\OtherTok{ href=}\StringTok{"facebook-oauth.html"}\OtherTok{ async}\KeywordTok{>}
+\KeywordTok{<link}\OtherTok{ rel=}\StringTok{"import"}\OtherTok{ href=}\StringTok{"high-res-template.html"}\OtherTok{ async}\KeywordTok{>}
+\NormalTok{...}
+
+\CommentTok{<!-- VIEW -->}
+\KeywordTok{<sign-in-presentational>}
+  \KeywordTok{<high-res-template>}
+    \KeywordTok{<facebook-oauth></facebook-oauth>}
+    \KeywordTok{<slot}\OtherTok{ name=}\StringTok{"form"}\KeywordTok{></slot>}
+    \KeywordTok{<slot}\OtherTok{ name=}\StringTok{"button"}\KeywordTok{></slot>}
+  \KeywordTok{</high-res-template>}
+  
+  \KeywordTok{<template}\OtherTok{ id=}\StringTok{"lowres"}\KeywordTok{>}\NormalTok{...}\KeywordTok{</template>}
+  \KeywordTok{<template}\OtherTok{ id=}\StringTok{"mobile"}\KeywordTok{>}\NormalTok{...}\KeywordTok{</template>}
+\KeywordTok{</sign-in-presentational>}
+
+\KeywordTok{<script>}
+  \KeywordTok{class} \NormalTok{SignIn }\KeywordTok{extends} \NormalTok{HTMLElement }\OperatorTok{\{}
+    \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
+      \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
+      \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
+      \CommentTok{// append templates according to window.innerWidth}
+      \CommentTok{// run this.getAttribute('htmlprop') to control element}
+    \OperatorTok{\}}
+    \AttributeTok{attributeChangedCallback}\NormalTok{(attrName}\OperatorTok{,} \NormalTok{oldVal}\OperatorTok{,} \NormalTok{newVal) }\OperatorTok{\{}
+      \CommentTok{// react on changing attributes}
+    \OperatorTok{\}}
+  \OperatorTok{\}}
+  \VariableTok{customElements}\NormalTok{.}\AttributeTok{define}\NormalTok{(}\StringTok{'sign-in-presentational'}\OperatorTok{,} \NormalTok{SignIn)}\OperatorTok{;}
+\OperatorTok{<}\SpecialStringTok{/script>}
+\end{Highlighting}
+\end{Shaded}
+
+Presentational components require configuration and usually ship a long
+list of CSS selectors. Whereas it's possible to expand templates in
+place it could be also possible to define \textbf{template components}
+to atomize the component further and increase code readability.
 
 \section{5. Thinking further}\label{thinking-further}
 
@@ -1585,13 +1645,12 @@ perspective web components are relatively young and at the time of
 writing only the newer Chrome and Opera browsers can handle them
 correctly. Most probably it will take a long time until native web
 components can be safely used without additional legacy support.The
-second inevitable question is the notion if they should be used pure
-from a \textbf{simplicity perspective} without any proprietary
-technology now and future.
+second inevitable question is the notion whether proprietary technology
+promotes \textbf{simplicity} or complects the implementation.
 
 Talking about web components it is impossible to avoid technologies like
 \textbf{React} altogether. In the last couple years React introduced
-some good concepts to web development like the notion of state, passing
+some good concepts to web development like the idea of state, passing
 data as properties and declarative event management just to name a few.
 Many of those design decisions were made to overall \textbf{simplify
 browser development through standardized methodologies}. The principles
