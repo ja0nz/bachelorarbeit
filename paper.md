@@ -32,7 +32,7 @@ In search of a better, simpler web architecture one might look on already establ
 
 Microservices incorporate a wide array of ideas from developing scalable software like **domain-driven design** to pursuing the real world structure in the code.[@Newman2015, p. 2] Another concept focuses on **continuous delivery** for pushing software rapidly through **automated deployment** mechanisms into production.[@Fowler2014] Furthermore, microservices transcend the technical perspective and reach into team organization.
 
-As a primary source of comprehensive information this paper relies on the work of Sam Newman[@Newman2015] and the work of Fowler and Lewis[@Fowler2014]. The purpose of this section is to gain confidence about the architecture of microservices in the context of the browser platform.
+As a primary source of comprehensive information this paper relies on the work of Sam Newman[@Newman2015] and the work of Fowler and Lewis[@Fowler2014]. The purpose of this section is to develop confidence about the architecture of microservices in the context of the browser platform.
 
 ## 2.1. Componentization via Services
 
@@ -225,7 +225,7 @@ One aspect not mentioned yet is the possibility of extending other build-in elem
 
 A *shadow DOM* is just an isolated DOM tree living inside another DOM tree. The spec refers the hosting tree as **light DOM tree** and the attached DOM as **shadow DOM tree**. Conceptually *shadow DOM* issues a single important function for building scalable software which is namely **encapsulation**. While custom elements provide a good way to encapsulate JS behavior *shadow DOM* tends strongly to the direction of style and event encapsulation.
 
-With an ever increasing complexity of single-page applications the global nature of the DOM creates a daunting situation for code organization and leads over times to highly fragmented bits of CSS and obscured CSS selectors. Of course this situation dramatically lowers code clarity and reusability. The only solution which will not break with the existing global paradigm of the DOM is to allow separate pieces of encapsulated code sit on top of the global DOM - introducing the shadowed DOM approach.
+With an ever increasing complexity of single-page applications the global nature of the DOM creates a daunting situation for code organization and leads over times to highly fragmented bits of CSS or obscured CSS selectors. Of course this situation dramatically lowers code clarity and reusability. The only solution which will not break with the existing global paradigm of the DOM is to allow separate pieces of encapsulated code sit on top of the global DOM - introducing the shadowed DOM approach.
 
 Enhancing the previous example the new encapsulated `HelloWorld` would look like the following code snippet:
 
@@ -441,9 +441,8 @@ Another common web components' use case can be a **middleware** subscribing to c
 
 Like CustomEvent, *web workers* have been around for a long time and therefore enjoy full browser support. They emerged at around 2009 when discussions about browser performance were still in the early days. *Web workers* however addressed a fundamental performance bottleneck of the JS language.
 
-JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process large amounts of data or manipulating the DOM runs on a single thread[@Bidelman2010]. Putting a lot of work into the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen or crashed UI. A worker can overcome the bottleneck of the single-threaded nature with spawning new **background threads** which allows the UI to stay responsive even when computation-heavy tasks need to perform. Furthermore, a worker adds a performance advantage embracing the multi core CPU architecture most devices are running on today. To grasp the full potential of workers, a reader might dive deeper into the Angular 2 architecture, where most of the application layer is abstracted from the main rendering thread into worker threads.[^angular]
+JS runs in a single-threaded language environment. Every script in the browser environment, from handling UI events to query and process large amounts of data or manipulating the DOM runs on a single thread[@Bidelman2010]. Putting a lot of work into the single main thread can slow down the web service significantly. From time to time scripts can block or fail for whatever reason which leads to a frozen or crashed UI. A worker can overcome the bottleneck of the single-threaded nature with spawning new **background threads** which allows the UI to stay responsive even when computation-heavy tasks need to perform. Furthermore, a worker adds a performance advantage embracing the multi core CPU architecture most devices are running on today. To grasp the full potential of workers, a reader might dive deeper into the Angular 2 architecture, where most of the application layer is abstracted from the main rendering thread into worker threads.[^Jbanov]
 
-[^angular]: [Angular 2 Rendering Architecture](https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E)
 
 # 4. Building a browsernative microservice
 
@@ -632,10 +631,12 @@ The `<sign-in-styling>` contains all required input fields and Oauth connectors 
     constructor() {
       super();
       this.attachShadow({mode: 'open'});
-      this.shadowRoot.appendChild(temp.content);
-      // f.e. append templates according to window.innerWidth
-      // style related JS altering
+      if (window.innerWidth > 1280) {
+        const temp = this.querySelector('#highres');
+        this.shadowRoot.appendChild(temp.content);
+      }  
       // this.getAttribute('theme') for configuration
+      // selecting nodes for altering
     }
     attributeChangedCallback(attrName, oldVal, newVal) {
       // react on changing attributes
@@ -645,7 +646,7 @@ The `<sign-in-styling>` contains all required input fields and Oauth connectors 
 </script>
 ```
 
-As mentioned before, HTML templates provide an opportunity to define **CSS modules**. Tags like `<style>` and `<slot>` create a kind of stencil filled by content from the `index.html`. As it is possible to expand templates in place it could also be possible to define **template components** like the `mobile-template` to atomize the component further and to increase code brevity. 
+As mentioned before, HTML templates provide an opportunity to define **CSS modules**. Tags like `<style>` and `<slot>` create a kind of stencil filled by content from the `index.html`. As it is possible to expand templates in place it could also be possible to define **template components** like the `mobile-template.html` to atomize the component further and to increase code brevity. 
 
 Overall, the `<shop-checkout>` should provide a taste of web components and their ingredients in practical usage. On a bigger scale things would certainly look different and less static than in the given example. Still, the microservice approach is intended to be somewhat visible in this example.
 
