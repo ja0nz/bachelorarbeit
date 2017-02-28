@@ -255,8 +255,8 @@ into team organization.
 
 As a primary source of comprehensive information this paper relies on
 the work of Sam Newman{[}4{]} and the work of Fowler and Lewis{[}5{]}.
-The purpose of this section is to gain confidence about the architecture
-of microservices in the context of the browser platform.
+The purpose of this section is to develop confidence about the
+architecture of microservices in the context of the browser platform.
 
 \subsection{2.1. Componentization via
 Services}\label{componentization-via-services}
@@ -832,7 +832,7 @@ tends strongly to the direction of style and event encapsulation.
 
 With an ever increasing complexity of single-page applications the
 global nature of the DOM creates a daunting situation for code
-organization and leads over times to highly fragmented bits of CSS and
+organization and leads over times to highly fragmented bits of CSS or
 obscured CSS selectors. Of course this situation dramatically lowers
 code clarity and reusability. The only solution which will not break
 with the existing global paradigm of the DOM is to allow separate pieces
@@ -1254,8 +1254,7 @@ a performance advantage embracing the multi core CPU architecture most
 devices are running on today. To grasp the full potential of workers, a
 reader might dive deeper into the Angular 2 architecture, where most of
 the application layer is abstracted from the main rendering thread into
-worker threads.\footnote{\href{https://docs.google.com/document/d/1M9FmT05Q6qpsjgvH1XvCm840yn2eWEg0PMskSQz7k4E}{Angular
-  2 Rendering Architecture}}
+worker threads.{[}\^{}Jbanov{]}
 
 \section{4. Building a browsernative
 microservice}\label{building-a-browsernative-microservice}
@@ -1591,10 +1590,12 @@ former containers, the \emph{presentational component} highly utilizes
     \AttributeTok{constructor}\NormalTok{() }\OperatorTok{\{}
       \KeywordTok{super}\NormalTok{()}\OperatorTok{;}
       \KeywordTok{this}\NormalTok{.}\AttributeTok{attachShadow}\NormalTok{(}\OperatorTok{\{}\DataTypeTok{mode}\OperatorTok{:} \StringTok{'open'}\OperatorTok{\}}\NormalTok{)}\OperatorTok{;}
-      \KeywordTok{this}\NormalTok{.}\VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{temp}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
-      \CommentTok{// f.e. append templates according to window.innerWidth}
-      \CommentTok{// style related JS altering}
+      \ControlFlowTok{if} \NormalTok{(}\VariableTok{window}\NormalTok{.}\AttributeTok{innerWidth} \OperatorTok{>} \DecValTok{1280}\NormalTok{) }\OperatorTok{\{}
+        \KeywordTok{const} \NormalTok{temp }\OperatorTok{=} \KeywordTok{this}\NormalTok{.}\AttributeTok{querySelector}\NormalTok{(}\StringTok{'#highres'}\NormalTok{)}\OperatorTok{;}
+        \KeywordTok{this}\NormalTok{.}\VariableTok{shadowRoot}\NormalTok{.}\AttributeTok{appendChild}\NormalTok{(}\VariableTok{temp}\NormalTok{.}\AttributeTok{content}\NormalTok{)}\OperatorTok{;}
+      \OperatorTok{\}}  
       \CommentTok{// this.getAttribute('theme') for configuration}
+      \CommentTok{// selecting nodes for altering}
     \OperatorTok{\}}
     \AttributeTok{attributeChangedCallback}\NormalTok{(attrName}\OperatorTok{,} \NormalTok{oldVal}\OperatorTok{,} \NormalTok{newVal) }\OperatorTok{\{}
       \CommentTok{// react on changing attributes}
@@ -1610,7 +1611,7 @@ As mentioned before, HTML templates provide an opportunity to define
 and \texttt{\textless{}slot\textgreater{}} create a kind of stencil
 filled by content from the \texttt{index.html}. As it is possible to
 expand templates in place it could also be possible to define
-\textbf{template components} like the \texttt{mobile-template} to
+\textbf{template components} like the \texttt{mobile-template.html} to
 atomize the component further and to increase code brevity.
 
 Overall, the \texttt{\textless{}shop-checkout\textgreater{}} should
