@@ -1621,54 +1621,52 @@ usage. On a bigger scale things would certainly look different and less
 static than in the given example. Still, the microservice approach is
 intended to be somewhat visible in this example.
 
-\section{5. Thinking further}\label{thinking-further}
+\section{5. Outlook}\label{outlook}
 
-In the search for an independent \textbf{browsernative} approach this
-paper left out third-party libraries so far. Nevertheless, it should be
-clear to this point that the example in the last section is far away
-from being usable in production. At first, from a technical perspective
-web components are relatively young and at the time of writing only
-usable in \textbf{newer Chrome and Opera browsers}. Most probably it
-will take a long time until native web components can be safely used
-without additional legacy support. The troublesome \emph{HTML imports}
-spec will certainly need even longer which inevitably opens up the
-question if web components are useful from today onwards. And second, do
-web components align with the notion of simplicity if too many downsides
-and possible pitfalls require attention?!
+In the search for an independent browsernative approach this paper left
+out \textbf{third-party libraries} purposely. It has to be pointed out
+that the example given in chapter 4 of this paper is far from being
+usable in production. At first, from a technical perspective web
+components are relatively young and at the time of writing only usable
+in \textbf{newer Chrome and Opera browsers}. Most probably it will take
+time until native web components can be safely used without additional
+legacy support. The troublesome \emph{HTML imports} spec will certainly
+need even longer which inevitably opens up the question if web
+components are useful from today onwards. And second, do web components
+align with the notion of simplicity if too many drawbacks and possible
+pitfalls require attention?!
 
 Any profound discussion about web components would be incomplete without
-touching component alternatives like \textbf{React}. In the last couple
-years React introduced new concepts to web development like the idea of
-state, passing data as properties and declarative event management just
-to name a few. Those design decisions were made to simplify browser
-development with full browser support right from the start. Overall,
-React's perception about UI development created much of a hype around
-the library and technologies like the virtual DOM while web components
-never caught up in momentum at a comparable rate. According to Github,
-Google's Polymer project is even six months older than React but has
-less than one third of its stars. Other notable web component projects
-like Bosonic\footnote{https://github.com/bosonic/bosonic/} or Mozilla's
-X-tag\footnote{https://github.com/x-tag/core} are more dead than alive,
-too.
+ever touching \textbf{component alternatives} like React or Angular. In
+the last couple of years both introduced new concepts to web development
+like the idea of state, passing data as properties and declarative event
+management just to name a few. Even though they use the notion of
+components too, they differentiate much from the philosophy of web
+components. Web components are more about the DOM whereas others focus
+on JS. Implicitly this approach opens up a case for \textbf{`standards
+vs.~opinions'}.
 
-It seems like the web developing community in a broader sense values
-\textbf{standardized procedures, tooling and browser support} in
-frameworks like React (and many others to be fair). Previously mentioned
-web component libraries clearly missed a real selling point compared to
-React or Angular. Providing guidelines, simpler syntax and features are
-missed out or are too cumbersome to use at all. For the future it
-remains unclear if web components eventually gain wider adoption within
-the UI developing community or will be adopted as low-level technology
-for framework development emphasized by Sebastian Markbage, one of the
-React creators.{[}21{]}
+Overall, React's perception about UI development created much of a hype
+around the library and technologies like the virtual DOM while web
+components have never caught up in momentum at a comparable rate.
+Certainly the biggest drawbacks of web components were frequently
+changing specs and the uneasiness of using an underperforming polyfilled
+version. In the highly competitive field of UI frameworks, \textbf{web
+components clearly missed a real selling point} compared to opinionated
+frameworks so far. Notable web component projects like Bosonic\footnote{https://github.com/bosonic/bosonic/}
+or Mozilla's X-tag\footnote{https://github.com/x-tag/core} are more dead
+than alive. For the future it remains unclear if web components
+eventually gain wider adoption within the UI developing community or
+will be adopted as low-level technology for framework development
+emphasized by Sebastian Markbage, one of the React creators.{[}21{]}
 
-Even though the drawbacks seems heavy weight, there are notable attempts
-to bring web components into production. A very good example is the
-``reactish'' library Skate\footnote{https://github.com/skatejs/skatejs/}.
-Following the functional rendering model from React, it combines native
-methods with additional functionalities known from React like
+Even though the drawbacks seems heavy weight for the moment things will
+certainly change for good with flourishing browser adoption. A good
+example of recent efforts is the ``reactish'' library Skate\footnote{https://github.com/skatejs/skatejs/}.
+Following the functional rendering model from React, Skate combines
+native methods with additional functionalities known from React like
 declarative event management. Given the focus on native technologies it
-only weights around 4kb (minified and gzipped) which is ten times less
+only weights around 4 KB (minified and gzipped) which is ten times less
 than React. \textbf{Micro UI frameworks} like Skate could certainly be
 the near future of web development, offering a real selling point.
 Previously mentioned specs could lead to modular, pluggable building
