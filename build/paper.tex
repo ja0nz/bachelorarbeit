@@ -99,22 +99,22 @@
 \providecommand{\subtitle}[1]{}
 \subtitle{Modular web architecture through new W3C specifications}
 \author{Jan Peteler, FH Würzburg-Schweinfurt, jan.peteler@student.fhws.de}
-\date{Januar 2017}
+\date{March 2017}
 
 \begin{document}
 \maketitle
 \begin{abstract}
 Building complex web applications nowadays require additional layers of
 abstraction and often heavily depend on indispensable frameworks. While
-they perfectly circumstance the global paradigm of the DOM they remain
-highly proprietary attached to the framework. New w3c specifications
-build right into the browser provide a native service API in the need to
-create standardized web components for the browser. As of 2017 all major
+they elegantly circuit the global paradigm of the DOM they remain highly
+proprietary pieces of technology. New w3c specifications build right
+into the browser provide a native service API in the need to create
+standardized web components for the browser. As of 2017 all major
 browsers will ship those technologies in their browsers. The paper not
-only provides an introduction to the specification. As an assessment
-criteria of it will match those specifications against the concept of
-microservices which is an modular system architecture to build scalable
-applications.
+only provides an brief and practical introduction to the specification.
+As an assessment criteria this paper will match those specifications
+against the concept of microservices, which is an modular system
+architecture to build scalable applications.
 \end{abstract}
 
 {
@@ -259,7 +259,7 @@ The purpose of this section is to develop confidence about the
 architecture of microservices in the context of the browser platform.
 
 \subsection{2.1. Componentization via
-Services}\label{componentization-via-services}
+services}\label{componentization-via-services}
 
 ``A~\textbf{component}~is a unit of software that is independently
 replaceable and upgradeable.'' {[}5{]} Components are the building
@@ -335,8 +335,8 @@ the components' signature. HTML markup is an expressive syntax and
 therefore convenient for steering a web component using merely
 attributes and values.
 
-\subsection{2.2. Organized around Business
-Capabilities}\label{organized-around-business-capabilities}
+\subsection{2.2. Organized around business
+capabilities}\label{organized-around-business-capabilities}
 
 \begin{quote}
 ``organizations which design systems \ldots{} are constrained to produce
@@ -424,7 +424,7 @@ browsernative microservice to ensure communication to services in the
 backend.
 
 \subsection{2.4. Decentralized
-Governance}\label{decentralized-governance}
+governance}\label{decentralized-governance}
 
 Microservices are separate entities and decentralization is important to
 ensure autonomy. This paper already described fragmented services
@@ -453,7 +453,7 @@ So-called \textbf{Progressive Web Apps}\footnote{\href{https://developers.google
   Web Apps}}, a bunch of criteria for building good browser apps, can
 achieve a similar look and feel like native apps. And last but not least
 services like NativeScript\footnote{\href{https://www.nativescript.org}{NativeScript}
-  \#\# 2.5. Decentralized Data Management} effectively compiling `the
+  \#\# 2.5. Decentralized data management} effectively compiling `the
 web' to native machine code lower the boundary between native and
 browser code even further.
 
@@ -1337,10 +1337,10 @@ familiar. Dan Abramov, the creator of Redux, once defined a simple
 dichotomous pattern for creating UI components.
 
 Firstly, Abramov defined a pattern around \textbf{presentational
-components} only related with the concern about \emph{how things look}.
-This component literally does not know anything about the service in
-question which makes the component highly flexible and reusable. It is
-controlled solely from the outside, receiving data and dispatching
+components} only related with the concern about \textbf{how things
+look}. This component literally does not know anything about the service
+in question which makes the component highly flexible and reusable. It
+is controlled solely from the outside, receiving data and dispatching
 unbiased events on user interaction.{[}20{]} Most probably every
 presentational component embodies more HTML/CSS markup and less JS code.
 It should encapsulate its styles from bleeding out and protect its
@@ -1348,7 +1348,7 @@ styles from being overwritten. Furthermore, it may contain several
 templates to change its look on different demands.
 
 Secondly, Abramov described components he refers to as
-\textbf{containers}. A container component is concerned with \emph{how
+\textbf{containers}. A container component is concerned with \textbf{how
 things work}.{[}20{]} Containers act as invisible wrappers around
 presentational components acting in the sense of UNIX filters. Their job
 is to fetch data from child nodes, aggregating events, interacting with
@@ -1369,11 +1369,12 @@ Lets start the service description top-down beginning with the
 
 \subsection{4.1. Service root}\label{service-root}
 
-The root container \texttt{\textless{}shop-checkout\textgreater{}} is
-basically just an encapsulation layer in terms of service
-functionalities. Encapsulation of CSS will not be an issue at this point
-as no styling is involved. A simplified \emph{root container} for the
-checkout might look like the following code snippet:
+The \emph{root container}
+\texttt{\textless{}shop-checkout\textgreater{}} is basically just an
+encapsulation layer in terms of service functionalities. Encapsulation
+of CSS will not be an issue at this point as no styling is involved. A
+simplified \emph{root container} for the checkout might look like the
+following code snippet:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1477,7 +1478,7 @@ The second layer of the checkout microservice like
 \texttt{\textless{}shipping-details\textgreater{}} still contains mostly
 logic and little or less styling. The job of a \emph{container
 component} is to control its underlying presentational components and to
-define a \textbf{set of ACTIONS towards the model}. Every
+define and spell a \textbf{set of ACTIONS towards the model}. Every
 \emph{container} mounted directly under the service root may have a
 dedicated area inside the worker thread reserved for its duties. For
 example, a typical \texttt{\textless{}sign-in\textgreater{}} contains
@@ -1670,7 +1671,7 @@ declarative event management. Given the focus on native technologies it
 only weights around 4kb (minified and gzipped) which is ten times less
 than React. \textbf{Micro UI frameworks} like Skate could certainly be
 the near future of web development, offering a real selling point.
-Previously mentioned specs could lead to a modular, pluggable building
+Previously mentioned specs could lead to modular, pluggable building
 pipelines offering the same features and tooling as React already does.
 After all, web components fit better with the microservice
 \textbf{decentralization aspect} than `walled garden' frameworks.

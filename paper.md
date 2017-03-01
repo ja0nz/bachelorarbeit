@@ -34,7 +34,7 @@ Microservices incorporate a wide array of ideas from developing scalable softwar
 
 As a primary source of comprehensive information this paper relies on the work of Sam Newman[@Newman2015] and the work of Fowler and Lewis[@Fowler2014]. The purpose of this section is to develop confidence about the architecture of microservices in the context of the browser platform.
 
-## 2.1. Componentization via Services
+## 2.1. Componentization via services
 
 "A **component** is a unit of software that is independently replaceable and upgradeable." [@Fowler2014] Components are the building blocks of microservices. And microservices are the building blocks of applications. Essentially the difference between microservices and components is just the level of abstraction. Whether a concrete microservice or a much more generic component, both share a similar set of principles. Therefore this paper refers to both parts when talking about **services**.
 
@@ -49,7 +49,7 @@ Another issue where web components stand out is related to performance and espec
 The last argument in favor of components over libraries is the more explicit interface.[@Fowler2014] While the functionality of a library needs documentation to be accessible, a component functionality is exposed via the components' signature. HTML markup is an expressive syntax and therefore convenient for steering a web component using merely attributes and values.
 
 
-## 2.2. Organized around Business Capabilities
+## 2.2. Organized around business capabilities
 
 > "organizations which design systems ... are constrained to produce designs which are copies of the communication structures of these organizations". [@Conway1968]
 
@@ -67,7 +67,7 @@ To ensure the microservice functionality among teams and different services requ
 
 Microservices heavily rely on simple HTTP request-response with resource APIs and lightweight messaging.[@Fowler2014] Newman recommends technologic-agnostic REST APIs to free data persistence from implementation constraints.[@Newman2015, p. 247]  The advantage of this overall simple communication model is the suitability for both frontend-backend likewise backend-backend communication. A service therefore can evolve from a heavy backend with a lot of network roundtrips to a leaner backend seamlessly. The browser build-in **fetch API** which is essentially a HTTP request can be heavily incorporated into a browsernative microservice to ensure communication to services in the backend. 
 
-## 2.4. Decentralized Governance
+## 2.4. Decentralized governance
 
 Microservices are separate entities and decentralization is important to ensure autonomy. This paper already described fragmented services bounded to singular business context, choreographed by simple communication protocols developed and evolved by autonomous teams.
 
@@ -81,7 +81,7 @@ Another more real life decentralization aspect derives from the easiness of depl
 
 [^pwa]: [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps)
 [^nscript]: [NativeScript](https://www.nativescript.org)
-## 2.5. Decentralized Data Management
+## 2.5. Decentralized data management
 
 Data Management in a microservice follows the same modular philosophy as the service implementation. As mentioned before, different bounded contexts make different assumptions of the underlying models. Decentralized decisions about conceptual models demand decentralized data storage decisions.[@Fowler2014] Todays web architectures aim to leverage an increasing amout of **processing to the client** to avoid time-consuming roundtrips especially in mobile networks.[@Boner2012] Since network roundtrips are costly it is a good advice to only query as much data as needed and cache as much as possible. The build-in LocalStorage or its successor IndexedDB are mature persistence technologies and libraries like PouchDB[^pouch] even offer adapters for syncing to the server out of the box. 
 
@@ -477,9 +477,9 @@ Yet already we see the simplicity arouse from web components as they persue a cl
 
 Before diving deeper into implementation, it is worth to clarify an **architectural pattern** behind components. To any reader of the paper who already came across React, the concept of components may look familiar. Dan Abramov, the creator of Redux, once defined a simple dichotomous pattern for creating UI components.
 
-Firstly, Abramov defined a pattern around **presentational components** only related with the concern about *how things look*. This component literally does not know anything about the service in question which makes the component highly flexible and reusable. It is controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.[@Abramov2015] Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles from being overwritten. Furthermore, it may contain several templates to change its look on different demands.
+Firstly, Abramov defined a pattern around **presentational components** only related with the concern about **how things look**. This component literally does not know anything about the service in question which makes the component highly flexible and reusable. It is controlled solely from the outside, receiving data and dispatching unbiased events on user interaction.[@Abramov2015] Most probably every presentational component embodies more HTML/CSS markup and less JS code. It should encapsulate its styles from bleeding out and protect its styles from being overwritten. Furthermore, it may contain several templates to change its look on different demands.
 
-Secondly, Abramov described components he refers to as **containers**. A container component is concerned with *how things work*.[@Abramov2015] Containers act as invisible wrappers around presentational components acting in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently they might contain more JS and less if any HTML markup. We probably do not need to utilize shadow DOM as no styles are involved.
+Secondly, Abramov described components he refers to as **containers**. A container component is concerned with **how things work**.[@Abramov2015] Containers act as invisible wrappers around presentational components acting in the sense of UNIX filters. Their job is to fetch data from child nodes, aggregating events, interacting with the model and push state back to the presentational components. Consequently they might contain more JS and less if any HTML markup. We probably do not need to utilize shadow DOM as no styles are involved.
 
 Last but not least, the pattern can be expanded for illustrational purposes to **native components** such as every build-in HTMLElement like an ordinary HTMLButtonElement. Native components are mostly deeply nested elements providing the actual functionality in the browser UI. They are solely controllable and styleable from the outside and are therefore wrapped in presentational components and/or containers.
 
@@ -487,7 +487,7 @@ Lets start the service description top-down beginning with the **service root co
 
 ## 4.1. Service root
 
-The root container `<shop-checkout>` is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS will not be an issue at this point as no styling is involved. A simplified *root container* for the checkout might look like the following code snippet:
+The *root container* `<shop-checkout>` is basically just an encapsulation layer in terms of service functionalities. Encapsulation of CSS will not be an issue at this point as no styling is involved. A simplified *root container* for the checkout might look like the following code snippet:
 
 ```html
 > shop-checkout.html
@@ -564,7 +564,7 @@ While the msg handlers are basic 'dumb' switch statements the **smartness** sole
 
 ## 4.2. Container components
 
-The second layer of the checkout microservice like `<sign-in>` or `<shipping-details>` still contains mostly logic and little or less styling. The job of a *container component* is to control its underlying presentational components and to define a **set of ACTIONS towards the model**. Every *container* mounted directly under the service root may have a dedicated area inside the worker thread reserved for its duties. For example, a typical `<sign-in>` contains merely two fields, username and password and a submit button. The *container component* waits for a submit action, aggregating the credentials, and might add some semantics to them. Field values and the action message will be dispatched towards the model for further processing like initiating an authorization process.
+The second layer of the checkout microservice like `<sign-in>` or `<shipping-details>` still contains mostly logic and little or less styling. The job of a *container component* is to control its underlying presentational components and to define and spell a **set of ACTIONS towards the model**. Every *container* mounted directly under the service root may have a dedicated area inside the worker thread reserved for its duties. For example, a typical `<sign-in>` contains merely two fields, username and password and a submit button. The *container component* waits for a submit action, aggregating the credentials, and might add some semantics to them. Field values and the action message will be dispatched towards the model for further processing like initiating an authorization process.
 
 Every *container component* is eligible to aggregate subordinate events from its children, buffer them and interact with the model via a **unified message system**. A base class, from which `<sign-in>` or `<shipping-details>` can be extended, might look like this:
 
@@ -658,9 +658,11 @@ Any profound discussion about web components would be incomplete without touchin
 
 It seems like the web developing community in a broader sense values **standardized procedures, tooling and browser support** in frameworks like React (and many others to be fair). Previously mentioned web component libraries clearly missed a real selling point compared to React or Angular. Providing guidelines, simpler syntax and features are missed out or are too cumbersome to use at all. For the future it remains unclear if web components eventually gain wider adoption within the UI developing community or will be adopted as low-level technology for framework development emphasized by Sebastian Markbage, one of the React creators.[@Rauschmayer2015] 
 
-Even though the drawbacks seems heavy weight, there are notable attempts to bring web components into production. A very good example is the "reactish" library Skate[^skate]. Following the functional rendering model from React, it combines native methods with additional functionalities known from React like declarative event management. Given the focus on native technologies it only weights around 4kb (minified and gzipped) which is ten times less than React. **Micro UI frameworks** like Skate could certainly be the near future of web development, offering a real selling point. Previously mentioned specs could lead to a modular, pluggable building pipelines offering the same features and tooling as React already does. After all, web components fit better with the microservice **decentralization aspect** than 'walled garden' frameworks.
+Even though the drawbacks seems heavy weight, there are notable attempts to bring web components into production. A very good example is the "reactish" library Skate[^skate]. Following the functional rendering model from React, it combines native methods with additional functionalities known from React like declarative event management. Given the focus on native technologies it only weights around 4kb (minified and gzipped) which is ten times less than React. **Micro UI frameworks** like Skate could certainly be the near future of web development, offering a real selling point. Previously mentioned specs could lead to modular, pluggable building pipelines offering the same features and tooling as React already does. After all, web components fit better with the microservice **decentralization aspect** than 'walled garden' frameworks.
 
 The role of web components may not result in an isolated implementation but move towards a common denominator for future Reacts, Angulars, Vues etc. This makes **web components worth considering them as recyclable technology**. The more mature UI framework Riot already expressed its intention to gradually develop towards web components.[^riot]
+
+
 
 [^skate]: https://github.com/skatejs/skatejs/
 [^bosonic]: https://github.com/bosonic/bosonic/
