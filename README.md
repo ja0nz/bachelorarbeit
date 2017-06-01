@@ -1,10 +1,16 @@
-# Browsernative Microservices durch Web Components
+# Browsernative Microservices
 
-## Modulare Webarchitekturen durch neue Browserstandards entwickeln
+## Abstract
 
-Meine Bachelorarbeit für die [FHWS Würzburg](https://github.com/claymcleod/pandoc-academic-publication).
+Building complex web applications requires additional layers of abstraction
+and often heavily depends on indispensable frameworks. While those smartly
+bypass the global paradigm of the DOM, they remain highly proprietary
+pieces of technology. New w3c specifications built into the browser provide
+a native service API in the need of standardized web components for the
+browser. In 2017 prospectively all major browsers will implement those
+technologies. The paper not only provides a brief and practical introduction
+into these new specifications. Furthermore, as an assessment criteria, it
+matches those specifications with the concept of microservices, which is a
+modular system architecture for building scalable applications.
 
-PDF: [builds](https://github.com/ja-nz/bachelorarbeit/tree/master/build)  
-ONLINE: [gh-pages](https://ja-nz.github.io/bachelorarbeit/)
-
-Credits to [claymed](https://github.com/claymcleod/pandoc-academic-publication) for his awesome IEEE Markup Repo.
+Published version: [Browsernative Microservices](https://github.com/ja0nz/bachelorarbeit/blob/master/Browsernative%20Microservices.pdf)
